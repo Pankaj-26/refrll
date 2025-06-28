@@ -1,0 +1,296 @@
+
+
+const User = require('../models/User');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Company = require('../models/Company');
+
+const createToken = (user) => {
+  return jwt.sign({ userId: user._id, roles: user.roles }, process.env.JWT_SECRET, {
+    expiresIn: '7d',
+  });
+};
+
+
+// Helper function to set HTTP-only cookie
+
+// const createToken = (user) => {
+//   const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, {
+//     expiresIn: '15m'
+//   });
+  
+//   const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, {
+//     expiresIn: '7d'
+//   });
+  
+//   return { accessToken, refreshToken };
+// };
+
+// Set both cookies
+// const setAuthCookies = (res, tokens) => {
+//   res.cookie('accessToken', tokens.accessToken, {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === 'production',
+//     sameSite: 'Strict',
+//     maxAge: 15 * 60 * 1000 // 15 minutes
+//   });
+  
+//   res.cookie('refreshToken', tokens.refreshToken, {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === 'production',
+//     sameSite: 'Strict',
+//     path: '/api/auth/refresh',
+//     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+//   });
+// };
+const setAuthCookie = (res, token) => {
+  res.cookie('accessToken', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+};
+
+exports.signup = async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+    if (user) return res.status(400).json({ message: 'User already exists' });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user = new User({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    await user.save();
+
+    const token = createToken(user);
+    setAuthCookie(res, token);
+
+
+    const userData = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      roles: user.roles,
+      profile: user.profile,
+      resume: user.resume,
+    };
+
+   
+    res.status(201).json({token,user: userData });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+exports.signin = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Try find User first
+    const user = await User.findOne({ email });
+
+    if (user) {
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+      const token = createToken(user);
+      setAuthCookie(res, token);
+
+      
+
+      const userData = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        roles: user.roles,
+        profile: user.profile,
+        resume: user.resume,
+        userType: 'User', 
+      };
+    
+
+
+      return res.status(200).json({token,user: userData });
+    }
+
+    // If no user, try find Company
+    const company = await Company.findOne({ email });
+    if (company) {
+      const isMatch = await bcrypt.compare(password, company.password);
+      if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+      const token = createToken(company);
+
+     setAuthCookie(res, token);
+
+      const companyData = {
+        id: company._id,
+        name: company.name,
+        email: company.email,
+        roles:company.roles,
+        userType: 'Company'
+        
+      };
+      
+
+      return res.status(200).json({token,company: companyData });
+    }
+
+    // Neither user nor company found
+    return res.status(400).json({ message: 'Invalid credentials' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+// exports.getme = async (req, res) => {
+
+//    const { userId, roles } = req.user;
+
+//   if (roles === 'company') {
+//       const company = await Company.findById(userId).select('-password');
+//       if (!company) return res.status(404).json({ message: 'Company not found' });
+
+//       const companyData = {
+//         id: company._id,
+//         name: company.name,
+//         email: company.email,
+//         description:company.description,
+//         website: company.website,
+//         roles:company.roles,
+//       };
+
+//       return res.json({ user: companyData });
+//     }
+
+
+//   try {
+//     const user = await User.findById(req.userId).select('-password');
+//     if (!user) return res.status(404).json({ message: 'User not found' });
+
+//     const userData = {
+//       id: user._id,
+//       name: user.name,
+//       email: user.email,
+//       roles: user.roles,
+//       profile: user.profile,
+//       resume: user.resume,
+//     };
+
+//     res.json({ user: userData });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
+
+// the above one is the one which was working initially 
+
+
+exports.getme = async (req, res) => {
+  try {
+    const { userId, roles } = req.user;
+
+    // Handle company user
+    if (roles === 'company') {
+      const company = await Company.findById(userId).select('-password');
+      if (!company) return res.status(404).json({ message: 'Company not found' });
+
+      return res.json({ 
+        user: {
+          id: company._id,
+          name: company.name,
+          email: company.email,
+          description: company.description,
+          website: company.website,
+          roles: company.roles,
+          userType: 'company'
+        }
+      });
+    }
+
+    // Handle regular users
+    const user = await User.findById(userId).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json({ 
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        roles: user.roles,
+        profile: user.profile,
+        resume: user.resume,
+        userType: 'user'
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.logout = (req, res) => {
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    // secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
+};
+
+// exports.logout = (req, res) => {
+//   res.clearCookie('accessToken', {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === 'production',
+//     sameSite: 'Strict',
+//   });
+  
+//   res.clearCookie('refreshToken', {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === 'production',
+//     sameSite: 'Strict',
+//   });
+  
+//   res.status(200).json({ message: 'Logged out successfully' });
+// };
+
+
+// // authController.js
+// exports.refresh = async (req, res) => {
+//   const refreshToken = req.cookies.refreshToken;
+//   if (!refreshToken) return res.status(401).json({ message: 'Refresh token required' });
+
+//   try {
+//     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+//     const user = await User.findById(decoded.userId);
+    
+//     if (!user) return res.status(404).json({ message: 'User not found' });
+    
+//     const { accessToken } = createToken(user);
+//     setAuthCookie(res, { accessToken, refreshToken });
+    
+//     res.status(200).json({ message: 'Token refreshed' });
+//   } catch (err) {
+//     res.status(403).json({ message: 'Invalid refresh token' });
+//   }
+// };
+
+
+
+
+
+
