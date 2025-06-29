@@ -1,29 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchProfile = createAsyncThunk(
-  "profile/fetchProfile",
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/users/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Failed to fetch profile");
-    }
-  }
-);
-
 // export const fetchProfile = createAsyncThunk(
 //   "profile/fetchProfile",
 //   async (_, { rejectWithValue }) => {
 //     try {
-      
+//       const token = localStorage.getItem("token");
 //       const res = await axios.get("http://localhost:5000/api/users/profile", {
-//         withCredentials: true
+//         headers: { Authorization: `Bearer ${token}` },
 //       });
 
 //       return res.data;
@@ -33,12 +17,64 @@ export const fetchProfile = createAsyncThunk(
 //   }
 // );
 
+export const fetchProfile = createAsyncThunk(
+  "profile/fetchProfile",
+  async (_, { rejectWithValue }) => {
+    try {
+      
+      const res = await axios.get("http://localhost:5000/api/users/profile", {
+        withCredentials: true
+      });
+   
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch profile");
+    }
+  }
+);
+
+// export const updateProfile = createAsyncThunk(
+//   "profile/updateProfile",
+//   async (profileData, { rejectWithValue }) => {
+//     try {
+//       const token = localStorage.getItem("token");
+
+//       const formData = new FormData();
+//       Object.entries(profileData).forEach(([key, value]) => {
+//         if (value !== null && value !== undefined) {
+//           if (key === "skills" && Array.isArray(value)) {
+//             formData.append("skills", value.join(",")); // Join skills into a string
+//           } else if (key === "resume") {
+//             formData.append("resume", value); // file
+//           } else {
+//             formData.append(key, value);
+//           }
+//         }
+//       });
+
+      
+
+//       const res = await axios.patch("http://localhost:5000/api/users/profile", formData, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "multipart/form-data",
+//         },
+//       });
+
+//       return res.data;
+//     } catch (err) {
+//       return rejectWithValue(err.response?.data?.message || "Failed to update profile");
+//     }
+//   }
+// );
+
+
+
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async (profileData, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
-
+      
       const formData = new FormData();
       Object.entries(profileData).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
@@ -55,10 +91,7 @@ export const updateProfile = createAsyncThunk(
       
 
       const res = await axios.patch("http://localhost:5000/api/users/profile", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
+       withCredentials: true,
       });
 
       return res.data;
@@ -67,7 +100,6 @@ export const updateProfile = createAsyncThunk(
     }
   }
 );
-
 
 
 

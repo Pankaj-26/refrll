@@ -12,6 +12,10 @@ const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
+const session = require('express-session');
+const passport = require('passport');
+require('./config/passport');
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -39,11 +43,27 @@ app.use(
     origin: 'http://localhost:5173', 
     credentials: true,
 
-  methods: ['GET', 'POST', 'PUT', 'DELETE']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   })
 );
 
 app.use(cookieParser());
+
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your_default_secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', // Set true in production behind HTTPS
+    httpOnly: true,
+    sameSite: 'strict'
+  }
+}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // Serve static files (resumes)

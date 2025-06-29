@@ -6,17 +6,87 @@ const jwt = require('jsonwebtoken');
 
 
 
-const createToken = (user) => {
-  const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '15m'
-  });
+// const createToken = (user) => {
+//   const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, {
+//     expiresIn: '15m'
+//   });
   
-  const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: '7d'
-  });
+//   const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, {
+//     expiresIn: '7d'
+//   });
+  
+//   return { accessToken, refreshToken };
+// };
+
+
+
+// Enhanced token creation
+const createTokens = (entity) => {
+  const accessToken = jwt.sign(
+    { userId: entity._id, roles: entity.roles },
+    process.env.ACCESS_TOKEN_SECRET || process.env.JWT_SECRET,
+    { expiresIn: '15m' }
+  );
+  
+  const refreshToken = jwt.sign(
+    { userId: entity._id },
+    process.env.REFRESH_TOKEN_SECRET || process.env.JWT_SECRET,
+    { expiresIn: '7d' }
+  );
   
   return { accessToken, refreshToken };
 };
+
+// Cookie management helpers
+const setAuthCookies = (res, accessToken, refreshToken) => {
+  // Access token cookie (short-lived)
+  res.cookie('accessToken', accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+    maxAge: 15 * 60 * 1000 // 15 minutes
+  });
+  
+  // Refresh token cookie (long-lived)
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+    path: '/api/auth/refresh', // Only sent to refresh endpoint
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  });
+};
+
+const clearAuthCookies = (res) => {
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict'
+  });
+  
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+    path: '/api/auth/refresh'
+  });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 exports.updateSeekerProfile = async (req, res) => {
   try {
@@ -80,52 +150,10 @@ user.profile.designation= designation || user.profile.designation
 };
 
 
-exports.upgradeToReferrer = async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.userId,  
-      {
-        $set: {
-          'roles.referrer': true,
-          'roles.seeker': false,
-        }
-      },
-      { new: true, runValidators: true }
-    ).select('-password');
-    
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    // Generate NEW JWT token with updated roles
-    const newToken = jwt.sign(
-      {
-        userId: user._id,
-        email: user.email,
-        roles: user.roles  // Updated roles object
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
-    
-    res.json({ 
-      message: 'Role changed to referrer.',
-      user,
-      newToken  // Send new token to client
-    });
-  } catch (error) {
-    console.error('upgradeToReferrer error:', error);
-    res.status(500).json({ message: 'Server error.' });
-  }
-};
-
-
 // exports.upgradeToReferrer = async (req, res) => {
 //   try {
-//     const userId = req.user.userId;
-    
 //     const user = await User.findByIdAndUpdate(
-//       userId,
+//       req.userId,  
 //       {
 //         $set: {
 //           'roles.referrer': true,
@@ -139,36 +167,21 @@ exports.upgradeToReferrer = async (req, res) => {
 //       return res.status(404).json({ message: 'User not found' });
 //     }
     
+//     // Generate NEW JWT token with updated roles
 //     const newToken = jwt.sign(
 //       {
 //         userId: user._id,
 //         email: user.email,
-//         roles: user.roles
+//         roles: user.roles  // Updated roles object
 //       },
 //       process.env.JWT_SECRET,
-//       { expiresIn: '7d' }
+//       { expiresIn: '1d' }
 //     );
     
-//     // Set updated token in cookie
-//     res.cookie('accessToken', newToken, {
-//       httpOnly: true,
-//       secure: process.env.NODE_ENV === 'production',
-//       sameSite: 'Strict',
-//       maxAge: 7 * 24 * 60 * 60 * 1000
-//     });
-    
-//     const userData = {
-//       id: user._id,
-//       name: user.name,
-//       email: user.email,
-//       roles: user.roles,
-//       profile: user.profile,
-//       resume: user.resume
-//     };
-    
 //     res.json({ 
-//       message: 'Role upgraded to referrer.',
-//       user: userData
+//       message: 'Role changed to referrer.',
+//       user,
+//       newToken  // Send new token to client
 //     });
 //   } catch (error) {
 //     console.error('upgradeToReferrer error:', error);
@@ -176,51 +189,42 @@ exports.upgradeToReferrer = async (req, res) => {
 //   }
 // };
 
-exports.downgradeToSeeker = async (req, res) => {
+
+exports.upgradeToReferrer = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
-      req.userId,  
+      req.user.userId, // Changed from req.userId to req.user.userId
       {
         $set: {
-          'roles.referrer': false,
-          'roles.seeker': true,
+          'roles.referrer': true,
+          'roles.seeker': false,
         }
       },
       { new: true, runValidators: true }
     ).select('-password');
     
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    // Generate NEW JWT token with updated roles
-    const newToken = jwt.sign(
-      {
-        userId: user._id,
-        email: user.email,
-        roles: user.roles  // Updated roles object
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Generate new tokens with updated roles
+    const { accessToken, refreshToken } = createTokens(user);
+    setAuthCookies(res, accessToken, refreshToken);
     
     res.json({ 
-      message: 'Role changed to seeker.',
+      message: 'Role changed to referrer.',
       user,
-      newToken  // Send new token to client
+      accessToken // Send new token to client
     });
   } catch (error) {
-    console.error('downgradeToSeeker error:', error);
+    console.error('upgradeToReferrer error:', error);
     res.status(500).json({ message: 'Server error.' });
   }
 };
 
+
 // exports.downgradeToSeeker = async (req, res) => {
 //   try {
-//     const userId = req.user.userId; // Use req.user.userId from middleware
-    
 //     const user = await User.findByIdAndUpdate(
-//       userId,  
+//       req.userId,  
 //       {
 //         $set: {
 //           'roles.referrer': false,
@@ -234,38 +238,21 @@ exports.downgradeToSeeker = async (req, res) => {
 //       return res.status(404).json({ message: 'User not found' });
 //     }
     
-//     // Generate new JWT token with updated roles
+//     // Generate NEW JWT token with updated roles
 //     const newToken = jwt.sign(
 //       {
 //         userId: user._id,
 //         email: user.email,
-//         roles: user.roles
+//         roles: user.roles  // Updated roles object
 //       },
 //       process.env.JWT_SECRET,
-//       { expiresIn: '7d' } // Match cookie expiration
+//       { expiresIn: '1d' }
 //     );
-    
-//     // Set new token in HTTP-only cookie
-//     res.cookie('accessToken', newToken, {
-//       httpOnly: true,
-//       secure: process.env.NODE_ENV === 'production',
-//       sameSite: 'Strict',
-//       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-//     });
-    
-//     // Format user response without sensitive data
-//     const userData = {
-//       id: user._id,
-//       name: user.name,
-//       email: user.email,
-//       roles: user.roles,
-//       profile: user.profile,
-//       resume: user.resume
-//     };
     
 //     res.json({ 
 //       message: 'Role changed to seeker.',
-//       user: userData
+//       user,
+//       newToken  // Send new token to client
 //     });
 //   } catch (error) {
 //     console.error('downgradeToSeeker error:', error);
@@ -273,8 +260,41 @@ exports.downgradeToSeeker = async (req, res) => {
 //   }
 // };
 
+
+exports.downgradeToSeeker = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user.userId, // Changed from req.userId to req.user.userId
+      {
+        $set: {
+          'roles.referrer': false,
+          'roles.seeker': true,
+        }
+      },
+      { new: true, runValidators: true }
+    ).select('-password');
+    
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Generate new tokens with updated roles
+    const { accessToken, refreshToken } = createTokens(user);
+    setAuthCookies(res, accessToken, refreshToken);
+    
+    res.json({ 
+      message: 'Role changed to seeker.',
+      user,
+      accessToken // Send new token to client
+    });
+  } catch (error) {
+    console.error('downgradeToSeeker error:', error);
+    res.status(500).json({ message: 'Server error.' });
+  }
+};
+
+
+
 exports.getSeekerProfile = async (req, res) => {
-  
+
  
   try {
     const user = await User.findById(req.userId).lean();

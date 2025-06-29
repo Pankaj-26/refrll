@@ -1,7 +1,5 @@
-
-
 import { useEffect } from "react";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -18,12 +16,12 @@ import { fetchUser } from "./features/auth/authSlice.js";
 import JobApplicants from "./pages/company/JobApplicants.jsx";
 import AllApplications from "./pages/AllApplications.jsx";
 import ApplicationDetails from "./pages/ApplicationDetails.jsx";
-import { updateSystemTheme } from './features/theme/themeSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { updateSystemTheme } from "./features/theme/themeSlice";
+import { useDispatch, useSelector } from "react-redux";
 import ThemeInitializer from "./components/ThemeInitializer.jsx";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
-  import { useLocation } from 'react-router-dom';
-import api from './api.js'
+import { useLocation } from "react-router-dom";
+import api from "./api.js";
 import axios from "axios";
 import Unauthorized from "./pages/Unauthorized.jsx";
 axios.defaults.withCredentials = true;
@@ -31,45 +29,31 @@ axios.defaults.withCredentials = true;
 function App() {
   const dispatch = useDispatch();
   const { mode } = useSelector((state) => state.theme);
-   const {user,loading } = useSelector((state) => state.auth);
- 
+  const { user, loading } = useSelector((state) => state.auth);
+
   // Fetch user and setup theme on mount
   useEffect(() => {
-   
     dispatch(fetchUser());
-
-
   }, [dispatch]);
 
-
-
-useEffect(() => {
-  // Initialize theme
+  useEffect(() => {
+    // Initialize theme
     dispatch(updateSystemTheme());
-    
+
     // // Listen for system theme changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = () => dispatch(updateSystemTheme());
-    
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
+
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
   }, [mode]);
-
-
-
-
-  
-
-
-
-
 
   return (
     <div className="bg-white text-black dark:bg-gray-900 dark:text-white min-h-screen">
-       <ThemeInitializer />
+      <ThemeInitializer />
       <Toaster position="top-right" reverseOrder={false} />
       <Navbar />
-      <div className=""> 
+      <div className="">
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
@@ -122,40 +106,41 @@ useEffect(() => {
           <Route
             path="/job/postings"
             element={
-              <ProtectedRoute allowedRoles={["seeker"]}>
+              <ProtectedRoute allowedRoles={["seeker", "referrer"]}>
                 <JobPostings />
               </ProtectedRoute>
             }
           />
 
-          <Route path="/job/:jobId/applicants" element={
-            <ProtectedRoute allowedRoles={["company"]}>
-              <JobApplicants />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/job/applications" element={
-            <ProtectedRoute allowedRoles={["referrer"]}>
-              <AllApplications />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/application/:id" element={
-            <ProtectedRoute allowedRoles={["seeker", "referrer", "company"]}>
-              <ApplicationDetails />
-            </ProtectedRoute>
-          } />
+          <Route
+            path="/job/:jobId/applicants"
+            element={
+              <ProtectedRoute allowedRoles={["company"]}>
+                <JobApplicants />
+              </ProtectedRoute>
+            }
+          />
 
+          <Route
+            path="/job/applications"
+            element={
+              <ProtectedRoute allowedRoles={["referrer", "seeker"]}>
+                <AllApplications />
+              </ProtectedRoute>
+            }
+          />
 
- <Route path="/unauthorized" element={
-           
-              <Unauthorized />
-          
-          } />
+          <Route
+            path="/application/:id"
+            element={
+              <ProtectedRoute allowedRoles={["seeker", "referrer", "company"]}>
+                <ApplicationDetails />
+              </ProtectedRoute>
+            }
+          />
 
-
+          <Route path="/unauthorized" element={<Unauthorized />} />
         </Routes>
-        
       </div>
     </div>
   );

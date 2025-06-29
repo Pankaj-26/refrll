@@ -17,7 +17,7 @@ import {
 } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import { signupUser, clearError,  } from "../features/auth/authSlice";
-// signupCompany
+
 import { motion } from "framer-motion";
 
 const Signup = () => {
@@ -150,6 +150,7 @@ const Signup = () => {
           name: form.name,
           email: form.email,
           password: form.password,
+          isCompany:null
         })
       );
     }

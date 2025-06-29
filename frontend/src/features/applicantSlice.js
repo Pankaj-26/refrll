@@ -1,25 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchApplicants = createAsyncThunk(
-  'applicants/fetchApplicants',
-  async (jobId, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:5000/api/applications/job/${jobId}/applicants`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      return res.data; 
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || err.message);
-    }
-  }
-);
-
 // export const fetchApplicants = createAsyncThunk(
 //   'applicants/fetchApplicants',
 //   async (jobId, { rejectWithValue }) => {
@@ -27,7 +8,9 @@ export const fetchApplicants = createAsyncThunk(
 //       const res = await axios.get(
 //         `http://localhost:5000/api/applications/job/${jobId}/applicants`,
 //         {
-//          withCredentials: true
+//           headers: {
+//             Authorization: `Bearer ${localStorage.getItem('token')}`,
+//           },
 //         }
 //       );
 //       return res.data; 
@@ -36,6 +19,23 @@ export const fetchApplicants = createAsyncThunk(
 //     }
 //   }
 // );
+
+export const fetchApplicants = createAsyncThunk(
+  'applicants/fetchApplicants',
+  async (jobId, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/applications/job/${jobId}/applicants`,
+        {
+         withCredentials: true
+        }
+      );
+      return res.data; 
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
+  }
+);
 
 // export const fetchSeekerApplications = createAsyncThunk(
 //   'applications/fetchSeekerApplications',
@@ -60,12 +60,10 @@ export const fetchSeekerApplications = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await axios.get('http://localhost:5000/api/applications/seeker', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+        
             withCredentials: true
         });
-      console.log(response.data)
+      
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to fetch applications');

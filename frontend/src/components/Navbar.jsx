@@ -40,6 +40,9 @@ const Navbar = () => {
     user?.roles?.seeker || user?.roles?.referrer, 
   [user]);
 
+
+
+
   const canPostJobs = useMemo(() => 
     user?.roles?.referrer || user?.roles === 'company', 
   [user]);

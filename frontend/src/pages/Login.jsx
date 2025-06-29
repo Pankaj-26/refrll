@@ -251,8 +251,16 @@ const Login = () => {
     }
   };
 
+
+
+const handleGoogleLogin = () => {
+  window.location.href = 'http://localhost:5000/api/auth/google'; 
+};
+
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 p-4">
+
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -275,6 +283,12 @@ const Login = () => {
             Sign in to your account
           </p>
         </div>
+              <button
+  onClick={handleGoogleLogin}
+  className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+>
+  Continue with Google
+</button>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email Field */}

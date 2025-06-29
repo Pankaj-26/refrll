@@ -2,11 +2,73 @@ const Company = require('../models/Company');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const createToken = (company) => {
-  return jwt.sign({ companyId: company._id }, process.env.JWT_SECRET, {
-    expiresIn: '7d',
+const createAccessToken = (user) => {
+  return jwt.sign(
+    { userId: user._id, roles: user.roles }, 
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
+};
+
+const createRefreshToken = (user) => {
+  return jwt.sign(
+    { userId: user._id }, 
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: '7d' }
+  );
+};
+
+// Cookie helpers
+const setAuthCookies = (res, accessToken, refreshToken) => {
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict'
+  };
+
+  res.cookie('accessToken', accessToken, {
+    ...cookieOptions,
+    maxAge: 15 * 60 * 1000 // 15 minutes
+  });
+
+  res.cookie('refreshToken', refreshToken, {
+    ...cookieOptions,
+    path: '/api/auth/refresh',
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
   });
 };
+
+// exports.signupCompany = async (req, res) => {
+//   const { name, email, password } = req.body;
+
+//   try {
+//     let company = await Company.findOne({ email });
+//     if (company) return res.status(400).json({ message: 'Company already exists' });
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     company = new Company({
+//       name,
+//       email,
+//       password: hashedPassword,
+      
+//     });
+
+//     await company.save();
+
+//     const token = createToken(company);
+
+//     res.status(201).json({ token, company: { id: company._id, name: company.name, email: company.email } });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
+
+
+
+exports.signupCompany = async (req, res) => {
+  const { name, email, password } = req.body;
 
 exports.signupCompany = async (req, res) => {
   const { name, email, password } = req.body;
@@ -33,6 +95,7 @@ exports.signupCompany = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
+};
 };
 
 exports.signinCompany = async (req, res) => {
