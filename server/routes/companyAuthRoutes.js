@@ -9,7 +9,7 @@ router.post('/signup', signupCompany);
 router.post('/signin', signinCompany);
 router.get('/me', companyAuthMiddleware, getCompanyProfile);
 // routes/companyRoutes.js
-router.put('/update-profile', authMiddleware, updateCompanyProfile);
+// router.put('/update-profile', authMiddleware, updateCompanyProfile);
 
 
 module.exports = router;

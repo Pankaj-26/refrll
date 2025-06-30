@@ -526,6 +526,9 @@ const ApplicantCard = React.memo(({
     rejected: 'bg-red-100 text-red-800'
   };
 
+
+  console.log(applicant)
+
   return (
     <div className="border border-gray-200 rounded-xl overflow-hidden transition-all hover:shadow-md">
       <div 

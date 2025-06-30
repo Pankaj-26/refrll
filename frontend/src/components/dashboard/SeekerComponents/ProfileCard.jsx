@@ -1,4 +1,4 @@
-import { FiUser, FiEdit, FiSave, FiMail, FiPhone, FiLinkedin, FiGithub, FiMapPin, FiBriefcase, FiTool } from "react-icons/fi";
+import { FiUser, FiEdit, FiSave, FiMail, FiPhone, FiLinkedin, FiGithub, FiMapPin, FiBriefcase, FiTool,FiFile } from "react-icons/fi";
 
 const ContactInfoItem = ({ icon, label, value, editable, name, onChange }) => (
   <div className="flex flex-col mb-4">
@@ -20,7 +20,26 @@ const ContactInfoItem = ({ icon, label, value, editable, name, onChange }) => (
   </div>
 );
 
-export const ProfileCard = ({ profile, isEditing, onEdit, onSave, onCancel, onChange }) => (
+export const ProfileCard = ({ profile, isEditing, onEdit, onSave, onCancel, onChange }) => {
+
+
+   const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      
+        onChange({ 
+          target: { 
+            name: e.target.name, 
+            value: file 
+          } 
+        });
+     
+    }
+  };
+  
+  
+  
+  return(
   <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
     <div className="flex items-start gap-5 mb-6">
       <div className="relative">
@@ -139,6 +158,65 @@ export const ProfileCard = ({ profile, isEditing, onEdit, onSave, onCancel, onCh
         name="experience"
         onChange={onChange}
       />
+
+
+<div className="mt-6">
+        {!isEditing ? (
+          profile.resume ? (
+            <a 
+              href={profile.resume} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-lg transition-colors"
+            >
+              <FiFile className="text-blue-500" />
+              View Resume
+            </a>
+          ) : (
+            <p className="text-gray-500 dark:text-gray-400">No resume uploaded</p>
+          )
+        ) : (
+          <div className="mb-4">
+            <label className="block text-gray-600 dark:text-gray-400 mb-2">
+              Resume Upload
+            </label>
+            <div className="flex items-center gap-3">
+              <label className="flex-1 cursor-pointer">
+                <div className="p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white flex items-center justify-between">
+                  <span className="truncate max-w-[70%]">
+                    {profile.resume ? "Change Resume" : "Select Resume"}
+                  </span>
+                  <FiFile className="text-blue-500" />
+                </div>
+                <input
+                  type="file"
+                  name="resume"
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </label>
+              {profile.resume && (
+                <a 
+                  href={profile.resume} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-3 py-3 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50 text-green-700 dark:text-green-300 rounded-lg"
+                  title="View current resume"
+                >
+                  <FiFile className="text-green-500" />
+                </a>
+              )}
+            </div>
+            {profile.resume && (
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                Upload new file to replace existing resume
+              </p>
+            )}
+          </div>
+        )}
+    </div>
+
     </div>
 
     <div className="flex gap-3">
@@ -170,6 +248,14 @@ export const ProfileCard = ({ profile, isEditing, onEdit, onSave, onCancel, onCh
     </div>
   </div>
 );
+}
 
 
 export default ProfileCard
+
+
+
+
+
+
+

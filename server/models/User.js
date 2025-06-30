@@ -5,11 +5,11 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-  // password: { type: String, required: true },
+
   password: {
   type: String,
   required: function() {
-    return !this.googleId; // Only require if no googleId present
+    return !this.googleId; 
   }
 },
  
@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
   
   resume: {
     url: { type: String, trim: true },
+    public_id: {type:String},
     uploadedAt: { type: Date, default: null },
   },
   
@@ -32,7 +33,8 @@ const userSchema = new mongoose.Schema({
     company: { type: String, trim: true }, 
      phone:{type:String},
      designation:{type:String},
-     location:{type:String} 
+     location:{type:String},
+     profileImg:{type: String, trim: true, default: null }, 
   },
 
   referrerProfile: {  
@@ -40,7 +42,7 @@ const userSchema = new mongoose.Schema({
     
   },
   googleId: { type: String, trim: true },
-  linkedinId: { type: String, trim: true },
+
 
   createdAt: { type: Date, default: Date.now },
 });

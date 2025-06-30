@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
-const upload = require('../middlewares/uploadMiddleware');
+// const upload = require('../middlewares/uploadMiddleware');
 const {
   applyToJob,
   getSeekerApplications,
@@ -18,7 +18,9 @@ const {
 
 
 
-router.post('/apply', authMiddleware,  upload.single('resume'), applyToJob);
+// router.post('/apply', authMiddleware,  upload.single('resume'), applyToJob);
+
+router.post('/apply', authMiddleware,  applyToJob);
 
 router.get('/seeker', authMiddleware, getSeekerApplications);
 

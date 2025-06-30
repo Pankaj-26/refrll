@@ -94,6 +94,7 @@ const navigate=useNavigate()
 
   // Handle job application
   const handleApply = useCallback((jobId) => {
+   
     dispatch(applyToJob(jobId));
   }, [dispatch]);
 

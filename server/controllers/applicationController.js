@@ -78,6 +78,8 @@ exports.applyToJob = async (req, res) => {
       return res.status(404).json({ message: 'Job not found.' });
     }
 
+console.log('Seeker:', seeker);
+
     const resumeUrl = seeker.resume?.url || seeker.resume;
     if (!resumeUrl) {
       return res.status(400).json({

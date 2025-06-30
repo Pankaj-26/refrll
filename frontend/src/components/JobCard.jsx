@@ -23,6 +23,9 @@ const JobCard = ({ job, currentUser, onApply, onRefer, loading, activeTab }) => 
       : undefined,
   });
 
+
+  // console.log(job)
+
   // Determine job action
   const getJobAction = () => {
     const roles = currentUser?.roles || {};
@@ -37,6 +40,12 @@ const JobCard = ({ job, currentUser, onApply, onRefer, loading, activeTab }) => 
 
     // Check if user has already applied
     const alreadyApplied = job.applied || job.applicants?.includes(userId);
+    // const alreadyApplied = job.applied ;
+   
+
+
+
+
 
     // Allow seekers to apply to any job they haven't applied to
     if (isSeeker && !alreadyApplied) {

@@ -536,6 +536,73 @@ exports.claimJobForReferral = async (req, res) => {
 };
 
 
+// exports.getJobs = async (req, res) => {
+//   try {
+//     const userId = req.userId;
+//     const { tab } = req.query;
+
+//     const query = {};
+
+//     if (tab === 'company') {
+//       query.postedByType = 'company';
+//     }
+
+//     if (tab === 'referral') {
+//       // Step 1: Get all active claimed jobs (by any referrer)
+//       const claimedJobs = await ReferralClaim.find({ status: 'Active' })
+//         .select('referralJob referrer')
+//         .lean();
+
+//       const claimedJobIds = claimedJobs
+//         .filter(c => c.referrer.toString() !== userId) // ❌ Exclude jobs claimed by this user
+//         .map(c => c.referralJob);
+
+//       // Step 2: Get jobs posted by other referrers (not this user)
+//       query.$or = [
+//         { postedByType: 'referrer', postedBy: { $ne: userId } }, // ✅ Jobs posted by other referrers
+//         { _id: { $in: claimedJobIds } } // ✅ Jobs claimed by other referrers
+//       ];
+//     }
+
+//     const jobs = await Job.find(query)
+//       .populate({
+//         path: 'referralClaims',
+//         match: { status: 'Active' },
+//         select: 'contactInfo referrer',
+//         populate: {
+//           path: 'referrer',
+//           select: 'name email profile.company'
+//         }
+//       })
+//       .lean();
+
+//     // Optional: attach seeker’s application info
+//     let applications = [];
+//     if (userId) {
+//       applications = await Application.find({ seeker: userId }).select('job status').lean();
+//     }
+
+//     const appliedMap = {};
+//     applications.forEach(app => {
+//       appliedMap[app.job.toString()] = app.status || 'Pending';
+//     });
+
+//     const enrichedJobs = jobs.map(job => ({
+//       ...job,
+//       applied: !!appliedMap[job._id.toString()],
+//       applicationStatus: appliedMap[job._id.toString()] || null,
+//     }));
+
+//     res.status(200).json(enrichedJobs);
+//   } catch (err) {
+//     console.error('Error fetching jobs:', err);
+//     res.status(500).json({ message: 'Failed to fetch jobs' });
+//   }
+// };
+
+
+
+
 exports.getJobs = async (req, res) => {
   try {
     const userId = req.userId;
@@ -578,20 +645,37 @@ exports.getJobs = async (req, res) => {
 
     // Optional: attach seeker’s application info
     let applications = [];
-    if (userId) {
-      applications = await Application.find({ seeker: userId }).select('job status').lean();
-    }
+    
+     applications = await Application.find({ seeker: userId })
+  .select('job originalJob status')
+  .lean();
+    
 
-    const appliedMap = {};
-    applications.forEach(app => {
-      appliedMap[app.job.toString()] = app.status || 'Pending';
-    });
+const appliedMap = {};
+applications.forEach(app => {
+  if (app.job) appliedMap[app.job.toString()] = app.status || 'Pending';
+  if (app.originalJob) appliedMap[app.originalJob.toString()] = app.status || 'Pending';
+});
 
-    const enrichedJobs = jobs.map(job => ({
-      ...job,
-      applied: !!appliedMap[job._id.toString()],
-      applicationStatus: appliedMap[job._id.toString()] || null,
-    }));
+const enrichedJobs = jobs.map(job => {
+  const jobId = job._id.toString();
+  const originalJobId = job.originalJob?.toString();
+
+  const applied = appliedMap[jobId] || appliedMap[originalJobId];
+  const applicationStatus = appliedMap[jobId] || appliedMap[originalJobId] || null;
+
+  return {
+    ...job,
+    applied: !!applied,
+    applicationStatus
+  };
+});
+
+// console.log('AppliedSet:', [...appliedSet]);
+
+// jobs.forEach(job => {
+//   console.log('Job:', job._id.toString(), 'Original:', job.originalJob?.toString(), 'Applied:', appliedSet.has(job._id.toString()) || appliedSet.has(job.originalJob?.toString()));
+// });
 
     res.status(200).json(enrichedJobs);
   } catch (err) {

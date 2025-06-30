@@ -13,7 +13,8 @@ const {
 
 router.put('/upgradeToReferrer', authMiddleware, upgradeToReferrer);
 router.put('/downgradeToSeeker', authMiddleware, downgradeToSeeker);
-const upload = require('../middlewares/uploadMiddleware');
+const {upload} = require('../middlewares/uploadMiddleware');
+
 
 
 // PATCH /api/users/profile
@@ -23,6 +24,8 @@ router.patch(
   upload.single('resume'),
   updateSeekerProfile
 );
+
+
 
 router.get("/profile", authMiddleware, getSeekerProfile);
 
