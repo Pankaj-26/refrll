@@ -258,6 +258,20 @@ export const fetchUser = createAsyncThunk('auth/fetchUser', async (_, { rejectWi
   }
 });
 
+
+export const refreshAccessToken = async () => {
+  try {
+    const res = await axios.post(`${API}/auth/refresh`, {}, {
+      withCredentials: true
+    });
+    return res.data;
+  } catch (err) {
+    console.error('Refresh token failed:', err);
+    throw err;
+  }
+};
+
+
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ email, password }, { rejectWithValue }) => {
@@ -280,8 +294,6 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
 });
 
 
-
-
 export const toggleRole = createAsyncThunk('auth/toggleRole', async (currentRole, thunkAPI) => {
   try {
     const token = localStorage.getItem('token');
@@ -294,7 +306,8 @@ export const toggleRole = createAsyncThunk('auth/toggleRole', async (currentRole
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true
+        withCredentials: true,
+        timeout: 5000
       }
     );
     

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import "./App.css";
 import Navbar from "./components/Navbar";
@@ -12,7 +12,7 @@ import CompanyProfile from "./pages/company/CompanyProfile.jsx";
 import CompanyDashboard from "./pages/company/CompanyDashboard.jsx";
 import JobPostings from "./pages/JobPostings.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import { fetchUser } from "./features/auth/authSlice.js";
+import { fetchUser,refreshAccessToken } from "./features/auth/authSlice.js";
 import JobApplicants from "./pages/company/JobApplicants.jsx";
 import AllApplications from "./pages/AllApplications.jsx";
 import ApplicationDetails from "./pages/ApplicationDetails.jsx";
@@ -24,17 +24,26 @@ import { useLocation } from "react-router-dom";
 import api from "./api.js";
 import axios from "axios";
 import Unauthorized from "./pages/Unauthorized.jsx";
+import Footer from "./components/Footer.jsx";
+import AboutPage from "./pages/Aboutpage.jsx";
+import ContactPage from "./pages/Contactpage.jsx";
+import PrivacyPolicy from "./pages/PrivacyPage.jsx";
+import TermsOfService from "./pages/TermsOfService.jsx";
+import BlogPage from "./pages/BlogPage.jsx";
+import HelpCenter from "./pages/HelpCenter.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
   const { mode } = useSelector((state) => state.theme);
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+   const [loading, setLoading] = useState(true);
 
   // Fetch user and setup theme on mount
-  useEffect(() => {
-    dispatch(fetchUser());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchUser());
+  // }, [dispatch]);
 
   useEffect(() => {
     // Initialize theme
@@ -47,6 +56,23 @@ function App() {
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
   }, [mode]);
+
+
+ useEffect(() => {
+  const checkAndRefresh = async () => {
+    try {
+      await refreshAccessToken();
+    } catch (err) {
+      console.log("Refresh failed");
+    } finally {
+      setLoading(false); // ensures loading ends regardless of success or failure
+    }
+  };
+
+  checkAndRefresh();
+}, []);
+
+
 
   return (
     <div className="bg-white text-black dark:bg-gray-900 dark:text-white min-h-screen">
@@ -140,8 +166,17 @@ function App() {
           />
 
           <Route path="/unauthorized" element={<Unauthorized />} />
+
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/help" element={<HelpCenter />} />
+          <Route path="/" element={<LandingPage />} />
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 }

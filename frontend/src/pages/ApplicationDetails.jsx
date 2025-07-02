@@ -36,6 +36,9 @@ const ApplicationDetails = () => {
 
   const { currentJob } = useSelector((state) => state.jobs);
 
+
+  console.log(currentJob)
+
   useEffect(() => {
     try {
       setLoading(true);
@@ -158,7 +161,7 @@ const ApplicationDetails = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                {currentJob.job.title} at {currentJob.job.company}
+                {currentJob?.job?.title} at {currentJob?.job?.company}
               </h1>
               <div className="flex flex-wrap items-center gap-3">
                 <span

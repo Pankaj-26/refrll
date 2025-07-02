@@ -46,7 +46,11 @@ export const updateProfile = createAsyncThunk(
           if (key === "skills" && Array.isArray(value)) {
             formData.append("skills", value.join(",")); // Join skills into a string
           } else if (key === "resume") {
-            formData.append("resume", value); // file
+            // formData.append("resume", value); // file
+
+             if (value instanceof File) {
+    formData.append("resume", value);
+  }
           } else {
             formData.append(key, value);
           }

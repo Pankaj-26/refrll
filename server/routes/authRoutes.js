@@ -14,7 +14,7 @@ router.post('/signup', signup);
 router.post('/signin', signin);
 router.get('/me',authMiddleware, getme);
 router.post('/logout', logout);
-// router.post('/refresh', refreshMiddleware,refresh);
+router.post('/refresh',refresh);
 
 const createAccessToken = (user) => {
   return jwt.sign(

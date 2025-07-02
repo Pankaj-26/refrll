@@ -177,24 +177,39 @@ exports.updateSeekerProfile = async (req, res) => {
 user.profile.designation= designation || user.profile.designation
     
  
- if (!req.file) {
-      return res.status(400).json({ message: 'No resume file uploaded' });
-    }
+//  if (!req.file) {
+//       return res.status(400).json({ message: 'No resume file uploaded' });
+//     }
 
-    // Delete previous resume from Cloudinary if exists
-    if (user.resume && user.resume.public_id) {
+//     // Delete previous resume from Cloudinary if exists
+//     if (user.resume && user.resume.public_id) {
+//       await cloudinary.uploader.destroy(user.resume.public_id, { resource_type: 'raw' });
+//     }
+
+
+
+ if (req.file) {
+       if (user.resume && user.resume.public_id) {
       await cloudinary.uploader.destroy(user.resume.public_id, { resource_type: 'raw' });
     }
-
-    // Save new resume
-    user.resume = {
+       user.resume = {
       url: req.file.path, 
       public_id: req.file.filename, 
       uploadedAt: new Date(),
     };
 
+    }
 
-    console.log("Updated user profile:", user.resume);
+   
+
+    // Save new resume
+    // user.resume = {
+    //   url: req.file.path, 
+    //   public_id: req.file.filename, 
+    //   uploadedAt: new Date(),
+    // };
+
+
 
     await user.save();
 
@@ -299,12 +314,13 @@ exports.getSeekerProfile = async (req, res) => {
       linkedIn: user.profile?.linkedIn || "",
       github: user.profile?.github || "",
       company: user.profile?.company || "",
-      resumeUrl: user.resume?.url || "",
+      resume: user.resume?.url || "",
       location:user.profile?.location || "",
       designation:user.profile?.designation ||"",
       phone:user.profile?.phone||"",
       profileImg: user.profile?.profileImg || null, 
     };
+
 
 
     res.status(200).json(profile);

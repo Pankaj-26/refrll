@@ -22,6 +22,8 @@ const ReferrerApplicationCard= ({ application, onStatusUpdate, updating }) => {
     accepted: "green",
     rejected: "red"
   };
+
+  
   
   const applicant = application.seeker || {};
   const profile = applicant.profile || {};
@@ -109,7 +111,7 @@ const ReferrerApplicationCard= ({ application, onStatusUpdate, updating }) => {
           
           <div className="relative">
             <select
-              value={application.referrerStatus}
+              value={application.status}
               onChange={(e) => onStatusUpdate(application._id, e.target.value)}
               disabled={updating}
               className={`pl-2 pr-8 py-1 text-sm rounded border border-gray-300 bg-white appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${

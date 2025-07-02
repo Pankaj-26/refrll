@@ -16,6 +16,107 @@ const mongoose =require('mongoose')
 // Apply to a job
 
 
+// exports.applyToJob = async (req, res) => {
+//   try {
+//     const seekerId = req.userId;
+//     const { jobId } = req.body;
+
+//     if (!jobId) {
+//       return res.status(400).json({ message: 'Job ID is required.' });
+//     }
+
+//     // Attempt to auto-detect referrerId from referralJob
+//     let referrerId = req.body.referrerId;
+//     let isReferral = false;
+//     let originalJobId = jobId;
+//     let targetJobId = jobId;
+
+//     if (!referrerId) {
+//       const referralClaim = await ReferralClaim.findOne({ referralJob: jobId, status: 'Active' })
+//         .select('referrer job')
+//         .lean();
+
+//       if (referralClaim) {
+//         referrerId = referralClaim.referrer;
+//         originalJobId = referralClaim.job;
+//         isReferral = true;
+//       }
+//     } else {
+//       // In case it's passed manually
+//       const claim = await ReferralClaim.findOne({
+//         job: jobId,
+//         referrer: referrerId,
+//         status: 'Active'
+//       }).select('referralJob').lean();
+
+//       if (!claim) {
+//         return res.status(400).json({ message: 'Invalid or inactive referral claim.' });
+//       }
+
+//       targetJobId = claim.referralJob;
+//       isReferral = true;
+//       originalJobId = jobId;
+//     }
+
+//     // Prevent duplicate applications
+//     const existing = await Application.findOne({ seeker: seekerId, originalJob: originalJobId });
+//     if (existing) {
+//       return res.status(400).json({ message: 'Already applied to this job.' });
+//     }
+
+//     // Fetch job and seeker
+//     const [seeker, job] = await Promise.all([
+//       User.findById(seekerId, 'roles resume'),
+//       Job.findById(targetJobId)
+//     ]);
+
+//     if (!seeker?.roles?.seeker) {
+//       return res.status(403).json({ message: 'Only seekers can apply to jobs.' });
+//     }
+
+//     if (!job) {
+//       return res.status(404).json({ message: 'Job not found.' });
+//     }
+
+// console.log('Seeker:', seeker);
+
+//     const resumeUrl = seeker.resume?.url || seeker.resume;
+//     if (!resumeUrl) {
+//       return res.status(400).json({
+//         message: 'Resume not found. Upload in profile first.',
+//         requiresResumeUpload: true
+//       });
+//     }
+
+//     // Create application
+//     const application = await Application.create({
+//       job: targetJobId,
+//       originalJob: originalJobId,
+//       seeker: seekerId,
+//       resumeUrl,
+//       appliedVia: isReferral ? 'referral' : 'company',
+//       referrer: isReferral ? referrerId : null,
+//       companyStatus: isReferral ? null : 'applied',
+//       referrerStatus: isReferral ? 'applied' : null,
+//       companyStatusUpdatedAt: isReferral ? null : new Date(),
+//       referrerStatusUpdatedAt: isReferral ? new Date() : null,
+//       updatedBy: {
+//         kind: isReferral ? 'referrer' : 'company',
+//         id: isReferral ? referrerId : job.postedBy
+//       }
+//     });
+
+//     return res.status(201).json({
+//       message: 'Application submitted successfully.',
+//       applicationId: application._id
+//     });
+
+//   } catch (err) {
+//     console.error('applyToJob error:', err);
+//     return res.status(500).json({ message: 'Server error' });
+//   }
+// };
+
 exports.applyToJob = async (req, res) => {
   try {
     const seekerId = req.userId;
@@ -78,7 +179,12 @@ exports.applyToJob = async (req, res) => {
       return res.status(404).json({ message: 'Job not found.' });
     }
 
-console.log('Seeker:', seeker);
+    // ✅ Check application slots if it's a referrer job with a limit
+    if (job.postedByType === 'referrer' && job.applicationLimit) {
+      if (job.currentApplications >= job.applicationLimit) {
+        return res.status(400).json({ message: 'No more slots left for this job.' });
+      }
+    }
 
     const resumeUrl = seeker.resume?.url || seeker.resume;
     if (!resumeUrl) {
@@ -88,7 +194,7 @@ console.log('Seeker:', seeker);
       });
     }
 
-    // Create application
+    // ✅ Create application
     const application = await Application.create({
       job: targetJobId,
       originalJob: originalJobId,
@@ -106,6 +212,12 @@ console.log('Seeker:', seeker);
       }
     });
 
+    // ✅ Increment currentApplications for referrer jobs only
+    if (job.postedByType === 'referrer' && job.applicationLimit) {
+      job.currentApplications = (job.currentApplications || 0) + 1;
+      await job.save();
+    }
+
     return res.status(201).json({
       message: 'Application submitted successfully.',
       applicationId: application._id
@@ -116,6 +228,7 @@ console.log('Seeker:', seeker);
     return res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 
 
@@ -257,8 +370,10 @@ exports.getReferrerApplications = async (req, res) => {
         
         // For referral copies, show referrer status
         const displayStatus = job.isReferralCopy 
-          ? app.referrerStatus
-          : app.companyStatus;
+          ?  app.companyStatus : app.referrerStatus
+     
+
+        
         
         jobMap.get(jobId).applicants.push({
           _id: app._id,
@@ -269,6 +384,8 @@ exports.getReferrerApplications = async (req, res) => {
         });
       }
     });
+    
+   
 
     res.status(200).json({ jobs: Array.from(jobMap.values()) });
   } catch (err) {
@@ -320,13 +437,13 @@ exports.updateApplicationStatus = async (req, res) => {
     }
 
     // DEBUG: Log user and application info
-    console.log(`Status update request:
-      User ID: ${userId}
-      User Type: ${userType}
-      Application ID: ${applicationId}
-      Applied Via: ${application.appliedVia}
-      Job Type: ${application.job?.postedByType}
-      Is Referral Copy: ${application.job?.isReferralCopy}`);
+    // console.log(`Status update request:
+    //   User ID: ${userId}
+    //   User Type: ${userType}
+    //   Application ID: ${applicationId}
+    //   Applied Via: ${application.appliedVia}
+    //   Job Type: ${application.job?.postedByType}
+    //   Is Referral Copy: ${application.job?.isReferralCopy}`);
 
     // Determine which status to update
     let statusField = null;
@@ -397,16 +514,14 @@ exports.updateApplicationStatus = async (req, res) => {
       { $set: updateData }
     );
 
+    
+
     if (result.modifiedCount === 0) {
       return res.status(409).json({ 
         message: 'Application was modified concurrently. Please retry.' 
       });
     }
-    console.log(`Status updated:
-      Application ID: ${applicationId}
-      New Status: ${status}
-      Updated By: ${userId}
-      Status Field: ${statusField}`);
+
 
     res.status(200).json({
       message: 'Status updated successfully',

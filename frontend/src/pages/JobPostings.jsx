@@ -68,18 +68,33 @@ const navigate=useNavigate()
   }, [searchParams, setSearchParams]);
 
   // Fetch jobs when tab or filters change
+  // useEffect(() => {
+  //   const fetchParams = {
+  //     tab: activeTab,
+  //     ...(debouncedSearch && { search: debouncedSearch }),
+  //     ...(filters.jobType.length > 0 && { jobType: filters.jobType }),
+  //     ...(filters.experience && { experience: filters.experience }),
+  //     ...(filters.salaryRange && { salaryRange: filters.salaryRange }),
+  //     ...(filters.location && { location: filters.location }),
+  //   };
+
+  //   dispatch(fetchJobs(fetchParams));
+  // }, [dispatch, activeTab, debouncedSearch, filters]);
+
+  
   useEffect(() => {
     const fetchParams = {
       tab: activeTab,
-      ...(debouncedSearch && { search: debouncedSearch }),
-      ...(filters.jobType.length > 0 && { jobType: filters.jobType }),
-      ...(filters.experience && { experience: filters.experience }),
-      ...(filters.salaryRange && { salaryRange: filters.salaryRange }),
-      ...(filters.location && { location: filters.location }),
+      search: debouncedSearch,
+      experience: searchParams.experience && !isNaN(searchParams.experience) ? searchParams.experience : undefined,
+      salaryRange: filters.salaryRange,
+      location: filters.location,
+      // page: currentPage,
+      limit: 20 // or any default limit
     };
 
     dispatch(fetchJobs(fetchParams));
-  }, [dispatch, activeTab, debouncedSearch, filters]);
+  }, [activeTab, debouncedSearch, filters, dispatch]);
 
   // Debounce search input
   useEffect(() => {
@@ -141,12 +156,29 @@ const navigate=useNavigate()
   }, []);
 
   // Calculate stats
-  const stats = useMemo(() => ({
+  // const stats = useMemo(() => ({
+  //   total: jobs.length,
+  //   referral: jobs.filter(job => job.postedByType === "referrer").length,
+  //   company: jobs.filter(job => job.postedByType === "company").length,
+  //   remote: jobs.filter(job => job.employmentType === "Remote").length,
+  // }), [jobs]);
+
+const stats = useMemo(() => {
+  if (!Array.isArray(jobs)) return {
+    total: 0,
+    referral: 0,
+    company: 0,
+    remote: 0,
+  };
+
+  return {
     total: jobs.length,
     referral: jobs.filter(job => job.postedByType === "referrer").length,
     company: jobs.filter(job => job.postedByType === "company").length,
     remote: jobs.filter(job => job.employmentType === "Remote").length,
-  }), [jobs]);
+  };
+}, [jobs]);
+
 
   // Filter jobs client-side
   const filteredJobs = useMemo(() => {
@@ -447,6 +479,10 @@ const navigate=useNavigate()
 };
 
 export default JobPostings;
+
+
+
+
 
 
 

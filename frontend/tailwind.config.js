@@ -37,6 +37,11 @@ module.exports = {
       black: '#000000',
       // ... other colors you need
     },
+     extend: {
+      fontFamily: {
+        sans: ["Roboto"], // Replace with your chosen font
+      },
+    },
   },
   plugins: [],
 }

@@ -389,7 +389,7 @@ export const fetchJobs = createAsyncThunk(
           experience: params.experience
         }
       });
-      
+    
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
@@ -464,7 +464,9 @@ export const fetchJobsWithApplicantsForReferrer = createAsyncThunk(
        
         withCredentials:true
       });
-     console.log( 'job', res.data)
+
+      console.log(res.data)
+     
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
@@ -522,6 +524,8 @@ export const updateApplicationStatus = createAsyncThunk(
         withCredentials:true
         }
       );
+
+      console.log(response.data)
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data.message || "Failed to update status");
@@ -554,7 +558,7 @@ export const getJobDetailForSeeker = createAsyncThunk(
       const res = await axios.get(`/api/applications/${jobId}/seeker`,   {
          withCredentials:true
         });
-  
+   
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data.message || 'Error fetching job');
@@ -597,7 +601,11 @@ const jobsSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
-        state.jobs = action.payload;
+
+        //changes .jobs added here
+        state.jobs = action.payload.jobs;
+        // state.jobs = action.payload;
+
         state.loading = false;
       })
       .addCase(fetchJobs.rejected, (state, action) => {

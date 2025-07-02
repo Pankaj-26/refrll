@@ -23,49 +23,99 @@ const JobCard = ({ job, currentUser, onApply, onRefer, loading, activeTab }) => 
       : undefined,
   });
 
+ const isReferrerJob = job.postedByType === 'referrer';
 
-  // console.log(job)
+ const remaining = isReferrerJob
+  ? (job.applicationLimit ?? 0) - (job.currentApplications ?? 0)
+  : null;
+
+
+
 
   // Determine job action
-  const getJobAction = () => {
-    const roles = currentUser?.roles || {};
-    const isReferrer = roles?.referrer;
-    const isSeeker = roles?.seeker;
-    const userId = currentUser?.id;
+//   const getJobAction = () => {
+//     const roles = currentUser?.roles || {};
+//     const isReferrer = roles?.referrer;
+//     const isSeeker = roles?.seeker;
+//     const userId = currentUser?.id;
 
-    // Check if user has already claimed this job
-    const alreadyReferred = job.referralClaims?.some(
-      claim => claim.referrer === userId || claim.referrer?._id === userId
-    );
+//     // Check if user has already claimed this job
+//     const alreadyReferred = job.referralClaims?.some(
+//       claim => claim.referrer === userId || claim.referrer?._id === userId
+//     );
 
-    // Check if user has already applied
-    const alreadyApplied = job.applied || job.applicants?.includes(userId);
-    // const alreadyApplied = job.applied ;
+//     // Check if user has already applied
+//     const alreadyApplied = job.applied || job.applicants?.includes(userId);
+//     // const alreadyApplied = job.applied ;
    
 
 
 
 
 
-    // Allow seekers to apply to any job they haven't applied to
-    if (isSeeker && !alreadyApplied) {
-      return 'apply';
-    }
+//     // Allow seekers to apply to any job they haven't applied to
+//     // if (isSeeker && !alreadyApplied) {
+//     //   return 'apply';
+//     // }
 
-    // Allow referrers to claim unclaimed company jobs
-    if (isReferrer && job.postedByType === "company" && !alreadyReferred) {
-      return 'refer';
-    }
+//     if (isSeeker && !alreadyApplied) {
+//   // For referrer jobs: disable if remaining is 0
+//   if (isReferrerJob && remaining <= 0) {
+//     return null; // Hide button
+//   }
+//   return 'apply';
+// }
 
-    // Show claimed status if referrer already claimed
-    if (isReferrer && job.postedByType === "company" && alreadyReferred) {
-      return 'claimed';
-    }
 
-    return null;
-  };
+//     // Allow referrers to claim unclaimed company jobs
+//     if (isReferrer && job.postedByType === "company" && !alreadyReferred) {
+//       return 'refer';
+//     }
+
+//     // Show claimed status if referrer already claimed
+//     if (isReferrer && job.postedByType === "company" && alreadyReferred) {
+//       return 'claimed';
+//     }
+
+//     return null;
+//   };
+
+// Determine job action
+const getJobAction = () => {
+  const roles = currentUser?.roles || {};
+  const isReferrer = roles?.referrer;
+  const isSeeker = roles?.seeker;
+  const userId = currentUser?.id;
+
+  const alreadyReferred = job.referralClaims?.some(
+    claim => claim.referrer === userId || claim.referrer?._id === userId
+  );
+
+  const alreadyApplied = job.applied || job.applicants?.includes(userId);
+
+  if (isSeeker && !alreadyApplied) {
+    // Prevent if referrer job is full
+    if (isReferrerJob && remaining <= 0) {
+      return null;
+    }
+    return 'apply';
+  }
+
+  if (isReferrer && job.postedByType === "company" && !alreadyReferred) {
+    return 'refer';
+  }
+
+  if (isReferrer && job.postedByType === "company" && alreadyReferred) {
+    return 'claimed';
+  }
+
+  return null;
+};
+
 
   const action = getJobAction();
+
+
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-lg h-full flex flex-col">
@@ -119,6 +169,10 @@ const JobCard = ({ job, currentUser, onApply, onRefer, loading, activeTab }) => 
               color="amber"
               icon={<FiClock />}
             />
+  {isReferrerJob && remaining !== null && remaining >= 0 && (
+  <p>Remaining Applications: {remaining}</p>
+)}
+
           </div>
           
           {job.salaryRange && (

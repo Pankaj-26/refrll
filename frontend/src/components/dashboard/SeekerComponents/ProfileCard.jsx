@@ -37,7 +37,7 @@ export const ProfileCard = ({ profile, isEditing, onEdit, onSave, onCancel, onCh
     }
   };
   
-  
+  console.log(profile)
   
   return(
   <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">

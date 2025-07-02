@@ -74,3 +74,7 @@ applicationSchema.pre('save', async function(next) {
 applicationSchema.index({ job: 1, seeker: 1  }, { unique: true });
 applicationSchema.index({ seeker: 1, createdAt: -1 });
 module.exports = mongoose.model('Application', applicationSchema);
+
+
+
+
