@@ -1,11 +1,38 @@
 import { FiUser, FiEdit, FiSave, FiMail, FiPhone, FiLinkedin, FiGithub, FiMapPin, FiBriefcase, FiTool,FiFile } from "react-icons/fi";
 
+// const ContactInfoItem = ({ icon, label, value, editable, name, onChange }) => (
+//   <div className="flex flex-col mb-4">
+//     <label className="flex items-center gap-2 mb-1 text-gray-600 dark:text-gray-300">
+//       {icon}
+//       <span>{label}</span>
+//     </label>
+//     {editable ? (
+//       <input
+//         type="text"
+//         name={name}
+//         value={value}
+//         onChange={onChange}
+//         className="w-full p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-gray-900 dark:text-white"
+//       />
+//     ) : (
+
+//       // {label==='LinkedIn'?
+
+//       //   <a href={value} target="_blank">{value || "Not provided"}</a> :  <p className="text-gray-900 dark:text-white font-medium">{value || "Not provided"}</p>
+//       // }
+//       <p className="text-gray-900 dark:text-white font-medium">{value || "Not provided"}</p>
+//     )}
+//   </div>
+// );
+
+
 const ContactInfoItem = ({ icon, label, value, editable, name, onChange }) => (
   <div className="flex flex-col mb-4">
     <label className="flex items-center gap-2 mb-1 text-gray-600 dark:text-gray-300">
       {icon}
       <span>{label}</span>
     </label>
+
     {editable ? (
       <input
         type="text"
@@ -15,10 +42,28 @@ const ContactInfoItem = ({ icon, label, value, editable, name, onChange }) => (
         className="w-full p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-gray-900 dark:text-white"
       />
     ) : (
-      <p className="text-gray-900 dark:text-white font-medium">{value || "Not provided"}</p>
+      <>
+        {label === "LinkedIn" || label === "GitHub" ? (
+          value ? (
+            <a
+              href={value.startsWith("http") ? value : `https://${value}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 dark:text-blue-400 underline break-words"
+            >
+              {value}
+            </a>
+          ) : (
+            <p className="text-gray-900 dark:text-white font-medium">Not provided</p>
+          )
+        ) : (
+          <p className="text-gray-900 dark:text-white font-medium">{value || "Not provided"}</p>
+        )}
+      </>
     )}
   </div>
 );
+
 
 export const ProfileCard = ({ profile, isEditing, onEdit, onSave, onCancel, onChange }) => {
 
@@ -37,7 +82,7 @@ export const ProfileCard = ({ profile, isEditing, onEdit, onSave, onCancel, onCh
     }
   };
   
-  console.log(profile)
+  
   
   return(
   <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">

@@ -418,42 +418,44 @@ export const applyToJob = createAsyncThunk("jobs/applyToJob", async ( jobId , th
 });
 
 
-export const fetchJobsWithApplicants = createAsyncThunk(
-  "jobs/fetchJobsWithApplicants",
-  async (_, thunkAPI) => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/applications/applicants", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-     console.log(res.data)
-      
-      return res.data;
-    } catch (err) {
-      return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
-    }
-  }
-);
-
-
-// export const fetchJobsWithApplicantsForReferrer = createAsyncThunk(
-//   "jobs/fetchJobsWithApplicantsForReferrer",
+// export const fetchJobsWithApplicants = createAsyncThunk(
+//   "jobs/fetchJobsWithApplicants",
 //   async (_, thunkAPI) => {
 //     try {
-//       const res = await axios.get("http://localhost:5000/api/applications/referrer", {
+//       const res = await axios.get("http://localhost:5000/api/applications/applicants", {
 //         headers: {
 //           Authorization: `Bearer ${localStorage.getItem("token")}`,
 //         },
-//         withCredentials:true
 //       });
-//      console.log( 'job', res.data)
+//      console.log(res.data)
+      
 //       return res.data;
 //     } catch (err) {
 //       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
 //     }
 //   }
 // );
+
+export const fetchJobsWithApplicants = createAsyncThunk(
+  "jobs/fetchJobsWithApplicants",
+  async (params, thunkAPI) => {
+    
+ 
+    try {
+      const res = await axios.get("http://localhost:5000/api/applications/applicants", {
+     params
+      });
+     console.log(res.data)
+      
+      return res.data;
+    } catch (err) {
+     console.log(err)
+
+      return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+    
+  }
+  }
+);
 
 
 export const fetchJobsWithApplicantsForReferrer = createAsyncThunk(
@@ -622,10 +624,18 @@ const jobsSlice = createSlice({
       .addCase(fetchJobsWithApplicants.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchJobsWithApplicants.fulfilled, (state, action) => {
-        state.jobs = action.payload;
-        state.loading = false;
-      })
+      // .addCase(fetchJobsWithApplicants.fulfilled, (state, action) => {
+      //   state.jobs = action.payload;
+      //   state.loading = false;
+      // })
+        .addCase(fetchJobsWithApplicants.fulfilled, (state, action) => {
+      state.loading = false;
+      state.jobs = action.payload.jobs;
+      state.totalJobs = action.payload.totalJobs;
+      state.totalPages = action.payload.totalPages;
+      state.currentPage = action.payload.currentPage;
+      state.limit = action.payload.limit;
+    })
       .addCase(fetchJobsWithApplicants.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;

@@ -61,6 +61,31 @@ const navigate=useNavigate()
   const [showReferModal, setShowReferModal] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
 
+
+     const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  
+  
+
+const handleRefresh = useCallback(() => {
+  setIsRefreshing(true);
+
+  const fetchParams = {
+    tab: activeTab,
+    search: debouncedSearch,
+    experience: filters.experience,
+    salaryRange: filters.salaryRange,
+    location: filters.location,
+    // ...other filters if needed
+  };
+
+  dispatch(fetchJobs(fetchParams))
+    .finally(() => setIsRefreshing(false));
+}, [dispatch, activeTab, debouncedSearch, filters]);
+
+
+
+
   // Set active tab in URL
   const setActiveTab = useCallback((tab) => {
     searchParams.set("tab", tab);
@@ -109,7 +134,6 @@ const navigate=useNavigate()
 
   // Handle job application
   const handleApply = useCallback((jobId) => {
-   
     dispatch(applyToJob(jobId));
   }, [dispatch]);
 
@@ -117,15 +141,22 @@ const navigate=useNavigate()
   const handleReferClick = useCallback((job) => {
     setSelectedJob(job);
     setShowReferModal(true);
+      handleRefresh()
+
   }, []);
 
   const confirmReferral = useCallback((contactInfo) => {
     if (selectedJob) {
-      dispatch(claimJobForReferral({
+     dispatch(claimJobForReferral({
         jobId: selectedJob._id,
         contactInfo,
-      }));
+      }))
+
+       .then(() => {
       setShowReferModal(false);
+      handleRefresh(); 
+        // setShowReferModal(false);
+       })
     }
   }, [dispatch, selectedJob]);
 
@@ -292,7 +323,7 @@ const stats = useMemo(() => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <StatsCard 
             title="Total Jobs" 
             value={stats.total} 
@@ -317,7 +348,7 @@ const stats = useMemo(() => {
             icon={<FiMapPin className="text-amber-500" />}
             color="amber"
           />
-        </div>
+        </div> */}
 
         {/* Filters Panel */}
         {showFilters && (

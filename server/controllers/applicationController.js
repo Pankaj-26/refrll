@@ -370,7 +370,7 @@ exports.getReferrerApplications = async (req, res) => {
         
         // For referral copies, show referrer status
         const displayStatus = job.isReferralCopy 
-          ?  app.companyStatus : app.referrerStatus
+          ?   app.referrerStatus:app.companyStatus ;
      
 
         
@@ -564,18 +564,103 @@ console.log('Fetching applicants for job:');
 
 // Get all jobs posted by current user, along with applicants per job
 
+// exports.getJobsWithApplicants = async (req, res) => {
+//   try {
+//     const userId = req.userId;
+//     const userType = req.userType; 
+
+//     let jobQuery = {};
+
+//     if (userType==='referrer') {
+//       const claimedJobs = await ReferralClaim.find({
+//         referrer: userId,
+//         status: 'Active'
+//       }).select('job');
+
+//       const claimedJobIds = claimedJobs.map(c => c.job);
+
+//       jobQuery = {
+//         $or: [
+//           { postedBy: userId, postedByType: 'referrer' },
+//           { _id: { $in: claimedJobIds } }
+//         ]
+//       };
+//     } else if (userType === 'company') {
+//       jobQuery = {
+//         postedBy: userId,
+//         postedByType: 'company'
+//       };
+//     } else {
+//       return res.status(403).json({ message: 'Unauthorized user type' });
+//     }
+
+//     const jobs = await Job.find(jobQuery).lean();
+//     const jobIds = jobs.map(job => job._id);
+
+//     // 💡 Application filter
+//     const appFilter = {
+//       job: { $in: jobIds },
+//     };
+
+//     if (userType==='referrer') {
+//       appFilter.appliedVia = 'referral';
+//       appFilter.referrer = userId;
+//     } else if (userType === 'company') {
+//       appFilter.appliedVia = 'company';
+//     }
+
+//     const applications = await Application.find(appFilter)
+//       .populate('seeker', 'name email profile')
+//       .lean();
+
+//     const applicationsByJob = applications.reduce((acc, app) => {
+//       const jobId = app.job.toString();
+//       acc[jobId] = acc[jobId] || [];
+//       acc[jobId].push(app);
+//       return acc;
+//     }, {});
+
+//     const jobsWithApplicants = jobs.map(job => ({
+//       ...job,
+//       applicants: applicationsByJob[job._id.toString()] || []
+//     }));
+
+
+// //       console.log('🧾 JOB IDS', jobIds);
+// // console.log('🔍 Application Filter', appFilter);
+
+//     res.status(200).json(jobsWithApplicants);
+//   } catch (err) {
+//     console.error('getJobsWithApplicants error:', err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
+
+
+// controllers/jobController.js
+
 exports.getJobsWithApplicants = async (req, res) => {
   try {
     const userId = req.userId;
-    const userType = req.userType; 
+    const userType = req.userType;
+    const { 
+      page = 1, 
+      limit = 10, 
+      search = '',
+      status = '',
+      sort = '-createdAt'
+    } = req.query;
 
+    const skip = (page - 1) * limit;
+
+    // Base query
     let jobQuery = {};
 
-    if (userType==='referrer') {
+    if (userType === 'referrer') {
       const claimedJobs = await ReferralClaim.find({
         referrer: userId,
         status: 'Active'
-      }).select('job');
+      }).select('job').lean();
 
       const claimedJobIds = claimedJobs.map(c => c.job);
 
@@ -586,56 +671,87 @@ exports.getJobsWithApplicants = async (req, res) => {
         ]
       };
     } else if (userType === 'company') {
-      jobQuery = {
-        postedBy: userId,
-        postedByType: 'company'
-      };
+      jobQuery = { postedBy: userId, postedByType: 'company' };
     } else {
       return res.status(403).json({ message: 'Unauthorized user type' });
     }
 
-    const jobs = await Job.find(jobQuery).lean();
-    const jobIds = jobs.map(job => job._id);
-
-    // 💡 Application filter
-    const appFilter = {
-      job: { $in: jobIds },
-    };
-
-    if (userType==='referrer') {
-      appFilter.appliedVia = 'referral';
-      appFilter.referrer = userId;
-    } else if (userType === 'company') {
-      appFilter.appliedVia = 'company';
+    // Add search filter
+    if (search) {
+      jobQuery.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { location: { $regex: search, $options: 'i' } }
+      ];
     }
 
-    const applications = await Application.find(appFilter)
-      .populate('seeker', 'name email profile')
+    // Add status filter
+    if (status) {
+      jobQuery.status = status;
+    }
+
+    // Get jobs with applicant counts
+    const jobs = await Job.find(jobQuery)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
       .lean();
 
-    const applicationsByJob = applications.reduce((acc, app) => {
-      const jobId = app.job.toString();
-      acc[jobId] = acc[jobId] || [];
-      acc[jobId].push(app);
+    // Get job IDs for applicant counts
+    const jobIds = jobs.map(job => job._id);
+
+    // Get applicant counts in bulk
+    const applicantCounts = await Application.aggregate([
+      {
+        $match: { 
+          job: { $in: jobIds },
+          ...(userType === 'referrer' && { appliedVia: 'referral' }),
+          ...(userType === 'company' && { appliedVia: 'company' })
+        }
+      },
+      {
+        $group: {
+          _id: '$job',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Create map for quick lookup
+    const countsMap = applicantCounts.reduce((acc, curr) => {
+      acc[curr._id.toString()] = curr.count;
       return acc;
     }, {});
 
-    const jobsWithApplicants = jobs.map(job => ({
+    // Add applicant counts to jobs
+    const jobsWithCounts = jobs.map(job => ({
       ...job,
-      applicants: applicationsByJob[job._id.toString()] || []
+      applicantCount: countsMap[job._id.toString()] || 0
     }));
 
+    // Get total job count for pagination
+    const totalJobs = await Job.countDocuments(jobQuery);
 
-//       console.log('🧾 JOB IDS', jobIds);
-// console.log('🔍 Application Filter', appFilter);
+    console.log(  { success: true,
+      jobs: jobsWithCounts,
+      totalJobs,
+      totalPages: Math.ceil(totalJobs / limit),
+      currentPage: parseInt(page),
+      limit: parseInt(limit)})
 
-    res.status(200).json(jobsWithApplicants);
+    res.status(200).json({
+      success: true,
+      jobs: jobsWithCounts,
+      totalJobs,
+      totalPages: Math.ceil(totalJobs / limit),
+      currentPage: parseInt(page),
+      limit: parseInt(limit)
+    });
   } catch (err) {
     console.error('getJobsWithApplicants error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 
 
 // get individual job applicants  for company

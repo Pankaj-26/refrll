@@ -23,7 +23,7 @@ const ReferrerApplicationCard= ({ application, onStatusUpdate, updating }) => {
     rejected: "red"
   };
 
-  
+  console.log(application)
   
   const applicant = application.seeker || {};
   const profile = applicant.profile || {};

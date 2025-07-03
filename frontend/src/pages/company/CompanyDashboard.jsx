@@ -1,150 +1,6 @@
 
 
 // import { useEffect, useState } from "react";
-// import { FiBriefcase, FiUsers, FiDollarSign, FiBarChart, FiBell, FiSettings } from "react-icons/fi";
-// import { useNavigate } from "react-router-dom";
-// import { fetchJobsWithApplicants } from "../../features/jobSlice";
-// import { useDispatch, useSelector } from "react-redux";
-
-// export default function CompanyDashboard() {
-//   const { jobs, loading, error } = useSelector((state) => state.jobs);
-//   const navigate=useNavigate()
-// const dispatch = useDispatch();
-
-//   useEffect(() => {
-//     dispatch(fetchJobsWithApplicants());
-//   }, [dispatch]);
-  
-
-//   return (
-//     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8">
-//       <div className="max-w-7xl mx-auto">
-//         {/* Header */}
-//         <div className="flex justify-between items-center mb-12">
-//           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
-//             Company Dashboard
-//           </h1>
-//           {/* <div className="flex items-center gap-4">
-//             <FiBell className="w-6 h-6 text-gray-400 hover:text-blue-400 cursor-pointer" />
-//             <FiSettings className="w-6 h-6 text-gray-400 hover:text-blue-400 cursor-pointer" />
-//           </div> */}
-//         </div>
-
-//         {/* Stats Grid */}
-//         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-//           <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 hover:border-blue-400 transition-colors">
-//             <div className="flex items-center gap-4">
-//               <div className="p-3 bg-blue-900/30 rounded-xl">
-//                 <FiBriefcase className="w-8 h-8 text-blue-400" />
-//               </div>
-//               <div>
-//                 <p className="text-sm text-gray-400">Total Jobs</p>
-//                 <p className="text-2xl font-bold text-gray-100">{jobs.length}</p>
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 hover:border-green-400 transition-colors">
-//             <div className="flex items-center gap-4">
-//               <div className="p-3 bg-green-900/30 rounded-xl">
-//                 <FiUsers className="w-8 h-8 text-green-400" />
-//               </div>
-//               <div>
-//                 <p className="text-sm text-gray-400">Active Referrals</p>
-//                 <p className="text-2xl font-bold text-gray-100">45</p>
-//               </div>
-//             </div>
-//           </div> */}
-
-//           {/* <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 hover:border-purple-400 transition-colors">
-//             <div className="flex items-center gap-4">
-//               <div className="p-3 bg-purple-900/30 rounded-xl">
-//                 <FiDollarSign className="w-8 h-8 text-purple-400" />
-//               </div>
-//               <div>
-//                 <p className="text-sm text-gray-400">Total Hires</p>
-//                 <p className="text-2xl font-bold text-gray-100">8</p>
-//               </div>
-//             </div>
-//           </div> */}
-//         </div>
-
-//         {/* Active Jobs Table */}
-//         <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6">
-//           <div className="flex justify-between items-center mb-6">
-//             <h2 className="text-xl font-semibold text-gray-100">Active Job Listings</h2>
-//             <button className="bg-gradient-to-r from-blue-600 to-teal-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:from-teal-600 hover:to-blue-600 transition-all"  onClick={()=>navigate('/post-job')} >
-//               Post New Job
-//             </button>
-//           </div>
-
-//           <div className="overflow-x-auto">
-//             <table className="w-full">
-//               <thead className="bg-gray-700">
-//                 <tr>
-//                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-300">Job Title</th>
-//                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-300">Applications</th>
-//                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-300">Location</th>
-//                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-300">Status</th>
-//                 </tr>
-//               </thead>
-//               <tbody className="divide-y divide-gray-700">
-//                 {/* {jobs.map((job) => (
-//                   <tr key={job._id} className="hover:bg-gray-700/50 transition-colors">
-//                     <td className="px-6 py-4 text-sm font-medium text-gray-100">{job.title}</td>
-//                     <td className="px-6 py-4 text-sm text-gray-400">{job.applicants.length}</td>
-//                     <td className="px-6 py-4 text-sm text-gray-400">{job.location}</td>
-//                     <td className="px-6 py-4">
-//                       <span className="px-3 py-1 text-xs font-medium rounded-full bg-green-900/20 text-green-400">
-//                         {job.status}
-//                       </span>
-//                     </td>
-//                   </tr>
-//                 ))} */}
-
-
-//  {jobs.map((job) => (
-//         <tr 
-//           key={job._id} 
-//           className="hover:bg-gray-700/50 transition-colors cursor-pointer"
-//           onClick={() => navigate(`/job/${job._id}/applicants`)}
-//         >
-//           <td className="px-6 py-4 text-sm font-medium text-gray-100">{job.title}</td>
-//           <td className="px-6 py-4 text-sm text-gray-400">{job.applicants.length}</td>
-//           <td className="px-6 py-4 text-sm text-gray-400">{job.location}</td>
-//           <td className="px-6 py-4">
-//             <span className="px-3 py-1 text-xs font-medium rounded-full bg-green-900/20 text-green-400">
-//               {job.status}
-//             </span>
-//           </td>
-//         </tr>
-//       ))}
-
-//               </tbody>
-//             </table>
-//           </div>
-//         </div>
-
-//         {/* Performance Section */}
-//         {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-//           <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700">
-//             <h3 className="text-lg font-semibold text-gray-100 mb-4">Referral Performance</h3>
-//             <div className="flex items-center justify-center h-48 bg-gray-900/30 rounded-xl">
-//               <FiBarChart className="w-16 h-16 text-gray-600" />
-//               <p className="text-gray-500 ml-2">Performance Chart (Placeholder)</p>
-//             </div>
-//           </div>
-//         </div> */}
-//       </div>
-//     </div>
-//   );
-
-
-// }
-
-
-
-// import { useEffect, useState } from "react";
 // import { 
 //   FiBriefcase, 
 //   FiUsers, 
@@ -155,7 +11,8 @@
 //   FiCalendar,
 //   FiMapPin,
 //   FiCheckCircle,
-//   FiTrendingUp
+//   FiTrendingUp,
+//   FiAlertCircle
 // } from "react-icons/fi";
 // import { useNavigate } from "react-router-dom";
 // import { fetchJobsWithApplicants } from "../../features/jobSlice";
@@ -163,7 +20,17 @@
 // import Chart from 'react-apexcharts';
 
 // export default function CompanyDashboard() {
-//   const { jobs, loading, error } = useSelector((state) => state.jobs);
+//   // const { jobs, loading, error } = useSelector((state) => state.jobs);
+ 
+//   const { 
+//     jobs, 
+//     loading, 
+//     error, 
+//     totalJobs,
+//     totalPages,
+//     currentPage,
+//     limit
+//   } = useSelector((state) => state.jobs);
 //   const navigate = useNavigate();
 //   const dispatch = useDispatch();
 //   const [stats, setStats] = useState({
@@ -172,59 +39,318 @@
 //     avgApplicants: 0,
 //     closedJobs: 0
 //   });
+//   const [chartType, setChartType] = useState('bar');
+//   const [filters, setFilters] = useState({
+//     search: '',
+//     status: '',
+//     sort: '-createdAt'
+//   });
+
+// console.log(jobs)
+
+//   // useEffect(() => {
+//   //   dispatch(fetchJobsWithApplicants(
+
+//   //   ));
+//   // }, [dispatch]);
+
 
 //   useEffect(() => {
-//     dispatch(fetchJobsWithApplicants());
-//   }, [dispatch]);
+//     dispatch(fetchJobsWithApplicants(
+//       {  page: 1, 
+//       limit: 10, 
+//       ...filters }
+//     ));
+//   }, [dispatch,filters]);
 
+
+//   // useEffect(() => {
+//   //   if (jobs.length > 0) {
+//   //     const totalApplicants = jobs.reduce((acc, job) => acc + job.applicants.length, 0);
+//   //     const closedJobs = jobs.filter(job => job.status === 'Closed').length;
+      
+//   //     setStats({
+//   //       totalJobs: jobs.length,
+//   //       totalApplicants,
+//   //       avgApplicants: Math.round(totalApplicants / jobs.length) || 0,
+//   //       closedJobs
+//   //     });
+//   //   }
+//   // }, [jobs]);
+
+//   // Enhanced chart configuration
+  
+  
+  
+//     // Stats calculation (now using applicantCount)
 //   useEffect(() => {
 //     if (jobs.length > 0) {
-//       const totalApplicants = jobs.reduce((acc, job) => acc + job.applicants.length, 0);
+//       const totalApplicants = jobs.reduce(
+//         (acc, job) => acc + job.applicantCount, 0
+//       );
+      
 //       const closedJobs = jobs.filter(job => job.status === 'Closed').length;
       
 //       setStats({
-//         totalJobs: jobs.length,
+//         totalJobs,
 //         totalApplicants,
 //         avgApplicants: Math.round(totalApplicants / jobs.length) || 0,
 //         closedJobs
 //       });
 //     }
-//   }, [jobs]);
+//   }, [jobs, totalJobs]);
 
-//   // Chart configuration
+
+//  // Handle page change
+//   const handlePageChange = (newPage) => {
+//     dispatch(fetchJobsWithApplicants({ 
+//       page: newPage, 
+//       limit, 
+//       ...filters 
+//     }));
+//   };
+
+//   // Handle filter changes
+//   const handleFilterChange = (name, value) => {
+//     setFilters(prev => ({
+//       ...prev,
+//       [name]: value
+//     }));
+//   };
+
+  
 //   const chartOptions = {
 //     chart: {
-//       toolbar: { show: false },
-//       sparkline: { enabled: true }
-//     },
-//     colors: ['#3b82f6', '#10b981', '#8b5cf6'],
-//     plotOptions: {
-//       bar: {
-//         borderRadius: 4,
-//         horizontal: false,
-//         columnWidth: '55%',
+//       toolbar: { 
+//         show: true,
+//         tools: {
+//           download: true,
+//           selection: true,
+//           zoom: true,
+//           zoomin: true,
+//           zoomout: true,
+//           pan: true,
+//           reset: true
+//         }
+//       },
+//       animations: {
+//         enabled: true,
+//         easing: 'easeinout',
+//         speed: 800,
+//         animateGradually: {
+//           enabled: true,
+//           delay: 150
+//         },
+//         dynamicAnimation: {
+//           enabled: true,
+//           speed: 350
+//         }
+//       },
+//       events: {
+//         dataPointSelection: (event, chartContext, config) => {
+//           const jobIndex = config.dataPointIndex;
+//           if (jobs[jobIndex]) {
+//             navigate(`/job/${jobs[jobIndex]._id}/applicants`);
+//           }
+//         }
 //       }
 //     },
-//     dataLabels: { enabled: false },
-//     stroke: { curve: 'smooth' },
-//     xaxis: {
-//       categories: jobs.slice(0, 5).map(job => job.title.substring(0, 15) + (job.title.length > 15 ? '...' : '')),
+//     colors: ['#3b82f6'],
+//     plotOptions: {
+//       bar: {
+//         borderRadius: 6,
+//         horizontal: chartType === 'bar' ? false : true,
+//         columnWidth: '60%',
+//         dataLabels: {
+//           position: 'top',
+//         }
+//       },
+//       pie: {
+//         donut: {
+//           labels: {
+//             show: true,
+//             name: {
+//               show: true,
+//               fontSize: '16px',
+//               fontFamily: 'Inter, sans-serif',
+//               fontWeight: 600,
+//               color: '#6b7280',
+//             },
+//             value: {
+//               show: true,
+//               fontSize: '20px',
+//               fontFamily: 'Inter, sans-serif',
+//               fontWeight: 700,
+//               color: '#1f2937',
+//               formatter: function (val) {
+//                 return val;
+//               }
+//             },
+//             total: {
+//               show: true,
+//               showAlways: true,
+//               label: 'Total Applicants',
+//               color: '#6b7280',
+//               formatter: function (w) {
+//                 return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+//               }
+//             }
+//           }
+//         }
+//       }
 //     },
-//     yaxis: { show: false },
-//     grid: { show: false },
+//     dataLabels: {
+//       enabled: chartType === 'bar' || chartType === 'horizontalBar',
+//       formatter: function(val) {
+//         return val;
+//       },
+//       offsetY: chartType === 'bar' ? -20 : 0,
+//       style: {
+//         fontSize: '12px',
+//         fontWeight: 600,
+//         colors: ["#1f2937"]
+//       },
+//       dropShadow: {
+//         enabled: true,
+//         top: 1,
+//         left: 1,
+//         blur: 1,
+//         color: '#000',
+//         opacity: 0.15
+//       }
+//     },
+//     stroke: {
+//       show: true,
+//       width: 2,
+//       colors: ['transparent']
+//     },
+//     xaxis: {
+//       categories: jobs.slice(0, 8).map(job => job.title.substring(0, 12) + (job.title.length > 12 ? '...' : '')),
+//       labels: {
+//         style: {
+//           colors: '#6b7280',
+//           fontSize: '12px'
+//         }
+//       },
+//       axisBorder: {
+//         show: false
+//       },
+//       axisTicks: {
+//         show: false
+//       }
+//     },
+//     yaxis: {
+//       labels: {
+//         style: {
+//           colors: '#6b7280',
+//           fontSize: '12px'
+//         }
+//       }
+//     },
+//     fill: {
+//       type: 'gradient',
+//       gradient: {
+//         shade: 'light',
+//         type: 'vertical',
+//         shadeIntensity: 0.25,
+//         gradientToColors: ['#60a5fa'],
+//         inverseColors: false,
+//         opacityFrom: 0.9,
+//         opacityTo: 0.9,
+//         stops: [0, 100]
+//       }
+//     },
 //     tooltip: {
+//       enabled: true,
+//       theme: 'light',
+//       style: {
+//         fontSize: '14px',
+//         fontFamily: 'Inter, sans-serif'
+//       },
 //       y: {
 //         formatter: function(val) {
 //           return val + " applicants";
+//         },
+//         title: {
+//           formatter: function(seriesName) {
+//             return 'Applicants:';
+//           }
 //         }
 //       }
-//     }
+//     },
+//     grid: {
+//       show: true,
+//       borderColor: '#f3f4f6',
+//       strokeDashArray: 4,
+//       position: 'back',
+//       xaxis: {
+//         lines: {
+//           show: false
+//         }
+//       },
+//       yaxis: {
+//         lines: {
+//           show: true
+//         }
+//       }
+//     },
+//     responsive: [{
+//       breakpoint: 768,
+//       options: {
+//         plotOptions: {
+//           bar: {
+//             horizontal: true
+//           }
+//         },
+//         dataLabels: {
+//           enabled: false
+//         }
+//       }
+//     }]
 //   };
 
 //   const chartSeries = [{
 //     name: "Applicants",
-//     data: jobs.slice(0, 5).map(job => job.applicants.length)
+//     data: jobs.slice(0, 8).map(job => job.applicants.length)
 //   }];
+
+//   const pieChartOptions = {
+//     ...chartOptions,
+//     labels: jobs.slice(0, 5).map(job => job.title.substring(0, 12) + (job.title.length > 12 ? '...' : '')),
+//     legend: {
+//       position: 'right',
+//       horizontalAlign: 'center',
+//       labels: {
+//         colors: '#6b7280',
+//         useSeriesColors: false
+//       },
+//       itemMargin: {
+//         horizontal: 5,
+//         vertical: 5
+//       }
+//     },
+//     dataLabels: {
+//       enabled: true,
+//       formatter: function(val, opts) {
+//         return opts.w.config.series[opts.seriesIndex];
+//       },
+//       style: {
+//         fontSize: '12px',
+//         fontWeight: 600,
+//         colors: ["#fff"]
+//       },
+//       dropShadow: {
+//         enabled: true,
+//         top: 1,
+//         left: 1,
+//         blur: 1,
+//         color: '#000',
+//         opacity: 0.35
+//       }
+//     }
+//   };
+
+//   const pieChartSeries = jobs.slice(0, 5).map(job => job.applicants.length);
 
 //   // Status badge component
 //   const StatusBadge = ({ status }) => {
@@ -287,7 +413,7 @@
 //           </div>
 //           <button 
 //             onClick={() => navigate('/post-job')}
-//             className="mt-4 sm:mt-0 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
+//             className="mt-4 sm:mt-0 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-md hover:shadow-lg"
 //           >
 //             <FiPlus size={18} />
 //             Post New Job
@@ -296,64 +422,68 @@
 
 //         {/* Stats Grid */}
 //         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-//           <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-//             <div className="flex items-center gap-4">
-//               <div className="p-3 bg-blue-100 rounded-xl">
-//                 <FiBriefcase className="w-6 h-6 text-blue-600" />
+//           {[
+//             { 
+//               title: "Total Jobs", 
+//               value: stats.totalJobs, 
+//               icon: <FiBriefcase className="w-6 h-6 text-blue-600" />,
+//               bg: "bg-blue-100",
+//               trend: "+2 from last month"
+//             },
+//             { 
+//               title: "Total Applicants", 
+//               value: stats.totalApplicants, 
+//               icon: <FiUsers className="w-6 h-6 text-green-600" />,
+//               bg: "bg-green-100",
+//               trend: "+12 from last week"
+//             },
+//             { 
+//               title: "Avg. per Job", 
+//               value: stats.avgApplicants, 
+//               icon: <FiBarChart className="w-6 h-6 text-purple-600" />,
+//               bg: "bg-purple-100",
+//               trend: "Steady"
+//             },
+//             { 
+//               title: "Closed Positions", 
+//               value: stats.closedJobs, 
+//               icon: <FiCheckCircle className="w-6 h-6 text-amber-600" />,
+//               bg: "bg-amber-100",
+//               trend: "3 this month"
+//             }
+//           ].map((stat, index) => (
+//             <div 
+//               key={index} 
+//               className="bg-white p-5 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
+//             >
+//               <div className="flex items-center gap-4">
+//                 <div className={`p-3 ${stat.bg} rounded-xl`}>
+//                   {stat.icon}
+//                 </div>
+//                 <div>
+//                   <p className="text-sm text-gray-600">{stat.title}</p>
+//                   <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+//                 </div>
 //               </div>
-//               <div>
-//                 <p className="text-sm text-gray-600">Total Jobs</p>
-//                 <p className="text-2xl font-bold text-gray-900">{stats.totalJobs}</p>
-//               </div>
-//             </div>
-//             <div className="mt-3 flex items-center text-sm text-green-600 font-medium">
-//               <FiTrendingUp className="mr-1" />
-//               <span>+2 from last month</span>
-//             </div>
-//           </div>
-
-//           <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-//             <div className="flex items-center gap-4">
-//               <div className="p-3 bg-green-100 rounded-xl">
-//                 <FiUsers className="w-6 h-6 text-green-600" />
-//               </div>
-//               <div>
-//                 <p className="text-sm text-gray-600">Total Applicants</p>
-//                 <p className="text-2xl font-bold text-gray-900">{stats.totalApplicants}</p>
-//               </div>
-//             </div>
-//           </div>
-
-//           <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-//             <div className="flex items-center gap-4">
-//               <div className="p-3 bg-purple-100 rounded-xl">
-//                 <FiBarChart className="w-6 h-6 text-purple-600" />
-//               </div>
-//               <div>
-//                 <p className="text-sm text-gray-600">Avg. per Job</p>
-//                 <p className="text-2xl font-bold text-gray-900">{stats.avgApplicants}</p>
-//               </div>
-//             </div>
-//           </div>
-
-//           <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-//             <div className="flex items-center gap-4">
-//               <div className="p-3 bg-amber-100 rounded-xl">
-//                 <FiCheckCircle className="w-6 h-6 text-amber-600" />
-//               </div>
-//               <div>
-//                 <p className="text-sm text-gray-600">Closed Positions</p>
-//                 <p className="text-2xl font-bold text-gray-900">{stats.closedJobs}</p>
+//               <div className="mt-3 flex items-center text-sm text-blue-600 font-medium">
+//                 <FiTrendingUp className="mr-1" />
+//                 <span>{stat.trend}</span>
 //               </div>
 //             </div>
-//           </div>
+//           ))}
 //         </div>
 
 //         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 //           {/* Active Jobs Table */}
 //           <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200">
-//             <div className="p-5 border-b border-gray-200">
+//             <div className="p-5 border-b border-gray-200 flex justify-between items-center">
 //               <h2 className="text-lg font-semibold text-gray-900">Active Job Listings</h2>
+//               <button 
+//                 onClick={() => navigate('/post-job')}
+//                 className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+//               >
+//                 View All →
+//               </button>
 //             </div>
             
 //             <div className="overflow-x-auto">
@@ -367,7 +497,7 @@
 //                   </tr>
 //                 </thead>
 //                 <tbody className="divide-y divide-gray-200">
-//                   {jobs.map((job) => (
+//                   {jobs.slice(0, 5).map((job) => (
 //                     <tr 
 //                       key={job._id} 
 //                       className="hover:bg-gray-50 transition-colors cursor-pointer"
@@ -382,7 +512,10 @@
 //                       </td>
 //                       <td className="px-5 py-4">
 //                         <div className="flex items-center">
-//                           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-medium">
+//                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-medium
+//                             ${job.applicants.length > 10 ? 'bg-green-100 text-green-800' : 
+//                               job.applicants.length > 5 ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}
+//                           >
 //                             {job.applicants.length}
 //                           </div>
 //                           <span className="ml-2 text-gray-600">applicants</span>
@@ -415,32 +548,86 @@
 //             )}
 //           </div>
 
-//           {/* Performance Section */}
+//           {/* Analytics Section */}
 //           <div className="space-y-6">
-//             {/* Application Chart */}
+//             {/* Chart Controls */}
 //             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
 //               <div className="flex justify-between items-start mb-4">
-//                 <h2 className="text-lg font-semibold text-gray-900">Applications Overview</h2>
-//                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-//                   Last 5 Jobs
-//                 </span>
+//                 <h2 className="text-lg font-semibold text-gray-900">Applications Analytics</h2>
+//                 <div className="flex gap-1">
+//                   <button 
+//                     onClick={() => setChartType('bar')}
+//                     className={`px-3 py-1 rounded-lg text-sm ${
+//                       chartType === 'bar' 
+//                         ? 'bg-blue-100 text-blue-800 font-medium' 
+//                         : 'text-gray-600 hover:bg-gray-100'
+//                     }`}
+//                   >
+//                     Bar
+//                   </button>
+//                   <button 
+//                     onClick={() => setChartType('horizontalBar')}
+//                     className={`px-3 py-1 rounded-lg text-sm ${
+//                       chartType === 'horizontalBar' 
+//                         ? 'bg-blue-100 text-blue-800 font-medium' 
+//                         : 'text-gray-600 hover:bg-gray-100'
+//                     }`}
+//                   >
+//                     Horizontal
+//                   </button>
+//                   <button 
+//                     onClick={() => setChartType('pie')}
+//                     className={`px-3 py-1 rounded-lg text-sm ${
+//                       chartType === 'pie' 
+//                         ? 'bg-blue-100 text-blue-800 font-medium' 
+//                         : 'text-gray-600 hover:bg-gray-100'
+//                     }`}
+//                   >
+//                     Pie
+//                   </button>
+//                 </div>
 //               </div>
               
 //               {jobs.length > 0 ? (
-//                 <div className="h-64">
-//                   <Chart
-//                     options={chartOptions}
-//                     series={chartSeries}
-//                     type="bar"
-//                     height="100%"
-//                   />
+//                 <div className="h-80">
+//                   {chartType === 'pie' ? (
+//                     <Chart
+//                       options={pieChartOptions}
+//                       series={pieChartSeries}
+//                       type="donut"
+//                       height="100%"
+//                     />
+//                   ) : (
+//                     <Chart
+//                       options={{
+//                         ...chartOptions,
+//                         chart: {
+//                           ...chartOptions.chart,
+//                           type: chartType === 'horizontalBar' ? 'bar' : 'bar'
+//                         },
+//                         plotOptions: {
+//                           bar: {
+//                             ...chartOptions.plotOptions.bar,
+//                             horizontal: chartType === 'horizontalBar'
+//                           }
+//                         }
+//                       }}
+//                       series={chartSeries}
+//                       type={chartType === 'pie' ? 'donut' : 'bar'}
+//                       height="100%"
+//                     />
+//                   )}
 //                 </div>
 //               ) : (
-//                 <div className="h-64 flex flex-col items-center justify-center text-gray-400">
+//                 <div className="h-80 flex flex-col items-center justify-center text-gray-400">
 //                   <FiBarChart className="w-12 h-12" />
 //                   <p className="mt-3">No data to display</p>
 //                 </div>
 //               )}
+              
+//               <div className="mt-4 text-center text-sm text-gray-500">
+//                 Click on bars to view job details
+//               </div>
 //             </div>
 
 //             {/* Recent Activity */}
@@ -449,7 +636,11 @@
               
 //               <div className="space-y-4">
 //                 {jobs.slice(0, 3).map((job) => (
-//                   <div key={job._id} className="flex items-start">
+//                   <div 
+//                     key={job._id} 
+//                     className="flex items-start p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+//                     onClick={() => navigate(`/job/${job._id}/applicants`)}
+//                   >
 //                     <div className="mr-3 mt-1">
 //                       <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
 //                         <FiBriefcase className="text-green-600" size={16} />
@@ -485,10 +676,13 @@
 // }
 
 
-import { useEffect, useState } from "react";
+
+
+import { useEffect, useState, useMemo } from "react";
 import { 
   FiBriefcase, 
   FiUsers, 
+  FiSearch,
   FiDollarSign, 
   FiBarChart, 
   FiPlus,
@@ -505,268 +699,150 @@ import { useDispatch, useSelector } from "react-redux";
 import Chart from 'react-apexcharts';
 
 export default function CompanyDashboard() {
-  const { jobs, loading, error } = useSelector((state) => state.jobs);
+  const { 
+    jobs, 
+    loading, 
+    error, 
+    totalJobs: reduxTotalJobs,
+    totalPages,
+    currentPage,
+    limit
+  } = useSelector((state) => state.jobs);
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   const [stats, setStats] = useState({
     totalJobs: 0,
     totalApplicants: 0,
     avgApplicants: 0,
     closedJobs: 0
   });
+  
   const [chartType, setChartType] = useState('bar');
+  const [filters, setFilters] = useState({
+    search: '',
+    status: '',
+    sort: '-createdAt'
+  });
 
   useEffect(() => {
-    dispatch(fetchJobsWithApplicants());
-  }, [dispatch]);
+    dispatch(fetchJobsWithApplicants({ 
+      page: 1, 
+      limit: 10, 
+      ...filters 
+    }));
+  }, [dispatch, filters]);
 
+  // Stats calculation - FIXED to use applicantCount
   useEffect(() => {
     if (jobs.length > 0) {
-      const totalApplicants = jobs.reduce((acc, job) => acc + job.applicants.length, 0);
+      const totalApplicants = jobs.reduce(
+        (acc, job) => acc + (job.applicantCount || 0), 0
+      );
+      
       const closedJobs = jobs.filter(job => job.status === 'Closed').length;
       
       setStats({
-        totalJobs: jobs.length,
+        totalJobs: reduxTotalJobs, // Use reduxTotalJobs here
         totalApplicants,
         avgApplicants: Math.round(totalApplicants / jobs.length) || 0,
         closedJobs
       });
+    } else {
+      // Reset stats when no jobs
+      setStats({
+        totalJobs: reduxTotalJobs,
+        totalApplicants: 0,
+        avgApplicants: 0,
+        closedJobs: 0
+      });
     }
-  }, [jobs]);
+  }, [jobs, reduxTotalJobs]);
 
-  // Enhanced chart configuration
-  const chartOptions = {
-    chart: {
-      toolbar: { 
-        show: true,
-        tools: {
-          download: true,
-          selection: true,
-          zoom: true,
-          zoomin: true,
-          zoomout: true,
-          pan: true,
-          reset: true
-        }
-      },
-      animations: {
-        enabled: true,
-        easing: 'easeinout',
-        speed: 800,
-        animateGradually: {
-          enabled: true,
-          delay: 150
-        },
-        dynamicAnimation: {
-          enabled: true,
-          speed: 350
-        }
-      },
-      events: {
-        dataPointSelection: (event, chartContext, config) => {
-          const jobIndex = config.dataPointIndex;
-          if (jobs[jobIndex]) {
-            navigate(`/job/${jobs[jobIndex]._id}/applicants`);
-          }
-        }
-      }
-    },
-    colors: ['#3b82f6'],
-    plotOptions: {
-      bar: {
-        borderRadius: 6,
-        horizontal: chartType === 'bar' ? false : true,
-        columnWidth: '60%',
-        dataLabels: {
-          position: 'top',
-        }
-      },
-      pie: {
-        donut: {
-          labels: {
+  // Handle page change
+  const handlePageChange = (newPage) => {
+    dispatch(fetchJobsWithApplicants({ 
+      page: newPage, 
+      limit, 
+      ...filters 
+    }));
+  };
+
+  // Handle filter changes
+  const handleFilterChange = (name, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Memoized chart data - FIXED to use applicantCount
+  const chartData = useMemo(() => {
+    const chartJobs = jobs.slice(0, 5);
+    
+    return {
+      options: {
+        chart: {
+          toolbar: { 
             show: true,
-            name: {
-              show: true,
-              fontSize: '16px',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 600,
-              color: '#6b7280',
-            },
-            value: {
-              show: true,
-              fontSize: '20px',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 700,
-              color: '#1f2937',
-              formatter: function (val) {
-                return val;
-              }
-            },
-            total: {
-              show: true,
-              showAlways: true,
-              label: 'Total Applicants',
-              color: '#6b7280',
-              formatter: function (w) {
-                return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+            tools: { download: true, selection: true, zoom: true }
+          },
+          animations: { enabled: true },
+          events: {
+            dataPointSelection: (event, chartContext, config) => {
+              const jobIndex = config.dataPointIndex;
+              if (chartJobs[jobIndex]) {
+                navigate(`/job/${chartJobs[jobIndex]._id}/applicants`);
               }
             }
           }
-        }
-      }
-    },
-    dataLabels: {
-      enabled: chartType === 'bar' || chartType === 'horizontalBar',
-      formatter: function(val) {
-        return val;
-      },
-      offsetY: chartType === 'bar' ? -20 : 0,
-      style: {
-        fontSize: '12px',
-        fontWeight: 600,
-        colors: ["#1f2937"]
-      },
-      dropShadow: {
-        enabled: true,
-        top: 1,
-        left: 1,
-        blur: 1,
-        color: '#000',
-        opacity: 0.15
-      }
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ['transparent']
-    },
-    xaxis: {
-      categories: jobs.slice(0, 8).map(job => job.title.substring(0, 12) + (job.title.length > 12 ? '...' : '')),
-      labels: {
-        style: {
-          colors: '#6b7280',
-          fontSize: '12px'
-        }
-      },
-      axisBorder: {
-        show: false
-      },
-      axisTicks: {
-        show: false
-      }
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: '#6b7280',
-          fontSize: '12px'
-        }
-      }
-    },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shade: 'light',
-        type: 'vertical',
-        shadeIntensity: 0.25,
-        gradientToColors: ['#60a5fa'],
-        inverseColors: false,
-        opacityFrom: 0.9,
-        opacityTo: 0.9,
-        stops: [0, 100]
-      }
-    },
-    tooltip: {
-      enabled: true,
-      theme: 'light',
-      style: {
-        fontSize: '14px',
-        fontFamily: 'Inter, sans-serif'
-      },
-      y: {
-        formatter: function(val) {
-          return val + " applicants";
         },
-        title: {
-          formatter: function(seriesName) {
-            return 'Applicants:';
-          }
-        }
-      }
-    },
-    grid: {
-      show: true,
-      borderColor: '#f3f4f6',
-      strokeDashArray: 4,
-      position: 'back',
-      xaxis: {
-        lines: {
-          show: false
-        }
-      },
-      yaxis: {
-        lines: {
-          show: true
-        }
-      }
-    },
-    responsive: [{
-      breakpoint: 768,
-      options: {
+        colors: ['#3b82f6'],
         plotOptions: {
           bar: {
-            horizontal: true
+            borderRadius: 6,
+            horizontal: chartType !== 'bar',
+            columnWidth: '60%',
+            dataLabels: { position: 'top' }
+          },
+          pie: {
+            donut: {
+              labels: {
+                show: true,
+                name: { show: true, fontSize: '16px', fontWeight: 600 },
+                value: { show: true, fontSize: '20px', fontWeight: 700 },
+                total: { 
+                  show: true,
+                  label: 'Total Applicants',
+                  formatter: () => chartJobs.reduce((acc, job) => acc + (job.applicantCount || 0), 0)
+                }
+              }
+            }
           }
         },
         dataLabels: {
-          enabled: false
-        }
-      }
-    }]
-  };
-
-  const chartSeries = [{
-    name: "Applicants",
-    data: jobs.slice(0, 8).map(job => job.applicants.length)
-  }];
-
-  const pieChartOptions = {
-    ...chartOptions,
-    labels: jobs.slice(0, 5).map(job => job.title.substring(0, 12) + (job.title.length > 12 ? '...' : '')),
-    legend: {
-      position: 'right',
-      horizontalAlign: 'center',
-      labels: {
-        colors: '#6b7280',
-        useSeriesColors: false
+          enabled: chartType !== 'pie',
+          style: { fontSize: '12px', fontWeight: 600 }
+        },
+        xaxis: {
+          categories: chartJobs.map(job => job.title.substring(0, 12) + (job.title.length > 12 ? '...' : ''))
+        },
+        tooltip: {
+          y: {
+            formatter: (val) => `${val} applicants`,
+            title: { formatter: () => 'Applicants:' }
+          }
+        },
+        // ... other chart options
       },
-      itemMargin: {
-        horizontal: 5,
-        vertical: 5
-      }
-    },
-    dataLabels: {
-      enabled: true,
-      formatter: function(val, opts) {
-        return opts.w.config.series[opts.seriesIndex];
-      },
-      style: {
-        fontSize: '12px',
-        fontWeight: 600,
-        colors: ["#fff"]
-      },
-      dropShadow: {
-        enabled: true,
-        top: 1,
-        left: 1,
-        blur: 1,
-        color: '#000',
-        opacity: 0.35
-      }
-    }
-  };
-
-  const pieChartSeries = jobs.slice(0, 5).map(job => job.applicants.length);
+      barSeries: [{
+        name: "Applicants",
+        data: chartJobs.map(job => job.applicantCount || 0)
+      }],
+      pieSeries: chartJobs.map(job => job.applicantCount || 0)
+    };
+  }, [jobs, chartType, navigate]);
 
   // Status badge component
   const StatusBadge = ({ status }) => {
@@ -804,7 +880,11 @@ export default function CompanyDashboard() {
           <h3 className="text-xl font-bold text-gray-800 mt-4">Error Loading Data</h3>
           <p className="text-gray-600 mt-2">{error}</p>
           <button 
-            onClick={() => dispatch(fetchJobsWithApplicants())}
+            onClick={() => dispatch(fetchJobsWithApplicants({ 
+              page: 1, 
+              limit: 10, 
+              ...filters 
+            }))}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Try Again
@@ -827,45 +907,98 @@ export default function CompanyDashboard() {
               Manage your job postings and track applications
             </p>
           </div>
-          <button 
-            onClick={() => navigate('/post-job')}
-            className="mt-4 sm:mt-0 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-md hover:shadow-lg"
-          >
-            <FiPlus size={18} />
-            Post New Job
-          </button>
+
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Search jobs..."
+                className="w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={filters.search}
+                onChange={(e) => handleFilterChange('search', e.target.value)}
+              />
+              <FiSearch className="absolute left-3 top-3 text-gray-400" />
+            </div>
+            <button 
+              onClick={() => navigate('/post-job')}
+              className="flex-shrink-0 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-md hover:shadow-lg"
+            >
+              <FiPlus size={18} />
+              Post New Job
+            </button>
+          </div>
         </div>
 
-        {/* Stats Grid */}
+        {/* Filter Bar */}
+        <div className="flex flex-wrap gap-3 mb-6">
+          <select 
+            value={filters.status}
+            onChange={(e) => handleFilterChange('status', e.target.value)}
+            className="px-3 py-2 border rounded-lg text-sm"
+          >
+            <option value="">All Statuses</option>
+            <option value="Open">Open</option>
+            <option value="Closed">Closed</option>
+            <option value="Paused">Paused</option>
+          </select>
+          
+          <select 
+            value={filters.sort}
+            onChange={(e) => handleFilterChange('sort', e.target.value)}
+            className="px-3 py-2 border rounded-lg text-sm"
+          >
+            <option value="-createdAt">Newest First</option>
+            <option value="createdAt">Oldest First</option>
+            <option value="-applicantCount">Most Applicants</option>
+            <option value="applicantCount">Fewest Applicants</option>
+          </select>
+          
+          <select 
+            value={limit}
+            onChange={(e) => dispatch(fetchJobsWithApplicants({ 
+              page: 1, 
+              limit: Number(e.target.value),
+              ...filters
+            }))}
+            className="px-3 py-2 border rounded-lg text-sm"
+          >
+            <option value="5">5 per page</option>
+            <option value="10">10 per page</option>
+            <option value="20">20 per page</option>
+            <option value="50">50 per page</option>
+          </select>
+        </div>
+
+        {/* Stats Grid - FIXED data sources */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
           {[
             { 
               title: "Total Jobs", 
-              value: stats.totalJobs, 
+              value: reduxTotalJobs,  // Use reduxTotalJobs directly
               icon: <FiBriefcase className="w-6 h-6 text-blue-600" />,
               bg: "bg-blue-100",
-              trend: "+2 from last month"
+              trend: ""
             },
             { 
               title: "Total Applicants", 
               value: stats.totalApplicants, 
               icon: <FiUsers className="w-6 h-6 text-green-600" />,
               bg: "bg-green-100",
-              trend: "+12 from last week"
+              trend: ""
             },
             { 
               title: "Avg. per Job", 
               value: stats.avgApplicants, 
               icon: <FiBarChart className="w-6 h-6 text-purple-600" />,
               bg: "bg-purple-100",
-              trend: "Steady"
+              trend: ""
             },
             { 
               title: "Closed Positions", 
               value: stats.closedJobs, 
               icon: <FiCheckCircle className="w-6 h-6 text-amber-600" />,
               bg: "bg-amber-100",
-              trend: "3 this month"
+              trend: ""
             }
           ].map((stat, index) => (
             <div 
@@ -881,10 +1014,12 @@ export default function CompanyDashboard() {
                   <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
                 </div>
               </div>
-              <div className="mt-3 flex items-center text-sm text-blue-600 font-medium">
-                <FiTrendingUp className="mr-1" />
-                <span>{stat.trend}</span>
-              </div>
+              {stat.trend && (
+                <div className="mt-3 flex items-center text-sm text-blue-600 font-medium">
+                  <FiTrendingUp className="mr-1" />
+                  <span>{stat.trend}</span>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -894,12 +1029,9 @@ export default function CompanyDashboard() {
           <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200">
             <div className="p-5 border-b border-gray-200 flex justify-between items-center">
               <h2 className="text-lg font-semibold text-gray-900">Active Job Listings</h2>
-              <button 
-                onClick={() => navigate('/post-job')}
-                className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-              >
-                View All →
-              </button>
+              <span className="text-sm text-gray-500">
+                {reduxTotalJobs} total jobs
+              </span>
             </div>
             
             <div className="overflow-x-auto">
@@ -913,7 +1045,7 @@ export default function CompanyDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {jobs.slice(0, 5).map((job) => (
+                  {jobs.map((job) => (
                     <tr 
                       key={job._id} 
                       className="hover:bg-gray-50 transition-colors cursor-pointer"
@@ -929,10 +1061,10 @@ export default function CompanyDashboard() {
                       <td className="px-5 py-4">
                         <div className="flex items-center">
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-medium
-                            ${job.applicants.length > 10 ? 'bg-green-100 text-green-800' : 
-                              job.applicants.length > 5 ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}
+                            ${(job.applicantCount || 0) > 10 ? 'bg-green-100 text-green-800' : 
+                              (job.applicantCount || 0) > 5 ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}
                           >
-                            {job.applicants.length}
+                            {job.applicantCount || 0}
                           </div>
                           <span className="ml-2 text-gray-600">applicants</span>
                         </div>
@@ -949,11 +1081,96 @@ export default function CompanyDashboard() {
               </table>
             </div>
             
-            {jobs.length === 0 && (
+            {/* Pagination - FIXED conditional rendering */}
+            {totalPages > 1 && (
+              <div className="px-5 py-4 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-sm text-gray-500">
+                  Showing {Math.min((currentPage - 1) * limit + 1, reduxTotalJobs)} -{" "}
+                  {Math.min(currentPage * limit, reduxTotalJobs)} of {reduxTotalJobs} jobs
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded-md ${
+                      currentPage === 1 
+                        ? 'text-gray-400 cursor-not-allowed' 
+                        : 'text-blue-600 hover:bg-blue-50'
+                    }`}
+                  >
+                    Previous
+                  </button>
+                  
+                  <div className="flex gap-1">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      let pageNum;
+                      if (totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      } else {
+                        pageNum = currentPage - 2 + i;
+                      }
+                      
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => handlePageChange(pageNum)}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            currentPage === pageNum
+                              ? 'bg-blue-600 text-white'
+                              : 'text-gray-600 hover:bg-gray-100'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                    
+                    {totalPages > 5 && currentPage < totalPages - 2 && (
+                      <span className="px-2 py-2">...</span>
+                    )}
+                    
+                    {totalPages > 5 && currentPage < totalPages - 1 && (
+                      <button
+                        onClick={() => handlePageChange(totalPages)}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          currentPage === totalPages
+                            ? 'bg-blue-600 text-white'
+                            : 'text-gray-600 hover:bg-gray-100'
+                        }`}
+                      >
+                        {totalPages}
+                      </button>
+                    )}
+                  </div>
+                  
+                  <button
+                    onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 rounded-md ${
+                      currentPage === totalPages 
+                        ? 'text-gray-400 cursor-not-allowed' 
+                        : 'text-blue-600 hover:bg-blue-50'
+                    }`}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            {/* Empty state */}
+            {!loading && jobs.length === 0 && (
               <div className="text-center py-12">
                 <FiBriefcase className="w-12 h-12 text-gray-400 mx-auto" />
-                <h3 className="mt-4 text-lg font-medium text-gray-900">No active job listings</h3>
-                <p className="mt-1 text-gray-500">Get started by posting your first job</p>
+                <h3 className="mt-4 text-lg font-medium text-gray-900">No jobs found</h3>
+                <p className="mt-1 text-gray-500">
+                  {filters.search ? 'Try different search terms' : 'Get started by posting your first job'}
+                </p>
                 <button
                   onClick={() => navigate('/post-job')}
                   className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -1008,28 +1225,28 @@ export default function CompanyDashboard() {
                 <div className="h-80">
                   {chartType === 'pie' ? (
                     <Chart
-                      options={pieChartOptions}
-                      series={pieChartSeries}
+                      options={chartData.options}
+                      series={chartData.pieSeries}
                       type="donut"
                       height="100%"
                     />
                   ) : (
                     <Chart
                       options={{
-                        ...chartOptions,
+                        ...chartData.options,
                         chart: {
-                          ...chartOptions.chart,
+                          ...chartData.options.chart,
                           type: chartType === 'horizontalBar' ? 'bar' : 'bar'
                         },
                         plotOptions: {
                           bar: {
-                            ...chartOptions.plotOptions.bar,
+                            ...chartData.options.plotOptions.bar,
                             horizontal: chartType === 'horizontalBar'
                           }
                         }
                       }}
-                      series={chartSeries}
-                      type={chartType === 'pie' ? 'donut' : 'bar'}
+                      series={chartData.barSeries}
+                      type="bar"
                       height="100%"
                     />
                   )}
@@ -1046,7 +1263,7 @@ export default function CompanyDashboard() {
               </div>
             </div>
 
-            {/* Recent Activity */}
+            {/* Recent Activity - FIXED applicantCount */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
               
@@ -1067,11 +1284,13 @@ export default function CompanyDashboard() {
                         {job.title}
                       </p>
                       <p className="text-sm text-gray-500 mt-1">
-                        {job.applicants.length} new applicants
+                        {job.applicantCount || 0} applicants
                       </p>
                       <div className="flex items-center text-xs text-gray-400 mt-1">
                         <FiCalendar className="mr-1" size={12} />
-                        <span>Posted 2 days ago</span>
+                        <span>
+                          {new Date(job.createdAt).toLocaleDateString()}
+                        </span>
                       </div>
                     </div>
                   </div>
