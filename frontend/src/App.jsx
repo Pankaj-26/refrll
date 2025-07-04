@@ -32,6 +32,7 @@ import TermsOfService from "./pages/TermsOfService.jsx";
 import BlogPage from "./pages/BlogPage.jsx";
 import HelpCenter from "./pages/HelpCenter.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
+import NotificationCenter from "./components/NotificationCenter.jsx";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -161,6 +162,15 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["seeker", "referrer", "company"]}>
                 <ApplicationDetails />
+              </ProtectedRoute>
+            }
+          />
+
+             <Route
+            path="/notification"
+            element={
+              <ProtectedRoute allowedRoles={["seeker", "referrer", "company"]}>
+                <NotificationCenter />
               </ProtectedRoute>
             }
           />

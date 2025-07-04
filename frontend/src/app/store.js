@@ -7,7 +7,7 @@ import userReducer from "../features/userSlice"
 
 import jobReducer from '../features/jobSlice';
 import themeReducer from '../features/theme/themeSlice';
-
+import notificationsReducer from "../features/notificationsSlice"
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -17,5 +17,6 @@ export const store = configureStore({
     jobs: jobReducer,
     applicants: applicantReducer,
     theme: themeReducer,
+     notifications: notificationsReducer
   },
 });

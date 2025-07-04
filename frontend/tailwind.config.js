@@ -39,8 +39,11 @@ module.exports = {
     },
      extend: {
       fontFamily: {
-        sans: ["Roboto"], // Replace with your chosen font
+        sans: ["Roboto"], 
       },
+      animation: {
+        'pulse-once': 'pulse 0.5s ease-in-out'
+      }
     },
   },
   plugins: [],

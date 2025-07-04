@@ -13,6 +13,11 @@ import {
   FiBriefcase, FiSun, FiMoon, FiMonitor 
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import { getNotifications, markNotificationAsRead } from "../features/notificationsSlice";
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+import NotificationBell from "./NotificationBell";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -21,6 +26,10 @@ const Navbar = () => {
   const { mode: theme, preference } = useSelector((state) => state.theme);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
+
+ const { notifications, loading, error } = useSelector(state => state.notifications);
+
+
 
   // Apply theme class
   useEffect(() => {
@@ -100,6 +109,19 @@ const Navbar = () => {
     dispatch(setSystemTheme());
   }, [dispatch]);
 
+
+
+
+  useEffect(() => {
+    dispatch(getNotifications());
+  }, [dispatch]);
+
+  // const handleNotificationClick = (notif) => {
+  //   dispatch(markNotificationAsRead(notif._id));
+  //   navigate(notif.link);
+  // };
+
+
   return (
     <nav className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border-b border-gray-200 dark:border-gray-700 fixed w-full z-50 px-6 py-4 shadow-md dark:shadow-xl">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -114,6 +136,7 @@ const Navbar = () => {
             Refrll
           </span>
         </div>
+   
 
         {/* Navigation Links */}
         <div className="flex items-center space-x-8">
@@ -137,7 +160,7 @@ const Navbar = () => {
         {/* Theme Toggle & User Menu */}
         <div className="flex items-center gap-4">
           {/* Theme Toggle Button */}
-          <button
+          {/* <button
             onClick={() => handleThemeChange(theme === 'dark' ? 'light' : 'dark')}
             className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
@@ -147,7 +170,8 @@ const Navbar = () => {
             ) : (
               <FiMoon className="w-5 h-5 text-gray-700" />
             )}
-          </button>
+          </button> */}
+    <NotificationBell notifications={notifications} />
 
           {/* User Menu */}
           <div className="relative" ref={menuRef}>
@@ -173,7 +197,29 @@ const Navbar = () => {
             )}
           </div>
         </div>
+   
       </div>
+    <div>
+
+
+      {/* <div>
+        {loading && <p>Loading notifications...</p>}
+        {error && <p className="text-red-500">{error}</p>}
+        {notifications?.length === 0 && <p>No notifications</p>}
+
+        {notifications?.map(notif => (
+          <div
+            key={notif._id}
+            onClick={() => handleNotificationClick(notif)}
+            className={`p-2 border-b cursor-pointer ${!notif.isRead ? 'bg-gray-100 font-semibold' : ''}`}
+          >
+            <p>{notif.title}</p>
+            <p className="text-sm">{notif.message}</p>
+            <p className="text-xs text-gray-500">{dayjs(notif.createdAt).fromNow()}</p>
+          </div>
+        ))}
+      </div> */}
+    </div>
     </nav>
   );
 };

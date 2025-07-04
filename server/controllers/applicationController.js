@@ -6,11 +6,11 @@ const Application = require('../models/Application');
 const Job = require('../models/Job');
 const User = require('../models/User');
 const path = require('path');
-const { sendEmail, sendSMS } = require('../utils/notificationService');
+
 const ReferralClaim =require('../models/ReferralClaim')
 const mongoose =require('mongoose')
   const Company = require('../models/Company'); 
-
+const createNotification = require('../utils/createNotification');
 
 
 // Apply to a job
@@ -217,6 +217,36 @@ exports.applyToJob = async (req, res) => {
       job.currentApplications = (job.currentApplications || 0) + 1;
       await job.save();
     }
+
+
+
+    const applicationId = application._id;
+const jobTitle = job.title;
+
+
+// Notify seeker
+await createNotification(seekerId, "Application Submitted", `Your application for ${jobTitle} was submitted successfully.`, `/application/${applicationId}`);
+
+// Notify referrer only if it's a referral job
+
+
+
+
+if (!referrerId) {
+
+  if (job.postedByType === 'referrer') {
+    referrerId = job.postedBy;
+    isReferral = true;
+  }
+}
+
+
+
+if (referrerId && isReferral) {
+  await createNotification(referrerId, "New Application Received", `A seeker has applied for ${jobTitle}.`, `/referrer/applications/${applicationId}`);
+}
+
+
 
     return res.status(201).json({
       message: 'Application submitted successfully.',

@@ -12,6 +12,8 @@ import {
 } from "react-icons/fi";
 import StatusBadge from "./StatusBadge";
 
+   
+   
 const JobCard = ({ job, currentUser, onApply, onRefer, loading, activeTab }) => {
   // Format posted date
   const postedDate = new Date(job.createdAt);
@@ -106,6 +108,7 @@ const getJobAction = () => {
   }
 
   if (isReferrer && job.postedByType === "company" && alreadyReferred) {
+ 
     return 'claimed';
   }
 

@@ -379,9 +379,7 @@ export const fetchJobs = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       const res = await axios.get("http://localhost:5000/api/jobs/getjobs", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        withCredentials:true,
         params: {
           tab: params.tab,
           search: params.search,

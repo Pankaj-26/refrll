@@ -467,6 +467,7 @@ const stats = useMemo(() => {
               <JobCard
                 key={job._id}
                 job={job}
+              
                 currentUser={user}
                 onApply={handleApply}
                 onRefer={handleReferClick}
