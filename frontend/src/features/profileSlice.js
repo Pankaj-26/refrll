@@ -44,7 +44,7 @@ export const updateProfile = createAsyncThunk(
       Object.entries(profileData).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
           if (key === "skills" && Array.isArray(value)) {
-            formData.append("skills", value.join(",")); // Join skills into a string
+            formData.append("skills", value.join(",")); 
           } else if (key === "resume") {
             // formData.append("resume", value); // file
 
@@ -57,7 +57,7 @@ export const updateProfile = createAsyncThunk(
         }
       });
 
-      
+      console.log(formData)
 
       const res = await axios.patch("http://localhost:5000/api/users/profile", formData, {
        withCredentials: true,

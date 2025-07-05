@@ -120,7 +120,7 @@ jobSchema.index({ skills: 1, location: 1 });
 jobSchema.index({
   title: 'text',
   company: 'text',
-  skills: 'text', // If skills are array of strings, this works for text search
+  skills: 'text', 
 });
 
 

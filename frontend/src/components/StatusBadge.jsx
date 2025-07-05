@@ -38,7 +38,7 @@ const StatusBadge = ({ status, color = "blue", onRemove }) => {
   const colors = colorClasses[color] || colorClasses.blue;
   
   return (
-    <div className={`flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${colors.bg} ${colors.text} ${colors.border}`}>
+    <div className={`flex items-center px-2 py-0.5 rounded-full text-sm font-medium ${colors.bg} ${colors.text} ${colors.border}`}>
       {status}
       {onRemove && (
         <button 

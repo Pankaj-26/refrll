@@ -308,6 +308,7 @@ import ProfileCard from "../components/dashboard/SeekerComponents/ProfileCard";
 
 import ResumeStrength from '../components/dashboard/SeekerComponents/ResumeStrength';
 import ApplicationCard from '../components/dashboard/SeekerComponents/ApplicationCard';
+import toast from "react-hot-toast";
 
 
 export default function SeekerDashboard() {
@@ -349,6 +350,7 @@ export default function SeekerDashboard() {
 
   // Fetch data on mount
   useEffect(() => {
+     document.title = "Dashboard | Profile";
     dispatch(fetchProfile());
     dispatch(fetchSeekerApplications());
   }, [dispatch]);
@@ -387,9 +389,11 @@ export default function SeekerDashboard() {
     try {
       await dispatch(updateProfile(localProfile)).unwrap();
       setIsEditing(false);
-      dispatch(fetchProfile());
+      await dispatch(fetchProfile());
+      toast.success('Profile Updated Successfully!');
     } catch (error) {
-      console.error("Error updating profile:", error);
+      toast.error(error.message || 'Error updating profile.');
+      
     }
   }, [dispatch, localProfile]);
 
@@ -416,7 +420,7 @@ export default function SeekerDashboard() {
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-1">
                 Welcome back,{" "}
-                <span className="bg-gradient-to-r from-blue-500 to-teal-500 bg-clip-text text-transparent">
+                <span  className="bg-gradient-to-r from-[#8f94fb] to-[#4e54c8] bg-clip-text text-transparent font-bold text-4xl">
                   {profile?.fullName?.split(" ")[0] || "User"}!
                 </span>
               </h1>

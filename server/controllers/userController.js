@@ -147,7 +147,7 @@ exports.updateSeekerProfile = async (req, res) => {
     const {
       name,
       experience,
-      linkedin,
+      linkedIn,
       github,
       company,
       location,
@@ -166,15 +166,15 @@ exports.updateSeekerProfile = async (req, res) => {
     }
 
     // Update seeker profile fields
-    user.profile.fullName = name || user.profile.fullName;
-    user.profile.experience = experience || user.profile.experience;
+    user.profile.fullName = name 
+    user.profile.experience = experience 
     user.profile.skills = skills;
-    user.profile.linkedIn = linkedin || user.profile.linkedIn;
-    user.profile.github = github || user.profile.github;
-    user.profile.company = company || user.profile.company;
-    user.profile.location = location || user.profile.location;
-    user.profile.phone = phone || user.profile.phone;
-user.profile.designation= designation || user.profile.designation
+    user.profile.linkedIn = linkedIn
+    user.profile.github = github
+    user.profile.company = company
+    user.profile.location = location 
+    user.profile.phone = phone 
+user.profile.designation= designation
     
  
 //  if (!req.file) {

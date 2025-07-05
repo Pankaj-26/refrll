@@ -120,7 +120,7 @@
 // src/components/Footer.jsx
 import React from 'react';
 import { FaLinkedin, FaTwitter, FaFacebook, FaGithub } from 'react-icons/fa';
-
+import Refrll from "../assets/Refrll.png"
 const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white">
@@ -128,8 +128,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center mb-4">
-              <div className="bg-indigo-600 text-white font-bold px-2 py-1 rounded mr-2">R</div>
-              <span className="font-bold text-xl">Refrll</span>
+              {/* <div className="bg-indigo-600 text-white font-bold px-2 py-1 rounded mr-2">R</div> */}
+              {/* <span className="font-bold text-xl">Refrll</span> */}
+                 <img
+                          src={Refrll}
+                          alt="Refrll Logo"
+                          className=" h-14 w-auto object-contain cursor-pointer filter invert"
+                        />
             </div>
             <p className="text-gray-400 mb-4">
               Empowering referrals, empowering careers through trusted connections.

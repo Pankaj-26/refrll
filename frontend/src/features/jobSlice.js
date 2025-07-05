@@ -379,15 +379,10 @@ export const fetchJobs = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       const res = await axios.get("http://localhost:5000/api/jobs/getjobs", {
+        params,
         withCredentials:true,
-        params: {
-          tab: params.tab,
-          search: params.search,
-          jobType: params.jobType?.join(","),
-          experience: params.experience
-        }
       });
-    
+    console.log(res.data)
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
@@ -465,7 +460,7 @@ export const fetchJobsWithApplicantsForReferrer = createAsyncThunk(
         withCredentials:true
       });
 
-      console.log(res.data)
+   
      
       return res.data;
     } catch (err) {
@@ -534,21 +529,37 @@ export const updateApplicationStatus = createAsyncThunk(
 );
 
 
+// export const getJobWithApplicants = createAsyncThunk(
+//   'jobs/getJobWithApplicants',
+//   async (jobId, { rejectWithValue }) => {
+//     try {
+//       //  i changed it to seeker from applicants
+//       const res = await axios.get(`/api/applications/${jobId}/applicants`,   {
+//          withCredentials:true
+//         });
+//      console.log("Fetching job with applicants for ID:", res.data);
+//       return res.data;
+//     } catch (err) {
+//       return rejectWithValue(err.response.data.message || 'Error fetching job');
+//     }
+//   }
+// );
+
 export const getJobWithApplicants = createAsyncThunk(
   'jobs/getJobWithApplicants',
-  async (jobId, { rejectWithValue }) => {
+  async ({ jobId, page = 1, limit = 10, filters = {} }, { rejectWithValue }) => {
     try {
-      //  i changed it to seeker from applicants
-      const res = await axios.get(`/api/applications/${jobId}/applicants`,   {
-         withCredentials:true
-        });
-     console.log("Fetching job with applicants for ID:", res.data);
+      const res = await axios.get(`/api/applications/${jobId}/applicants`, {
+        params: { page, limit, ...filters },
+        withCredentials: true
+      });
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data.message || 'Error fetching job');
     }
   }
 );
+
 
 export const getJobDetailForSeeker = createAsyncThunk(
   'jobs/getJobDetailForSeeker',
@@ -577,6 +588,9 @@ const jobsSlice = createSlice({
     error: null,
     updating:null,
    selectedApplication: null,
+ totalPages: 0,
+  totalCount: 0,
+  currentPage: 1,
 
   },
   reducers: {
@@ -600,14 +614,22 @@ const jobsSlice = createSlice({
       .addCase(fetchJobs.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchJobs.fulfilled, (state, action) => {
+      // .addCase(fetchJobs.fulfilled, (state, action) => {
 
-        //changes .jobs added here
-        state.jobs = action.payload.jobs;
-        // state.jobs = action.payload;
+      //   //changes .jobs added here
+      //   state.jobs = action.payload.jobs;
+      //   // state.jobs = action.payload;
 
-        state.loading = false;
-      })
+      //   state.loading = false;
+      // })
+        .addCase(fetchJobs.fulfilled, (state, action) => {
+  state.loading = false;
+  state.jobs = action.payload.jobs;
+  // Add these properties from the server response
+  state.totalPages = action.payload.totalPages;
+  state.totalCount = action.payload.totalCount;
+  state.currentPage = action.payload.currentPage;
+})
       .addCase(fetchJobs.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
@@ -714,15 +736,27 @@ const jobsSlice = createSlice({
   state.loading = true;
   state.error = null;
 })
+// .addCase(getJobWithApplicants.fulfilled, (state, action) => {
+//   state.loading = false;
+//   state.currentJob = action.payload.job;
+//   state.applicants = action.payload.applicants;
+// })
 .addCase(getJobWithApplicants.fulfilled, (state, action) => {
   state.loading = false;
   state.currentJob = action.payload.job;
   state.applicants = action.payload.applicants;
+  state.pagination = {
+    page: action.payload.page,
+    totalPages: action.payload.totalPages,
+    totalApplicants: action.payload.totalApplicants
+  };
 })
 .addCase(getJobWithApplicants.rejected, (state, action) => {
   state.loading = false;
   state.error = action.payload;
 })
+
+
 
 .addCase(getJobDetailForSeeker.fulfilled, (state, action) => {
   // state.selectedApplication = action.payload;
@@ -740,6 +774,9 @@ export const { optimisticStatusUpdate } = jobsSlice.actions;
 export const selectAllJobs = (state) => state.jobs.jobs;
 export const selectJobsLoading = (state) => state.jobs.loading;
 export const selectJobsError = (state) => state.jobs.error;
-
+// / Add these selectors at the bottom
+export const selectTotalPages = (state) => state.jobs.totalPages;
+export const selectTotalCount = (state) => state.jobs.totalCount;
+export const selectCurrentPage = (state) => state.jobs.currentPage;
 
 export default jobsSlice.reducer;

@@ -10,7 +10,6 @@ export const getNotifications = createAsyncThunk(
          withCredentials:true
        });
 
-    console.log(res.data)
 
        return res.data;;
      
@@ -28,7 +27,6 @@ export const markNotificationAsRead  = createAsyncThunk(
 
         withCredentials:true
     });
-    console.log(res.data)
     return res.data;
   
      

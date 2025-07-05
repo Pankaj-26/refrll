@@ -725,6 +725,8 @@ export default function CompanyDashboard() {
     status: '',
     sort: '-createdAt'
   });
+const [appLoading, setAppLoading] = useState(true);
+
 
   useEffect(() => {
     dispatch(fetchJobsWithApplicants({ 
@@ -732,6 +734,8 @@ export default function CompanyDashboard() {
       limit: 10, 
       ...filters 
     }));
+    setAppLoading(false)
+     
   }, [dispatch, filters]);
 
   // Stats calculation - FIXED to use applicantCount
@@ -859,7 +863,7 @@ export default function CompanyDashboard() {
     );
   };
 
-  if (loading) {
+  if (appLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">

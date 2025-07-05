@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { postJob } from '../features/jobSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -24,6 +24,10 @@ const PostJob = () => {
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
   const { user } = useSelector((state) => state.auth);
+
+  useEffect(()=>{
+document.title = "Post Job | Refrll";
+  },[])
 
   const [formData, setFormData] = useState({
     title: '',

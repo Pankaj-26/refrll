@@ -1,12 +1,10 @@
 
-//below is correct 
-
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchJobsWithApplicantsForReferrer,
   updateApplicationStatus,
-  optimisticStatusUpdate
+  optimisticStatusUpdate,
 } from "../features/jobSlice";
 import {
   FiBriefcase,
@@ -28,13 +26,13 @@ import {
   FiPhone,
   FiLinkedin,
   FiDownload,
-  FiSearch
+  FiSearch,
 } from "react-icons/fi";
 import ReferrerStatusBadge from "../components/ReferrerStatusbadge";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
-
+import toast from "react-hot-toast";
 import ReferrerApplicationCard from "../components/ReferrerApplicationCard";
 
 export default function JobsWithApplicants() {
@@ -43,19 +41,17 @@ export default function JobsWithApplicants() {
   const [expandedJobs, setExpandedJobs] = useState({});
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    dispatch(fetchJobsWithApplicantsForReferrer()).finally(() => {
+      setIsRefreshing(false);
+    });
+  }, [dispatch]);
 
-
-
-   const handleRefresh = useCallback(() => {
-       setIsRefreshing(true);
-       dispatch(fetchJobsWithApplicantsForReferrer()).finally(() => {
-         setIsRefreshing(false);
-       });
-     }, [dispatch]);
- 
   useEffect(() => {
+    document.title = "Referrer Dashboard";
     dispatch(fetchJobsWithApplicantsForReferrer());
   }, [dispatch]);
 
@@ -66,39 +62,19 @@ export default function JobsWithApplicants() {
     }));
   };
 
-
-
-
-  // const handleStatusUpdate = async (jobId, applicationId, newStatus) => {
-  //   try {
-  //     // Optimistic update: Update Redux store immediately
-  //     console.log(newStatus)
-  //     dispatch(optimisticStatusUpdate({ jobId, applicationId, newStatus }));
-
-  //     // Send update to server
-  //     await dispatch(
-  //       updateApplicationStatus({ applicationId, status: newStatus })
-  //     ).unwrap();
-  //   } catch (error) {
-  //     console.error("Status update failed:", error);
-  //     // Revert on error (handled automatically by reducer)
-  //   }
-  // };
-
   const handleStatusUpdate = async (applicationId, newStatus) => {
     try {
       await dispatch(
         updateApplicationStatus({ applicationId, status: newStatus })
       );
-      handleRefresh()
-
-      
+      handleRefresh();
+      toast.success("Status Updated successfully!");
     } catch (error) {
-      console.error("Status update failed:", error);
+      toast.error(error.message || "Failed to update status");
     }
   };
 
-  const filteredJobs = jobs.filter(job => {
+  const filteredJobs = jobs.filter((job) => {
     // Filter by job status
     if (statusFilter !== "all" && job.status !== statusFilter) return false;
 
@@ -110,9 +86,10 @@ export default function JobsWithApplicants() {
         job.company.toLowerCase().includes(term) ||
         job.description.toLowerCase().includes(term);
 
-      const matchesApplicant = job.applicants?.some(applicant =>
-        applicant.seeker?.name?.toLowerCase().includes(term) ||
-        applicant.seeker?.email?.toLowerCase().includes(term)
+      const matchesApplicant = job.applicants?.some(
+        (applicant) =>
+          applicant.seeker?.name?.toLowerCase().includes(term) ||
+          applicant.seeker?.email?.toLowerCase().includes(term)
       );
 
       return matchesJob || matchesApplicant;
@@ -126,14 +103,14 @@ export default function JobsWithApplicants() {
     applied: "blue",
     reviewed: "purple",
     accepted: "green",
-    rejected: "red"
+    rejected: "red",
   };
 
   // Job status colors
   const jobStatusColors = {
     Open: "green",
     Closed: "red",
-    Paused: "amber"
+    Paused: "amber",
   };
 
   // Loading state
@@ -163,6 +140,8 @@ export default function JobsWithApplicants() {
       />
     );
   }
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8">
@@ -214,27 +193,36 @@ export default function JobsWithApplicants() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white rounded-xl shadow-sm p-4">
             <div className="text-gray-500 text-sm mb-1">Total Jobs</div>
-            <div className="text-2xl font-bold text-gray-900">{jobs.length}</div>
+            <div className="text-2xl font-bold text-gray-900">
+              {jobs.length}
+            </div>
           </div>
           <div className="bg-white rounded-xl shadow-sm p-4">
             <div className="text-gray-500 text-sm mb-1">Open Jobs</div>
             <div className="text-2xl font-bold text-green-600">
-              {jobs.filter(job => job.status === "Open").length}
+              {jobs.filter((job) => job.status === "Open").length}
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-sm p-4">
             <div className="text-gray-500 text-sm mb-1">Total Applicants</div>
             <div className="text-2xl font-bold text-blue-600">
-              {jobs.reduce((total, job) => total + (job.applicants?.length || 0), 0)}
+              {jobs.reduce(
+                (total, job) => total + (job.applicants?.length || 0),
+                0
+              )}
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-sm p-4">
             <div className="text-gray-500 text-sm mb-1">Avg. per Job</div>
             <div className="text-2xl font-bold text-purple-600">
-              {jobs.length ?
-                Math.round(jobs.reduce((total, job) => total + (job.applicants?.length || 0), 0) / jobs.length) :
-                0
-              }
+              {jobs.length
+                ? Math.round(
+                    jobs.reduce(
+                      (total, job) => total + (job.applicants?.length || 0),
+                      0
+                    ) / jobs.length
+                  )
+                : 0}
             </div>
           </div>
         </div>
@@ -289,7 +277,8 @@ export default function JobsWithApplicants() {
                       Applications
                     </p>
                     <p className="text-sm font-bold text-blue-900">
-                      {job?.applicants?.length || 0}/{job?.applicationLimit || "∞"}
+                      {job?.applicants?.length || 0}/
+                      {job?.applicationLimit || "∞"}
                     </p>
                   </div>
                   <button className="text-gray-500 hover:text-gray-700">
@@ -365,17 +354,3 @@ export default function JobsWithApplicants() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

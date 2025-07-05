@@ -1,9 +1,54 @@
 // src/pages/LandingPage.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaRocket, FaUserFriends, FaSearch, FaBell, FaFileAlt, FaShieldAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
+
+ useEffect(() => {
+    document.title = "Refrll – Get Job Referrals Fast and Get Hired";
+
+    const metaDescription = document.createElement('meta');
+    metaDescription.name = "description";
+    metaDescription.content = "Refrll connects job seekers with referrers to get referred to top companies easily.";
+    document.head.appendChild(metaDescription);
+
+    const ogTitle = document.createElement('meta');
+    ogTitle.setAttribute('property', 'og:title');
+    ogTitle.content = "Refrll – Get Job Referrals Fast and Get Hired";
+    document.head.appendChild(ogTitle);
+
+    const ogDesc = document.createElement('meta');
+    ogDesc.setAttribute('property', 'og:description');
+    ogDesc.content = "Refrll connects job seekers with referrers to get referred to top companies easily.";
+    document.head.appendChild(ogDesc);
+
+    const ogImage = document.createElement('meta');
+    ogImage.setAttribute('property', 'og:image');
+    ogImage.content = "https://yourdomain.com/preview.png"; // your logo or preview image url
+    document.head.appendChild(ogImage);
+
+    const ogUrl = document.createElement('meta');
+    ogUrl.setAttribute('property', 'og:url');
+    ogUrl.content = "https://yourdomain.com";
+    document.head.appendChild(ogUrl);
+
+    const twitterCard = document.createElement('meta');
+    twitterCard.setAttribute('name', 'twitter:card');
+    twitterCard.content = "summary_large_image";
+    document.head.appendChild(twitterCard);
+
+    return () => {
+      document.head.removeChild(metaDescription);
+      document.head.removeChild(ogTitle);
+      document.head.removeChild(ogDesc);
+      document.head.removeChild(ogImage);
+      document.head.removeChild(ogUrl);
+      document.head.removeChild(twitterCard);
+    };
+  }, []);
+
+
   return (
     <div className="bg-gray-50">
       {/* Hero Section */}

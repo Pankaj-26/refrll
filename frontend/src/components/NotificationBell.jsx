@@ -17,7 +17,7 @@ const NotificationBell = ({ notifications = [] }) => {
         className={`
           p-2 rounded-full transition-all duration-300
           ${isHovered ? 'bg-blue-100 shadow-sm' : 'bg-transparent'}
-          relative focus:outline-none focus:ring-2 focus:ring-blue-500
+          relative focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer
         `}
         aria-label="Notifications"
       >

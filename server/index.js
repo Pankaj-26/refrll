@@ -16,7 +16,7 @@ const session = require('express-session');
 const passport = require('passport');
 require('./config/passport');
 const notificationRoutes =require('./routes/notificationRoutes')
-
+const adminRoutes =require("./routes/adminRoutes")
 // Load environment variables from .env file
 dotenv.config();
 
@@ -83,6 +83,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/notifications',notificationRoutes);
+app.use('/api/admin',adminRoutes);
+
 
 
 

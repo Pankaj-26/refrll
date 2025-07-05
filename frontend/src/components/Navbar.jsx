@@ -1,24 +1,35 @@
-
 // components/Navbar.js
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { 
-  setTheme, 
-  setSystemTheme 
-} from '../features/theme/themeSlice';
-import { fetchUser, toggleRole, logout } from '../features/auth/authSlice';
-import { 
-  FiUser, FiLogOut, FiToggleRight, FiSettings, 
-  FiBriefcase, FiSun, FiMoon, FiMonitor 
-} from 'react-icons/fi';
-import toast from 'react-hot-toast';
-import { getNotifications, markNotificationAsRead } from "../features/notificationsSlice";
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setTheme, setSystemTheme } from "../features/theme/themeSlice";
+import { fetchUser, toggleRole, logout } from "../features/auth/authSlice";
+import {
+  FiUser,
+  FiLogOut,
+  FiToggleRight,
+  FiSettings,
+  FiBriefcase,
+  FiSun,
+  FiMoon,
+  FiMonitor,
+} from "react-icons/fi";
+import toast from "react-hot-toast";
+import {
+  getNotifications,
+  markNotificationAsRead,
+} from "../features/notificationsSlice";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 import NotificationBell from "./NotificationBell";
-
+import Refrll from "../assets/Refrll.png";
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,37 +38,37 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
 
- const { notifications, loading, error } = useSelector(state => state.notifications);
-
-
+  const { notifications, loading, error } = useSelector(
+    (state) => state.notifications
+  );
 
   // Apply theme class
   useEffect(() => {
-    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.remove("light", "dark");
     document.documentElement.classList.add(theme);
   }, [theme]);
 
   // Memoized derived values
   const dashboardPath = useMemo(() => {
-    if (user?.roles?.seeker) return '/dashboard';
-    if (user?.roles?.referrer) return '/dashboard/referrer';
-    if (user?.roles === 'company') return '/dashboard/company';
-    return '/login';
+    if (user?.roles?.seeker) return "/dashboard";
+    if (user?.roles?.referrer) return "/dashboard/referrer";
+    if (user?.roles === "company") return "/dashboard/company";
+    return "/login";
   }, [user]);
 
-  const canSeeJobs = useMemo(() => 
-    user?.roles?.seeker || user?.roles?.referrer, 
-  [user]);
+  const canSeeJobs = useMemo(
+    () => user?.roles?.seeker || user?.roles?.referrer,
+    [user]
+  );
 
-
-
-
-  const canPostJobs = useMemo(() => 
-    user?.roles?.referrer || user?.roles === 'company', 
-  [user]);
+  const canPostJobs = useMemo(
+    () => user?.roles?.referrer || user?.roles === "company",
+    [user]
+  );
 
   // Fetch user on mount
   useEffect(() => {
+    
     dispatch(fetchUser());
   }, [dispatch]);
 
@@ -69,24 +80,27 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Role toggle handler
   const handleToggleRole = useCallback(async () => {
     if (!user) return;
-    
+
     try {
-      const currentRole = user.roles.seeker ? 'seeker' : 'referrer';
+      const currentRole = user.roles.seeker ? "seeker" : "referrer";
       const result = await dispatch(toggleRole(currentRole));
-      
+
       if (toggleRole.fulfilled.match(result)) {
-        const newRole = currentRole === 'seeker' ? 'referrer' : 'seeker';
-        toast.success(`Switched to ${newRole.charAt(0).toUpperCase() + newRole.slice(1)}`);
-        navigate(newRole === 'referrer' ? '/dashboard/referrer' : '/dashboard');
+        const newRole = currentRole === "seeker" ? "referrer" : "seeker";
+          await dispatch(fetchUser());
+        toast.success(
+          `Switched to ${newRole.charAt(0).toUpperCase() + newRole.slice(1)}`
+        );
+        navigate(newRole === "referrer" ? "/dashboard/referrer" : "/dashboard");
       } else {
-        toast.error('Role switch failed. Please try again.');
+        toast.error("Role switch failed. Please try again.");
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -96,62 +110,58 @@ const Navbar = () => {
   // Logout handler
   const handleLogout = useCallback(() => {
     dispatch(logout());
-    toast.success('Logged out');
-    navigate('/login');
+    toast.success("Logged out");
+    navigate("/login");
   }, [dispatch, navigate]);
 
   // Theme handlers
-  const handleThemeChange = useCallback((newTheme) => {
-    dispatch(setTheme(newTheme));
-  }, [dispatch]);
+  const handleThemeChange = useCallback(
+    (newTheme) => {
+      dispatch(setTheme(newTheme));
+    },
+    [dispatch]
+  );
 
   const handleSystemTheme = useCallback(() => {
     dispatch(setSystemTheme());
   }, [dispatch]);
 
-
-
-
   useEffect(() => {
     dispatch(getNotifications());
   }, [dispatch]);
 
-  // const handleNotificationClick = (notif) => {
-  //   dispatch(markNotificationAsRead(notif._id));
-  //   navigate(notif.link);
-  // };
-
+ 
 
   return (
-    <nav className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border-b border-gray-200 dark:border-gray-700 fixed w-full z-50 px-6 py-4 shadow-md dark:shadow-xl">
+    <nav className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border-b border-gray-200 dark:border-gray-700 fixed w-full z-50 px-6 py-1 shadow-md dark:shadow-xl">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
-        <div 
+        <div
           className="flex items-center space-x-2 cursor-pointer group"
           onClick={() => navigate(dashboardPath)}
           aria-label="Dashboard"
         >
-          <FiBriefcase className="w-6 h-6 text-blue-600 dark:text-blue-400 transition-colors group-hover:text-blue-500 dark:group-hover:text-blue-300" />
-          <span className="text-xl font-semibold bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-400 dark:to-teal-400 bg-clip-text text-transparent">
-            Refrll
-          </span>
+          <img
+            src={Refrll}
+            alt="Refrll Logo"
+            className=" h-14 w-auto object-contain cursor-pointer"
+          />
         </div>
-   
 
         {/* Navigation Links */}
-        <div className="flex items-center space-x-8">
+        <div className="flex items-center space-x-8  ">
           <NavButton onClick={() => navigate(dashboardPath)}>
             Dashboard
           </NavButton>
 
           {canSeeJobs && (
-            <NavButton onClick={() => navigate('/job/postings')}>
+            <NavButton onClick={() => navigate("/job/postings")}>
               Jobs
             </NavButton>
           )}
 
           {canPostJobs && (
-            <NavButton onClick={() => navigate('/post-job')}>
+            <NavButton onClick={() => navigate("/post-job")}>
               Post Jobs
             </NavButton>
           )}
@@ -171,13 +181,13 @@ const Navbar = () => {
               <FiMoon className="w-5 h-5 text-gray-700" />
             )}
           </button> */}
-    <NotificationBell notifications={notifications} />
+          <NotificationBell notifications={notifications} />
 
           {/* User Menu */}
           <div className="relative" ref={menuRef}>
             <button
-              onClick={() => setMenuOpen(v => !v)}
-              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
+              onClick={() => setMenuOpen((v) => !v)}
+              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700 cursor-pointer"
               aria-expanded={menuOpen}
               aria-label="User menu"
             >
@@ -185,8 +195,8 @@ const Navbar = () => {
             </button>
 
             {menuOpen && (
-              <UserMenu 
-                user={user} 
+              <UserMenu
+                user={user}
                 currentTheme={theme}
                 themePreference={preference}
                 onToggleRole={handleToggleRole}
@@ -197,12 +207,9 @@ const Navbar = () => {
             )}
           </div>
         </div>
-   
       </div>
-    <div>
-
-
-      {/* <div>
+      <div>
+        {/* <div>
         {loading && <p>Loading notifications...</p>}
         {error && <p className="text-red-500">{error}</p>}
         {notifications?.length === 0 && <p>No notifications</p>}
@@ -219,7 +226,7 @@ const Navbar = () => {
           </div>
         ))}
       </div> */}
-    </div>
+      </div>
     </nav>
   );
 };
@@ -228,22 +235,22 @@ const Navbar = () => {
 const NavButton = ({ children, onClick }) => (
   <button
     onClick={onClick}
-    className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
+    className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium cursor-pointer"
   >
     {children}
   </button>
 );
 
-const UserMenu = ({ 
-  user, 
+const UserMenu = ({
+  user,
   currentTheme,
   themePreference,
-  onToggleRole, 
+  onToggleRole,
   onLogout,
   onThemeChange,
-  onSystemTheme
+  onSystemTheme,
 }) => (
-  <div className="absolute right-0 mt-2 w-64 origin-top-right bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50">
+  <div className="absolute right-0 mt-2 w-64 origin-top-right bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 cursor-pointer">
     <div className="p-4">
       <div className="flex items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex-shrink-0">
@@ -253,7 +260,7 @@ const UserMenu = ({
         </div>
         <div className="ml-3">
           <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-[180px]">
-            {user?.email || 'Guest'}
+            {user?.email || "Guest"}
           </p>
         </div>
       </div>
@@ -261,22 +268,22 @@ const UserMenu = ({
       <div className="space-y-2">
         {/* Theme Options */}
         <div className="flex gap-2 mb-2">
-          <ThemeOption 
-            theme="light" 
+          <ThemeOption
+            theme="light"
             currentTheme={currentTheme}
             preference={themePreference}
-            onClick={() => onThemeChange('light')}
+            onClick={() => onThemeChange("light")}
             icon={<FiSun className="w-4 h-4" />}
           />
-          <ThemeOption 
-            theme="dark" 
+          <ThemeOption
+            theme="dark"
             currentTheme={currentTheme}
             preference={themePreference}
-            onClick={() => onThemeChange('dark')}
+            onClick={() => onThemeChange("dark")}
             icon={<FiMoon className="w-4 h-4" />}
           />
-          <ThemeOption 
-            theme="system" 
+          <ThemeOption
+            theme="system"
             currentTheme={currentTheme}
             preference={themePreference}
             onClick={onSystemTheme}
@@ -285,24 +292,28 @@ const UserMenu = ({
         </div>
 
         {(user?.roles?.seeker || user?.roles?.referrer) && (
-          <MenuButton 
+          <MenuButton
             onClick={onToggleRole}
-            icon={<FiToggleRight className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />}
+            icon={
+              <FiToggleRight className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
+            }
           >
-            Switch to {user?.roles?.seeker ? 'Referrer' : 'Seeker'}
+            Switch to {user?.roles?.seeker ? "Referrer" : "Seeker"}
           </MenuButton>
         )}
 
-        <MenuButton 
-          onClick={() => navigate('/seeker-profile')}
-          icon={<FiSettings className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400" />}
+        <MenuButton
+          onClick={() => navigate("/seeker-profile")}
+          icon={
+            <FiSettings className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400" />
+          }
         >
           Profile Settings
         </MenuButton>
 
         <hr className="border-gray-200 dark:border-gray-700 my-2" />
 
-        <MenuButton 
+        <MenuButton
           onClick={onLogout}
           icon={<FiLogOut className="w-5 h-5 mr-2" />}
           className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
@@ -314,9 +325,9 @@ const UserMenu = ({
   </div>
 );
 
-const MenuButton = ({ children, icon, className = '', ...props }) => (
+const MenuButton = ({ children, icon, className = "", ...props }) => (
   <button
-    className={`w-full flex items-center px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-lg transition-colors ${className}`}
+    className={`w-full flex items-center px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-lg cursor-pointer transition-colors ${className}`}
     {...props}
   >
     {icon}
@@ -325,17 +336,18 @@ const MenuButton = ({ children, icon, className = '', ...props }) => (
 );
 
 const ThemeOption = ({ theme, currentTheme, preference, onClick, icon }) => {
-  const isActive = preference === theme || 
-                 (theme === 'system' && preference === 'system') ||
-                 (theme === currentTheme && preference === 'system');
+  const isActive =
+    preference === theme ||
+    (theme === "system" && preference === "system") ||
+    (theme === currentTheme && preference === "system");
 
   return (
     <button
       onClick={onClick}
       className={`flex-1 flex flex-col items-center p-2 rounded-lg border transition-colors ${
         isActive
-          ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300'
-          : 'bg-gray-50 dark:bg-gray-700/30 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+          ? "bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300"
+          : "bg-gray-50 dark:bg-gray-700/30 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
       }`}
       aria-label={`${theme} theme`}
     >
@@ -346,4 +358,3 @@ const ThemeOption = ({ theme, currentTheme, preference, onClick, icon }) => {
 };
 
 export default React.memo(Navbar);
-
