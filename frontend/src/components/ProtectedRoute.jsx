@@ -30,6 +30,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     );
   }
 
+ 
+
   // Handle errors (including authentication failures)
   if (error) {
     return <Navigate to="/login" state={{ from: location }} replace />;

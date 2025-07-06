@@ -1,15 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import API from "../util/axios"
 
 // export const fetchProfile = createAsyncThunk(
 //   "profile/fetchProfile",
 //   async (_, { rejectWithValue }) => {
 //     try {
-//       const token = localStorage.getItem("token");
+      
 //       const res = await axios.get("http://localhost:5000/api/users/profile", {
-//         headers: { Authorization: `Bearer ${token}` },
+//         withCredentials: true
 //       });
-
+   
 //       return res.data;
 //     } catch (err) {
 //       return rejectWithValue(err.response?.data?.message || "Failed to fetch profile");
@@ -17,22 +18,57 @@ import axios from "axios";
 //   }
 // );
 
+
+// export const updateProfile = createAsyncThunk(
+//   "profile/updateProfile",
+//   async (profileData, { rejectWithValue }) => {
+//     try {
+//       console.log("Updating profile with data:", profileData);
+      
+//       const formData = new FormData();
+//       Object.entries(profileData).forEach(([key, value]) => {
+//         if (value !== null && value !== undefined) {
+//           if (key === "skills" && Array.isArray(value)) {
+//             formData.append("skills", value.join(",")); 
+//           } else if (key === "resume") {
+//             // formData.append("resume", value); // file
+
+//              if (value instanceof File) {
+//     formData.append("resume", value);
+//   }
+//           } else {
+//             formData.append(key, value);
+//           }
+//         }
+//       });
+
+//       console.log(formData)
+
+//       const res = await axios.patch("http://localhost:5000/api/users/profile", formData, {
+//        withCredentials: true,
+//         headers: { "Content-Type": "multipart/form-data" },
+//       });
+
+//       return res.data;
+//     } catch (err) {
+//       return rejectWithValue(err.response?.data?.message || "Failed to update profile");
+//     }
+//   }
+// );
+
+
+
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (_, { rejectWithValue }) => {
     try {
-      
-      const res = await axios.get("http://localhost:5000/api/users/profile", {
-        withCredentials: true
-      });
-   
+      const res = await API.get("/users/profile");
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Failed to fetch profile");
     }
   }
 );
-
 
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
@@ -44,23 +80,20 @@ export const updateProfile = createAsyncThunk(
       Object.entries(profileData).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
           if (key === "skills" && Array.isArray(value)) {
-            formData.append("skills", value.join(",")); 
+            formData.append("skills", value.join(","));
           } else if (key === "resume") {
-            // formData.append("resume", value); // file
-
-             if (value instanceof File) {
-    formData.append("resume", value);
-  }
+            if (value instanceof File) {
+              formData.append("resume", value);
+            }
           } else {
             formData.append(key, value);
           }
         }
       });
 
-      console.log(formData)
+      console.log(formData);
 
-      const res = await axios.patch("http://localhost:5000/api/users/profile", formData, {
-       withCredentials: true,
+      const res = await API.patch("/users/profile", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -71,50 +104,6 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
-// export const updateProfile = createAsyncThunk(
-//   "profile/updateProfile",
-//   async (profileData, { rejectWithValue }) => {
-//     try {
-//       const formData = new FormData();
-//       console.log(profileData)
-//       Object.entries(profileData).forEach(([key, value]) => {
-//         if (value !== null && value !== undefined) {
-//           if (key === "skills" && Array.isArray(value)) {
-//             formData.append("skills", value.join(","));
-//           } 
-//           // Handle both file fields
-//           else if (key === "resume" || key === "profileImg") {
-//             // Check if it's a new file (Blob) or existing URL string
-//             if (value instanceof Blob) {
-//               formData.append(key, value);
-//             }
-//           } 
-//           // Handle all other fields
-//           else {
-//             formData.append(key, value);
-//           }
-// }
-//       });
-
-//       const res = await axios.patch(
-//         "http://localhost:5000/api/users/profile", 
-//         formData, 
-//         {
-//           withCredentials: true,
-//           headers: {
-//             "Content-Type": "multipart/form-data",
-//           },
-//         }
-//       );
-
-//       return res.data;
-//     } catch (err) {
-//       return rejectWithValue(
-//         err.response?.data?.message || "Failed to update profile"
-//       );
-//     }
-//   }
-// );
 
 const profileSlice = createSlice({
   name: "profile",

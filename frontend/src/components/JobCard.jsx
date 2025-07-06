@@ -330,6 +330,11 @@ const JobCard = ({
     const isSeeker = roles?.seeker;
     const userId = currentUser?.id;
 
+
+    console.log(currentUser)
+
+ const userCompany = currentUser?.profile?.company
+
     const alreadyReferred = job.referralClaims?.some(
       (claim) => claim.referrer === userId || claim.referrer?._id === userId
     );
@@ -344,9 +349,17 @@ const JobCard = ({
       return "apply";
     }
 
-    if (isReferrer && job.postedByType === "company" && !alreadyReferred) {
-      return "refer";
-    }
+    // if (isReferrer && job.postedByType === "company" && !alreadyReferred) {
+    //   return "refer";
+    // }
+
+      if (isReferrer && job.postedByType === "company" && !alreadyReferred) {
+    // 🔴 Block refer if user company doesn't match job company
+  if (userCompany.trim().toLowerCase() !== job.company.trim().toLowerCase()) {
+  return null;
+}
+    return "refer";
+  }
 
     if (isReferrer && job.postedByType === "company" && alreadyReferred) {
       return "claimed";

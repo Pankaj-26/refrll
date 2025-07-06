@@ -43,7 +43,7 @@ referrerStatus: {
      originalJob: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Job',
-    required: true,
+    // required: true,
      index: true
   }
   

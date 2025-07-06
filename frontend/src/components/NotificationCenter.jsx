@@ -30,6 +30,8 @@ const NotificationCenter = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { notifications, loading } = useSelector(state => state.notifications);
+  const { user } = useSelector(state => state.auth);
+
   const [filter, setFilter] = useState('all');
 
   // Transform notifications to include type and proper timestamp
@@ -107,7 +109,9 @@ const NotificationCenter = () => {
 
   // Mark all as read
   const handleMarkAllAsRead = useCallback(() => {
-    dispatch(markAllNotificationsAsRead());
+    dispatch(markAllNotificationsAsRead()).unwrap();
+    dispatch(getNotifications());
+
   }, [dispatch]);
 
   // Get icon based on notification type
@@ -138,8 +142,13 @@ const NotificationCenter = () => {
 
   // Load notifications on mount
   useEffect(() => {
-    dispatch(getNotifications());
   }, [dispatch]);
+
+  useEffect(() => {
+  if (user?._id) {
+        dispatch(getNotifications());
+  }
+}, [dispatch, user?._id]);
 
   if (loading) {
     return (

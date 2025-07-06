@@ -1,54 +1,96 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import API from "../util/axios"
+
+// export const getNotifications = createAsyncThunk(
+//   'notifications/getNotifications',
+//   async (_, { rejectWithValue }) => {
+//     try {
+//        const res = await axios.get('http://localhost:5000/api/notifications',{
+//          withCredentials:true
+//        });
+
+
+//        return res.data;;
+     
+//     } catch (err) {
+//       return rejectWithValue(err.response.data.message || 'Failed to fetch notifications');
+//     }
+//   }
+// );
+
+// export const markNotificationAsRead  = createAsyncThunk(
+//   'notifications/markNotificationAsRead ',
+//   async (id, { rejectWithValue }) => {
+//     try {
+//        const res = await axios.patch(`http://localhost:5000/api/notifications/${id}/read`,{
+
+//         withCredentials:true
+//     });
+//     return res.data;
+  
+     
+//     } catch (err) {
+//       return rejectWithValue(err.response.data.message || 'Failed to mark as read');
+//     }
+//   }
+// );
+
+// export const markAllNotificationsAsRead = createAsyncThunk(
+//   'notifications/markAllAsRead',
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.patch('http://localhost:5000/api/notifications/mark-all-read',{
+//          withCredentials:true
+//       });
+//       return response.data;
+//     } catch (err) {
+//       console.error('Failed to mark notifications as read:', err);
+//       return rejectWithValue(err.response.data || 'Failed to mark notifications as read.');
+//     }
+//   }
+// );
+
 
 
 export const getNotifications = createAsyncThunk(
   'notifications/getNotifications',
   async (_, { rejectWithValue }) => {
     try {
-       const res = await axios.get('http://localhost:5000/api/notifications',{
-         withCredentials:true
-       });
-
-
-       return res.data;;
-     
+      const res = await API.get('/notifications');
+      return res.data;
     } catch (err) {
-      return rejectWithValue(err.response.data.message || 'Failed to fetch notifications');
+      return rejectWithValue(err.response?.data?.message || 'Failed to fetch notifications');
     }
   }
 );
 
-export const markNotificationAsRead  = createAsyncThunk(
-  'notifications/markNotificationAsRead ',
+export const markNotificationAsRead = createAsyncThunk(
+  'notifications/markNotificationAsRead',
   async (id, { rejectWithValue }) => {
     try {
-       const res = await axios.patch(`http://localhost:5000/api/notifications/${id}/read`,{
-
-        withCredentials:true
-    });
-    return res.data;
-  
-     
+      const res = await API.patch(`/notifications/${id}/read`);
+      return res.data;
     } catch (err) {
-      return rejectWithValue(err.response.data.message || 'Failed to mark as read');
+      return rejectWithValue(err.response?.data?.message || 'Failed to mark as read');
+    }
+  }
+);
+
+export const markAllNotificationsAsRead = createAsyncThunk(
+  'notifications/markAllAsRead',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await API.patch('/notifications/mark-all-read');
+      return response.data;
+    } catch (err) {
+      console.error('Failed to mark notifications as read:', err);
+      return rejectWithValue(err.response?.data?.message || 'Failed to mark notifications as read.');
     }
   }
 );
 
 
-
-// features/notificationsSlice.js
-export const markAllNotificationsAsRead = createAsyncThunk(
-  'notifications/markAllAsRead',
-  async (_, { getState }) => {
-    const { user } = getState().auth;
-    const response = await api.patch('/notifications/mark-all-read', {
-      userId: user.id
-    });
-    return response.data;
-  }
-);
 
 const initialState = {
   notifications: [],
@@ -98,6 +140,21 @@ const notificationsSlice = createSlice({
       .addCase(markNotificationAsRead.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+       .addCase(markAllNotificationsAsRead.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(markAllNotificationsAsRead.fulfilled, (state, action) => {
+        state.loading = false;
+        state. notifications = state. notifications.map((notification) => ({
+          ...notification,
+          read: true,
+          readAt: new Date().toISOString()
+        }));
+      })
+      .addCase(markAllNotificationsAsRead.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to mark notifications as read';
       });
   }
 });
