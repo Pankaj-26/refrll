@@ -1,58 +1,49 @@
-// // import { FiLinkedin, FiTwitter, FiInstagram, FiMail } from "react-icons/fi";
+// import { FiLinkedin, FiTwitter, FiInstagram, FiMail, FiGithub } from "react-icons/fi";
 
-// // export default function Footer() {
-// //   return (
-// //     <footer className="bg-gray-900 text-gray-300 mt-16">
-// //       <div className="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
-// //         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          
-// //           <div>
-// //             <h3 className="text-white text-lg font-semibold mb-4">Refrll</h3>
-// //             <p className="text-sm">Connecting talent with hidden opportunities through trusted referrals.</p>
-// //           </div>
+// export default function Footer() {
+//   return (
+//     <footer className="bg-gray-900 text-gray-300 mt-16">
+//       <div className="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+//         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 
-// //           <div>
-// //             <h4 className="text-white text-md font-semibold mb-4">Product</h4>
-// //             <ul className="space-y-2">
-// //               <li><a href="/jobs" className="hover:text-white">Browse Jobs</a></li>
-// //               <li><a href="/referrals" className="hover:text-white">Referrals</a></li>
-// //               <li><a href="/companies" className="hover:text-white">Companies</a></li>
-// //             </ul>
-// //           </div>
+//           <div>
+//             <h3 className="text-white text-lg font-semibold mb-4">Refrll</h3>
+//             <p className="text-sm">Connecting talent with hidden opportunities through trusted referrals.</p>
+//           </div>
 
-// //           <div>
-// //             <h4 className="text-white text-md font-semibold mb-4">Company</h4>
-// //             <ul className="space-y-2">
-// //               <li><a href="/about" className="hover:text-white">About Us</a></li>
-// //               <li><a href="/contact" className="hover:text-white">Contact</a></li>
-// //               <li><a href="/privacy" className="hover:text-white">Privacy Policy</a></li>
-// //               <li><a href="/terms" className="hover:text-white">Terms of Service</a></li>
-// //             </ul>
-// //           </div>
+//  <div>
+//           <h2 className="text-lg font-semibold mb-4">Quick Links</h2>
+//           <ul className="space-y-2 text-sm">
+//             <li><a href="/jobs" className="hover:underline">Jobs</a></li>
+//             <li><a href="/referrals" className="hover:underline">Referrals</a></li>
+//             <li><a href="/about" className="hover:underline">About Us</a></li>
+//             <li><a href="/contact" className="hover:underline">Contact</a></li>
+//           </ul>
+//         </div>
+//         <div>
+//           <h2 className="text-lg font-semibold mb-4">Connect With Us</h2>
+//           <div className="flex space-x-4">
+//             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+//               <FiLinkedin className="w-6 h-6 hover:text-gray-300" />
+//             </a>
+//             <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+//               <FiGithub className="w-6 h-6 hover:text-gray-300" />
+//             </a>
+//             <a href="mailto:support@refrll.com">
+//               <FiMail className="w-6 h-6 hover:text-gray-300" />
+//             </a>
+//           </div>
+//         </div>
 
-// //           <div>
-// //             <h4 className="text-white text-md font-semibold mb-4">Connect</h4>
-// //             <div className="flex space-x-4">
-// //               <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-white"><FiLinkedin size={20} /></a>
-// //               <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-white"><FiTwitter size={20} /></a>
-// //               <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-white"><FiInstagram size={20} /></a>
-// //               <a href="mailto:support@refrll.com" className="hover:text-white"><FiMail size={20} /></a>
-// //             </div>
-// //           </div>
+//         </div>
 
-// //         </div>
-
-// //         <div className="mt-10 border-t border-gray-700 pt-6 text-center text-sm text-gray-400">
-// //           &copy; {new Date().getFullYear()} Refrll. All rights reserved.
-// //         </div>
-// //       </div>
-// //     </footer>
-// //   );
-// // }
-
-
-
-
+//         <div className="mt-10 border-t border-gray-700 pt-6 text-center text-sm text-gray-400">
+//           &copy; {new Date().getFullYear()} Refrll. All rights reserved.
+//         </div>
+//       </div>
+//     </footer>
+//   );
+// }
 
 // import { useEffect, useRef, useState } from "react";
 // import { FiLinkedin, FiGithub, FiMail } from "react-icons/fi";
@@ -117,29 +108,167 @@
 
 
 
+
+
+
 // src/components/Footer.jsx
-import React from 'react';
-import { FaLinkedin, FaTwitter, FaFacebook, FaGithub } from 'react-icons/fa';
-import Refrll from "../assets/Refrll.png"
+// import React from "react";
+// import { FaLinkedin, FaTwitter, FaFacebook, FaGithub } from "react-icons/fa";
+// import Refrll from "../assets/Refrll.png";
+// const Footer = () => {
+//   return (
+//     <footer className="bg-gray-900 text-white">
+//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+//         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+//           <div>
+//             <div className="flex items-center mb-4">
+//               <img
+//                 src={Refrll}
+//                 alt="Refrll Logo"
+//                 className=" h-14 w-auto object-contain cursor-pointer filter invert"
+//               />
+//             </div>
+//             <p className="text-gray-400 mb-4">
+//               Empowering referrals, empowering careers through trusted
+//               connections.
+//             </p>
+//             <div className="flex space-x-4">
+//               <a href="#" className="text-gray-400 hover:text-white">
+//                 <FaLinkedin size={20} />
+//               </a>
+//               <a href="#" className="text-gray-400 hover:text-white">
+//                 <FaTwitter size={20} />
+//               </a>
+//               <a href="#" className="text-gray-400 hover:text-white">
+//                 <FaFacebook size={20} />
+//               </a>
+//               <a href="#" className="text-gray-400 hover:text-white">
+//                 <FaGithub size={20} />
+//               </a>
+//             </div>
+//           </div>
+
+//           <div>
+//             <h3 className="text-lg font-semibold mb-4">For Job Seekers</h3>
+//             <ul className="space-y-2">
+//               <li>
+//                 <a
+//                   href="/job/postings"
+//                   className="text-gray-400 hover:text-white"
+//                 >
+//                   Browse Jobs
+//                 </a>
+//               </li>
+//               <li>
+//                 <a
+//                   href="/ReferralProgramPage"
+//                   className="text-gray-400 hover:text-white"
+//                 >
+//                   Referral Program
+//                 </a>
+//               </li>
+//               {/* <li><a href="#" className="text-gray-400 hover:text-white">Career Resources</a></li> */}
+//               <li>
+//                 <a href="#" className="text-gray-400 hover:text-white">
+//                   Success Stories
+//                 </a>
+//               </li>
+//             </ul>
+//           </div>
+
+//           <div>
+//             <h3 className="text-lg font-semibold mb-4">For Companies</h3>
+//             <ul className="space-y-2">
+//               <li>
+//                 <a href="/post-job" className="text-gray-400 hover:text-white">
+//                   Post a Job
+//                 </a>
+//               </li>
+//               <li>
+//                 <a href="#" className="text-gray-400 hover:text-white">
+//                   Pricing
+//                 </a>
+//               </li>
+//             </ul>
+//           </div>
+
+//           <div>
+//             <h3 className="text-lg font-semibold mb-4">Resources</h3>
+//             <ul className="space-y-2">
+//               <li>
+//                 <a href="/blog" className="text-gray-400 hover:text-white">
+//                   Blog
+//                 </a>
+//               </li>
+//               <li>
+//                 <a href="/help" className="text-gray-400 hover:text-white">
+//                   Help Center
+//                 </a>
+//               </li>
+//               <li>
+//                 <a href="/about" className="text-gray-400 hover:text-white">
+//                   About
+//                 </a>
+//               </li>
+//             </ul>
+//           </div>
+//         </div>
+
+//         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+//           <p className="text-gray-400">© 2023 Refrll. All rights reserved.</p>
+//           <div className="flex space-x-6 mt-4 md:mt-0">
+//             <a href="/privacy" className="text-gray-400 hover:text-white">
+//               Privacy Policy
+//             </a>
+//             <a href="/terms" className="text-gray-400 hover:text-white">
+//               Terms of Service
+//             </a>
+//             {/* <a href="#" className="text-gray-400 hover:text-white">Cookie Policy</a> */}
+//           </div>
+//         </div>
+//       </div>
+//     </footer>
+//   );
+// };
+
+// export default Footer;
+
+
+
+
+import React from "react";
+import { FaLinkedin, FaTwitter, FaFacebook, FaGithub } from "react-icons/fa";
+import Refrll from "../assets/Refrll.png";
 const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center mb-4">
-              {/* <div className="bg-indigo-600 text-white font-bold px-2 py-1 rounded mr-2">R</div> */}
-              {/* <span className="font-bold text-xl">Refrll</span> */}
-                 <img
-                          src={Refrll}
-                          alt="Refrll Logo"
-                          className=" h-14 w-auto object-contain cursor-pointer filter invert"
-                        />
+              <img
+                src={Refrll}
+                alt="Refrll Logo"
+                className=" h-14 w-auto object-contain cursor-pointer filter invert"
+              />
             </div>
             <p className="text-gray-400 mb-4">
-              Empowering referrals, empowering careers through trusted connections.
+              Empowering referrals, empowering careers through trusted
+              connections.
             </p>
-            <div className="flex space-x-4">
+            
+          </div>
+
+           <div>
+          <h2 className="text-lg font-semibold mb-4">Quick Links</h2>
+          <ul className="space-y-2 text-sm">
+            <li><a href="/job/postings" className="hover:underline">Jobs</a></li>
+            <li><a href="/post-job" className="hover:underline">Post Job</a></li>
+            <li><a href="/about" className="hover:underline">About Us</a></li>
+             <li><a href="/contact" className="hover:underline">Contact</a></li>
+          </ul>
+        </div>
+        <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white">
                 <FaLinkedin size={20} />
               </a>
@@ -153,45 +282,19 @@ const Footer = () => {
                 <FaGithub size={20} />
               </a>
             </div>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-semibold mb-4">For Job Seekers</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white">Browse Jobs</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Referral Program</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Career Resources</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Success Stories</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-semibold mb-4">For Companies</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white">Post a Job</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Pricing</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Enterprise Solutions</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Case Studies</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Resources</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white">Blog</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Help Center</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Community</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Webinars</a></li>
-            </ul>
-          </div>
+ 
         </div>
-        
+
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400">© 2023 Refrll. All rights reserved.</p>
+          <p className="text-gray-400">© 2025 Refrll. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="text-gray-400 hover:text-white">Privacy Policy</a>
-            <a href="#" className="text-gray-400 hover:text-white">Terms of Service</a>
-            <a href="#" className="text-gray-400 hover:text-white">Cookie Policy</a>
+            <a href="/privacy" className="text-gray-400 hover:text-white">
+              Privacy Policy
+            </a>
+            <a href="/terms" className="text-gray-400 hover:text-white">
+              Terms of Service
+            </a>
+            {/* <a href="#" className="text-gray-400 hover:text-white">Cookie Policy</a> */}
           </div>
         </div>
       </div>

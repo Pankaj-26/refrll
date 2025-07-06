@@ -37,6 +37,7 @@ import ReferralProgramPage from "./pages/ReferralProgramPage.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import CompanyJobPosts from "./pages/admin/CompanyJobPosts.jsx";
 axios.defaults.withCredentials = true;
+import JobModal from "./components/JobModal.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -178,6 +179,8 @@ function App() {
           />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/companyJobPost" element={<CompanyJobPosts />} />
+          <Route path="/jobmodal" element={<JobModal />} />
+
           
         </Routes>
       </div>
