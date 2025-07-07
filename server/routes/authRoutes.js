@@ -6,7 +6,7 @@ const { signup, signin, getme,logout, refresh } = require('../controllers/authCo
 const authMiddleware = require('../middlewares/authMiddleware');
 const jwt =require('jsonwebtoken')
 // const refreshMiddleware =require('../middlewares/authMiddleware')
-
+const { forgotPassword, resetPassword } = require('../controllers/authControllers');
 
 
 
@@ -68,5 +68,9 @@ router.get('/google/callback',
     res.redirect(`${process.env.CLIENT_URL}/dashboard`);
   }
 );
+
+
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password/:token', resetPassword);
 
 module.exports = router;

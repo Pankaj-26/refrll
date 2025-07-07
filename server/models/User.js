@@ -43,6 +43,8 @@ const userSchema = new mongoose.Schema({
   },
   googleId: { type: String, trim: true },
 
+  resetPasswordToken: { type: String, trim: true },
+  resetPasswordExpire: { type: Date, default: Date.now },
 
   createdAt: { type: Date, default: Date.now },
 });

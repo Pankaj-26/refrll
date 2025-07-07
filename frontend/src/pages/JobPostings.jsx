@@ -47,7 +47,8 @@ const JobPostings = () => {
   const navigate = useNavigate();
 
   // Server-side pagination and filtering
-  const [currentPage, setCurrentPage] = useState(1);
+  const initialPage = parseInt(searchParams.get("page")) || 1;
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [filters, setFilters] = useState(() => {
     const savedFilters = localStorage.getItem("jobFilters");
     return savedFilters
@@ -62,6 +63,12 @@ const JobPostings = () => {
 
   const [showFilters, setShowFilters] = useState(false);
   const [showJobDetail, setShowJobDetail] = useState(null);
+
+  useEffect(() => {
+  searchParams.set("page", currentPage);
+  setSearchParams(searchParams, { replace: true });
+}, [currentPage, searchParams, setSearchParams]);
+
 
   useEffect(() => {
     const currentTab = searchParams.get("tab") || "company";

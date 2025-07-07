@@ -38,6 +38,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import CompanyJobPosts from "./pages/admin/CompanyJobPosts.jsx";
 axios.defaults.withCredentials = true;
 import JobModal from "./components/JobModal.jsx";
+import ForgotPassword from "./components/ForgotPassword.jsx";
+import ResetPassword from "./components/ResetPassword.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -180,8 +182,8 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/companyJobPost" element={<CompanyJobPosts />} />
           <Route path="/jobmodal" element={<JobModal />} />
-
-          
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
       </div>
       <Footer />
