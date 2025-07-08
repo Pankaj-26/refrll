@@ -288,6 +288,7 @@ import {
   FiLoader,
   FiCalendar,
 } from "react-icons/fi";
+import { BiRupee } from 'react-icons/bi';
 import StatusBadge from "./StatusBadge";
 import { FaClipboardList } from "react-icons/fa";
 import toast from "react-hot-toast";
@@ -331,7 +332,7 @@ const JobCard = ({
     const userId = currentUser?.id;
 
 
-    console.log(currentUser)
+  
 
  const userCompany = currentUser?.profile?.company
 
@@ -409,7 +410,7 @@ const JobCard = ({
 
         <div className="mt-4 space-y-3">
           <div className="flex items-center text-gray-600 dark:text-gray-400">
-            <FiMapPin className="mr-2 flex-shrink-0" />
+            <FiMapPin className="mr-2 mt-0 flex-shrink-0" />
             <span>{job.location}</span>
           </div>
 
@@ -447,8 +448,8 @@ const JobCard = ({
 
           {job.salaryRange && (
             <div className="flex items-center text-green-600 dark:text-green-400 font-medium">
-              <FiDollarSign className="mr-2 flex-shrink-0" />
-              <span>{job.salaryRange}</span>
+              <BiRupee className=" flex-shrink-0"/>
+              <span>{job.salaryRange} LPA</span>
             </div>
           )}
         </div>

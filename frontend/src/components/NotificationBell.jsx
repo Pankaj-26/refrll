@@ -41,6 +41,3 @@ const NotificationBell = ({ notifications = [] }) => {
 
 
 export default NotificationBell;
-
-// Add this to your tailwind.config.js under theme.extend:
-// animation: { 'pulse-once': 'pulse 0.5s ease-in-out' }

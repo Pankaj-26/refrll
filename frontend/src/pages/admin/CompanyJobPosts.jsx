@@ -23,7 +23,6 @@ const CompanyJobPosts = () => {
   };
 
 
-  console.log(currentPage,totalPages)
 
     if (loading) return <div>Loading company jobs...</div>;
     if (error) return <div>Error: {error}</div>;

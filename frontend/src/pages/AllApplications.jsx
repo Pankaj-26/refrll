@@ -691,10 +691,7 @@ const AllApplications = () => {
     setSortBy("newest");
   };
 
-  // Export to CSV (mock implementation)
-  const exportToCSV = () => {
-    alert("CSV export would download your application data in a real implementation");
-  };
+
 
   // Handle application click
   const handleViewApplication = (appId) => {
@@ -716,7 +713,7 @@ const AllApplications = () => {
         <div className="mb-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-l md:text-3xl font-bold text-gray-900 dark:text-white">
                 Your Job Applications
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2">
@@ -726,15 +723,15 @@ const AllApplications = () => {
             
             <div className="flex flex-wrap gap-3">
               <button
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-medium transition-all shadow-md hover:shadow-lg"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-medium transition-all shadow-md hover:shadow-lg text-sm"
                 onClick={() => setShowFilters(!showFilters)}
               >
-                <FiFilter className="w-5 h-5" />
+                <FiFilter className="w-3 h-4" />
                 {showFilters ? "Hide Filters" : "Show Filters"}
               </button>
               
               <button
-                className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 text-gray-900 dark:text-gray-200 rounded-lg font-medium transition-all shadow-sm"
+                className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 text-gray-900 dark:text-gray-200 rounded-lg font-medium transition-all shadow-sm text-sm"
                 onClick={() => navigate(-1)}
               >
                 Back to Dashboard
@@ -833,8 +830,8 @@ const AllApplications = () => {
 
         {/* Applications Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+          {/* <div>
+            <h2 className="text-medium font-bold text-gray-900 dark:text-white">
               {filteredApps.length} {filteredApps.length === 1 ? "Application" : "Applications"} 
               <span className="text-gray-500 font-normal ml-2">
                 {applications.length !== filteredApps.length ? `(filtered from ${applications.length})` : ""}
@@ -849,14 +846,8 @@ const AllApplications = () => {
             >
               <FiRefreshCw className="mr-1" /> Refresh
             </button>
-            
-            <button
-              className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 flex items-center transition-colors"
-              onClick={exportToCSV}
-            >
-              <FiDownload className="mr-1" /> Export to CSV
-            </button>
-          </div>
+          
+          </div> */}
         </div>
 
         {/* Applications Grid */}

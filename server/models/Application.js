@@ -1,6 +1,4 @@
 
-// the below ne is to track if the seeker has already applied to a job claimed by other referrer
-
 const mongoose = require('mongoose');
 
 
@@ -21,9 +19,6 @@ const applicationSchema = new mongoose.Schema(
       ref: 'User',
     
     },
-
-    // ✅ NEW status fields
-  // models/Application.js
 companyStatus: {
   type: String,
   enum: ['applied', 'reviewed', 'accepted', 'rejected', null],

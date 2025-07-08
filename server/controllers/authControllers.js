@@ -4,6 +4,8 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Company = require('../models/Company');
+const crypto = require('crypto');
+const sendEmail = require('../utils/sendEmail'); 
 
 // Token creation helpers
 const createAccessToken = (user) => {
@@ -73,7 +75,7 @@ const formatUserData = (user) => ({
 exports.signup = async (req, res) => {
   const { name, email, password,isCompany } = req.body;
 
-  console.log(isCompany)
+ 
 
   if (isCompany) {
   
@@ -258,13 +260,12 @@ exports.resetPassword = async (req, res) => {
 };
 
 
-const crypto = require('crypto');
-const sendEmail = require('../utils/sendEmail'); // Will create next
+
 
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
 
-  console.log(email);
+
 
   try {
     const user = await User.findOne({ email });

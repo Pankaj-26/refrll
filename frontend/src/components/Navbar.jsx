@@ -495,7 +495,7 @@ const Navbar = () => {
           )}
 
           {canPostJobs && (
-            <NavButton onClick={() => navigate("/post-job")}>
+            <NavButton onClick={() => navigate("/post-job/:jobId/edit")}>
               Post Jobs
             </NavButton>
           )}
@@ -601,7 +601,7 @@ const Navbar = () => {
                 <MobileNavItem
                   icon={<FiPlusSquare className="w-5 h-5" />}
                   label="Post Jobs"
-                  onClick={() => navigateTo("/post-job")}
+                  onClick={() => navigateTo("/post-job/:jobId/edit")}
                 />
               )}
 

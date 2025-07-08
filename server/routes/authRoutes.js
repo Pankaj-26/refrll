@@ -5,7 +5,6 @@ const passport = require('passport');
 const { signup, signin, getme,logout, refresh } = require('../controllers/authControllers');
 const authMiddleware = require('../middlewares/authMiddleware');
 const jwt =require('jsonwebtoken')
-// const refreshMiddleware =require('../middlewares/authMiddleware')
 const { forgotPassword, resetPassword } = require('../controllers/authControllers');
 
 

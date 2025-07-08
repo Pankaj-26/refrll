@@ -6,190 +6,12 @@ import { toast } from 'react-hot-toast';
 import API from "../util/axios"
 
 
-// export const fetchJobs = createAsyncThunk(
-//   "jobs/fetchJobs",
-//   async (params, thunkAPI) => {
-//     try {
-//       const res = await axios.get("http://localhost:5000/api/jobs/getjobs", {
-//         params,
-//         withCredentials:true,
-//       });
-//     console.log(res.data)
-//       return res.data;
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
-//     }
-//   }
-// );
-
-
-// export const applyToJob = createAsyncThunk("jobs/applyToJob", async ( jobId , thunkAPI) => {
- 
-//   try {
-//     const res = await axios.post(
-//       "http://localhost:5000/api/applications/apply",
-//       { jobId },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${localStorage.getItem("token")}`,
-//         },
-//       }
-//     );
-
-//     return { jobId, status: res.data.status || "Pending" };
-//   } catch (err) {
-//     return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
-//   }
-// });
-
-
-
-
-// export const fetchJobsWithApplicants = createAsyncThunk(
-//   "jobs/fetchJobsWithApplicants",
-//   async (params, thunkAPI) => {
-    
- 
-//     try {
-//       const res = await axios.get("http://localhost:5000/api/applications/applicants", {
-//      params
-//       });
-//      console.log(res.data)
-      
-//       return res.data;
-//     } catch (err) {
-//      console.log(err)
-
-//       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
-    
-//   }
-//   }
-// );
-
-
-// export const fetchJobsWithApplicantsForReferrer = createAsyncThunk(
-//   "jobs/fetchJobsWithApplicantsForReferrer",
-//   async (_, thunkAPI) => {
-//     try {
-//       const res = await axios.get("http://localhost:5000/api/applications/referrer", {
-       
-//         withCredentials:true
-//       });
-
-   
-     
-//       return res.data;
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
-//     }
-//   }
-// );
-
-
-// export const postJob = createAsyncThunk(
-//   'jobs/postJob',
-//   async (jobData, { rejectWithValue }) => {
-//     try {
-//       const response = await axios.post('http://localhost:5000/api/jobs', jobData, {
-     
-//         withCredentials: true,
-//       });
-//       toast.success('Job posted successfully!');
-//       return response.data.job;
-//     } catch (err) {
-//       toast.error(err.response?.data?.message || 'Failed to post job');
-//       return rejectWithValue(err.response?.data);
-//     }
-//   }
-// );
-
-
-// export const claimJobForReferral = createAsyncThunk(
-//   "jobs/claimJobForReferral",
-//   async ({ jobId, contactInfo,userId  }, thunkAPI) => {
-//     try {
-//       const res = await axios.post(
-//         `http://localhost:5000/api/jobs/${jobId}/claim`,
-//         { contactInfo },
-//         {
-//          withCredentials:true
-//         }
-//       );
-//       return res.data;
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
-//     }
-//   }
-// );
-
-
-// export const updateApplicationStatus = createAsyncThunk(
-//   "jobs/updateApplicationStatus",
-//   async ({ applicationId, status }, thunkAPI) => {
-//     try {
-//       console.log( applicationId, status)
-//       const response = await axios.patch(
-//         `http://localhost:5000/api/applications/${applicationId}/status`,
-//         { status },
-//         {
-//         withCredentials:true
-//         }
-//       );
-
-//       console.log(response.data)
-//       return response.data;
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue(err.response.data.message || "Failed to update status");
-//     }
-//   }
-// );
-
-
-
-
-// export const getJobWithApplicants = createAsyncThunk(
-//   'jobs/getJobWithApplicants',
-//   async ({ jobId, page = 1, limit = 10, filters = {} }, { rejectWithValue }) => {
-//     try {
-//       const res = await axios.get(`/api/applications/${jobId}/applicants`, {
-//         params: { page, limit, ...filters },
-//         withCredentials: true
-//       });
-//       return res.data;
-//     } catch (err) {
-//       return rejectWithValue(err.response.data.message || 'Error fetching job');
-//     }
-//   }
-// );
-
-
-// export const getJobDetailForSeeker = createAsyncThunk(
-//   'jobs/getJobDetailForSeeker',
-//   async (jobId, { rejectWithValue }) => {
-//     try {
-//       //  i changed it to seeker from applicants
-//       const res = await axios.get(`/api/applications/${jobId}/seeker`,   {
-//          withCredentials:true
-//         });
-   
-//       return res.data;
-//     } catch (err) {
-//       return rejectWithValue(err.response.data.message || 'Error fetching job');
-//     }
-//   }
-// );
-
-
-
-
-
-
 export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs",
   async (params, thunkAPI) => {
     try {
       const res = await API.get("/jobs/getjobs", { params });
-      console.log(res.data);
+      
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
@@ -214,10 +36,10 @@ export const fetchJobsWithApplicants = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       const res = await API.get("/applications/applicants", { params });
-      console.log(res.data);
+   
       return res.data;
     } catch (err) {
-      console.log(err);
+  
       return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
     }
   }
@@ -265,9 +87,9 @@ export const updateApplicationStatus = createAsyncThunk(
   "jobs/updateApplicationStatus",
   async ({ applicationId, status }, thunkAPI) => {
     try {
-      console.log(applicationId, status);
+     
       const response = await API.patch(`/applications/${applicationId}/status`, { status });
-      console.log(response.data);
+  
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to update status");
@@ -282,6 +104,7 @@ export const getJobWithApplicants = createAsyncThunk(
       const res = await API.get(`/applications/${jobId}/applicants`, {
         params: { page, limit, ...filters },
       });
+     
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Error fetching job');
@@ -303,7 +126,43 @@ export const getJobDetailForSeeker = createAsyncThunk(
 
 
 
+export const updateJob = createAsyncThunk(
+  "jobs/updateJob",
+  async ({ jobId, updates }, thunkAPI) => {
+    try {
+      const res = await API.patch(`/jobs/${jobId}/edit`, updates);
+      return res.data.job;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to update job");
+    }
+  }
+);
 
+export const updateJobStatus = createAsyncThunk(
+  "jobs/updateJobStatus",
+  async ({ jobId, status }, thunkAPI) => {
+    try {
+      const res = await API.patch(`/jobs/${jobId}/status`, { status });
+      return res.data.job;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to update job status");
+    }
+  }
+);
+
+
+
+export const getJobDetailForEdit = createAsyncThunk(
+  'jobs/getJobDetailForEdit',
+  async (jobId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/jobs/jobforedit/${jobId}`); 
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to fetch job');
+    }
+  }
+);
 
 
 const jobsSlice = createSlice({
@@ -319,6 +178,7 @@ const jobsSlice = createSlice({
  totalPages: 0,
   totalCount: 0,
   currentPage: 1,
+   editJob: null,
 
   },
   reducers: {
@@ -332,6 +192,12 @@ const jobsSlice = createSlice({
           application.status = newStatus;
         }
       }
+    },
+     setEditJob: (state, action) => {
+      state.editJob = action.payload;
+    },
+    clearEditJob: (state) => {
+      state.editJob = null;
     },
  
   },
@@ -464,13 +330,25 @@ const jobsSlice = createSlice({
 
 })
 
+.addCase(getJobDetailForEdit.fulfilled, (state, action) => {
+  state.editJob = action.payload;
+  state.loading = false;
+})
+.addCase(getJobDetailForEdit.pending, (state) => {
+  state.loading = true;
+})
+.addCase(getJobDetailForEdit.rejected, (state, action) => {
+  state.loading = false;
+  state.error = action.payload;
+})
+
 
   },
   
 })
 
 
-export const { optimisticStatusUpdate } = jobsSlice.actions;
+export const { optimisticStatusUpdate,setEditJob, clearEditJob } = jobsSlice.actions;
 export const selectAllJobs = (state) => state.jobs.jobs;
 export const selectJobsLoading = (state) => state.jobs.loading;
 export const selectJobsError = (state) => state.jobs.error;
@@ -478,5 +356,7 @@ export const selectJobsError = (state) => state.jobs.error;
 export const selectTotalPages = (state) => state.jobs.totalPages;
 export const selectTotalCount = (state) => state.jobs.totalCount;
 export const selectCurrentPage = (state) => state.jobs.currentPage;
+
+
 
 export default jobsSlice.reducer;

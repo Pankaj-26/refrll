@@ -40,10 +40,10 @@ const StatsCard = ({ title, value, icon, color = "blue" }) => {
     <div className={`${colors.bg} ${colors.border} p-4 rounded-xl border`}>
       <div className="flex justify-between items-start">
         <div>
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+          <div className="text-sm text-gray-600 dark:text-gray-400 ">
             {title}
           </div>
-          <div className={`text-2xl font-bold ${colors.text}`}>
+          <div className={`text-medium font-bold ${colors.text}`}>
             {value}
           </div>
         </div>

@@ -62,78 +62,6 @@ const clearAuthCookies = (res) => {
 
 
 
-
-
-
-
-
-
-
-// exports.updateSeekerProfile = async (req, res) => {
-//   try {
-//     const userId = req.userId;
-//     const userType=req.userType;
-//     const user = await User.findById(userId);
-
-//     if (!user || ! userType.seeker) {
-//       return res.status(403).json({ message: 'Unauthorized or not a seeker' });
-//     }
-
-//     console.log(req.body)
-
-//     const {
-//       name,
-//       experience,
-//       linkedin,
-//       github,
-//       company,
-//       location,
-//       phone,
-//      designation,
-//     } = req.body;
-    
-  
-
-    
-
-//     // Handle skills: ensure it's an array
-//     let skills = req.body.skills;
-//     if (typeof skills === "string") {
-//       skills = skills.split(',').map(s => s.trim());
-//     } else if (!Array.isArray(skills)) {
-//       skills = []; // fallback
-//     }
-
-//     // Update seeker profile fields
-//     user.profile.fullName = name || user.profile.fullName;
-//     user.profile.experience = experience || user.profile.experience;
-//     user.profile.skills = skills;
-//     user.profile.linkedIn = linkedin || user.profile.linkedIn;
-//     user.profile.github = github || user.profile.github;
-//     user.profile.company = company || user.profile.company;
-//     user.profile.location = location || user.profile.location;
-//     user.profile.phone = phone || user.profile.phone;
-// user.profile.designation= designation || user.profile.designation
-   
-
-//     await user.save();
-
-//     res.status(200).json({
-//       message: 'Profile updated successfully',
-//       profile: user.profile,
-//       resumeUrl: user.resume.url,
-//     });
-
-//   } catch (err) {
-//     console.error("Error updating profile:", err);
-//     res.status(500).json({ message: 'Failed to update profile' });
-//   }
-// };
-
-
-
-
-
 exports.updateSeekerProfile = async (req, res) => {
   try {
     const userId = req.userId;
@@ -177,15 +105,6 @@ exports.updateSeekerProfile = async (req, res) => {
 user.profile.designation= designation
     
  
-//  if (!req.file) {
-//       return res.status(400).json({ message: 'No resume file uploaded' });
-//     }
-
-//     // Delete previous resume from Cloudinary if exists
-//     if (user.resume && user.resume.public_id) {
-//       await cloudinary.uploader.destroy(user.resume.public_id, { resource_type: 'raw' });
-//     }
-
 
 
  if (req.file) {
@@ -201,15 +120,6 @@ user.profile.designation= designation
     }
 
    
-
-    // Save new resume
-    // user.resume = {
-    //   url: req.file.path, 
-    //   public_id: req.file.filename, 
-    //   uploadedAt: new Date(),
-    // };
-
-
 
     await user.save();
 

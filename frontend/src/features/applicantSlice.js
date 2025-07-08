@@ -2,22 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import API from "../util/axios"
 
-// export const fetchApplicants = createAsyncThunk(
-//   'applicants/fetchApplicants',
-//   async (jobId, { rejectWithValue }) => {
-//     try {
-//       const res = await axios.get(
-//         `http://localhost:5000/api/applications/job/${jobId}/applicants`,
-//         {
-//          withCredentials: true
-//         }
-//       );
-//       return res.data; 
-//     } catch (err) {
-//       return rejectWithValue(err.response?.data?.message || err.message);
-//     }
-//   }
-// );
+
 
 export const fetchApplicants = createAsyncThunk(
   'applicants/fetchApplicants',
@@ -31,21 +16,6 @@ export const fetchApplicants = createAsyncThunk(
   }
 );
 
-// export const fetchSeekerApplications = createAsyncThunk(
-//   'applications/fetchSeekerApplications',
-//   async (_, thunkAPI) => {
-//     try {
-//       const response = await axios.get('http://localhost:5000/api/applications/seeker', {
-        
-//             withCredentials: true
-//         });
-      
-//       return response.data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to fetch applications');
-//     }
-//   }
-// );
 
 
 export const fetchSeekerApplications = createAsyncThunk(

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { postJob } from '../features/jobSlice';
+import { getJobDetailForEdit, postJob, updateJob } from '../features/jobSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { 
   FiBriefcase, 
@@ -16,10 +16,12 @@ import {
   FiAlertCircle,
   FiX
 } from 'react-icons/fi';
+import { useLocation, useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const PostJob = () => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.jobs);
+  const { editJob,loading } = useSelector((state) => state.jobs);
   const [submitted, setSubmitted] = useState(false);
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
@@ -28,6 +30,10 @@ const PostJob = () => {
   useEffect(()=>{
 document.title = "Post Job | Refrll";
   },[])
+
+
+
+
 
   const [formData, setFormData] = useState({
     title: '',
@@ -40,6 +46,26 @@ document.title = "Post Job | Refrll";
     salaryRange: '',
     employmentType: 'Full-Time',
   });
+
+
+  useEffect(() => {
+  if (editJob) {
+    setFormData({
+      title: editJob.title || '',
+      company: editJob.company || '',
+      description: editJob.description || '',
+      location: editJob.location || '',
+      applicationLimit: editJob.applicationLimit || 10,
+      experienceRequired: editJob.experienceRequired || 0,
+      skills: editJob.skills ? editJob.skills.join(', ') : '',
+      salaryRange: editJob.salaryRange || '',
+      employmentType: editJob.employmentType || 'Full-Time',
+    });
+  }
+}, [editJob]);
+
+const isEditing = !!editJob;
+
 
   const validateField = (name, value) => {
     let error = '';
@@ -97,6 +123,29 @@ document.title = "Post Job | Refrll";
     if (!validateForm()) return;
 
     const skillsArray = formData.skills.split(',').map(s => s.trim()).filter(Boolean);
+
+
+
+  if (isEditing) {
+  dispatch(updateJob({ 
+    jobId, 
+    updates: { ...formData, skills: skillsArray }
+  })).then(()=>{
+     setFormData({
+          title: '',
+          company: user?.company || '',
+          description: '',
+          location: user?.location || '',
+          applicationLimit: 10,
+          experienceRequired: 0,
+          skills: '',
+          salaryRange: '',
+          employmentType: 'Full-Time',
+        });
+        toast.success('Job updated successfully!');
+  })
+}
+else{
     
     dispatch(postJob({ 
       ...formData, 
@@ -121,6 +170,7 @@ document.title = "Post Job | Refrll";
         setTouched({});
       }, 2000);
     });
+  }
   };
 
   const inputFields = [
@@ -131,6 +181,16 @@ document.title = "Post Job | Refrll";
     { label: 'Skills (comma separated)', name: 'skills', icon: <FiHash />, required: true },
     { label: 'Salary Range', name: 'salaryRange', icon: <FiDollarSign /> },
   ];
+
+
+const { jobId } = useParams();
+
+useEffect(() => {
+  if (jobId) {
+    dispatch(getJobDetailForEdit(jobId));
+  }
+}, [dispatch, jobId]);
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 flex items-start justify-center">
@@ -303,7 +363,8 @@ document.title = "Post Job | Refrll";
             ) : (
               <>
                 <FiBriefcase className="w-4 h-4" />
-                Post Job Opportunity
+                {/* Post Job Opportunity */}
+                 {isEditing ? 'Edit Job Opportunity' : 'Post New Opportunity'}
               </>
             )}
           </button>

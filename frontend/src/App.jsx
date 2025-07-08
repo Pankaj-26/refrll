@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ThemeInitializer from "./components/ThemeInitializer.jsx";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
 import { useLocation } from "react-router-dom";
-import api from "./api.js";
+
 import axios from "axios";
 import Unauthorized from "./pages/Unauthorized.jsx";
 import Footer from "./components/Footer.jsx";
@@ -47,10 +47,6 @@ function App() {
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(true);
 
-  // Fetch user and setup theme on mount
-  // useEffect(() => {
-  //   dispatch(fetchUser());
-  // }, [dispatch]);
 
   useEffect(() => {
     // Initialize theme
@@ -69,7 +65,7 @@ function App() {
       try {
         await refreshAccessToken();
       } catch (err) {
-        console.log("Refresh failed");
+        toast.error("Refresh failed");
       } finally {
         setLoading(false);
       }
@@ -104,7 +100,7 @@ function App() {
             }
           />
           <Route
-            path="/post-job"
+            path="/post-job/:jobId/edit"
             element={
               <ProtectedRoute allowedRoles={["referrer", "company"]}>
                 <PostJob />

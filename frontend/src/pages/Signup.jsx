@@ -131,11 +131,7 @@ const Signup = () => {
 
     if (form.isCompany) {
       dispatch(
-        // signupCompany({
-        //   name: form.name,
-        //   email: form.email,
-        //   password: form.password,
-        // })
+      
 
         signupUser({
           name: form.name,
@@ -172,6 +168,10 @@ const Signup = () => {
     return "Very Strong";
   };
 
+    const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:5000/api/auth/google'; 
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 p-4">
       <motion.div 
@@ -185,32 +185,25 @@ const Signup = () => {
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4"
+            className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4"
           >
-            <FaUser className="w-8 h-8 text-white" />
+            <FaUser className="w-6 h-6 text-white" />
           </motion.div>
-          <h2 className="text-3xl font-bold text-center mb-2 text-gray-800">
+          <h2 className="text-2xl font-bold text-center mb-2 text-gray-800">
             Join Our Community
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm ">
             Create an account to get started
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-4 mb-4">
           <button
-            onClick={() => handleSocialLogin("Google")}
-            className="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-800 py-3 rounded-xl transition-all border border-gray-200 shadow-sm"
+             onClick={handleGoogleLogin}
+            className="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-800 py-2 rounded-xl transition-all border border-gray-200 shadow-sm"
           >
-            <FaGoogle className="w-5 h-5 text-red-500" />
+            <FaGoogle className="w-4 h-4 text-red-500" />
             <span>Google</span>
-          </button>
-          <button
-            onClick={() => handleSocialLogin("LinkedIn")}
-            className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-all shadow-sm"
-          >
-            <FaLinkedin className="w-5 h-5" />
-            <span>LinkedIn</span>
           </button>
         </div>
 
@@ -254,7 +247,7 @@ const Signup = () => {
                 : 'border-gray-200'
             }`}>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaUser className="w-5 h-5 text-gray-400" />
+                <FaUser className="w-4 h-4 text-gray-400" />
               </div>
               <input
                 type="text"
@@ -264,7 +257,7 @@ const Signup = () => {
                 onChange={handleChange}
                 onFocus={() => setFocusedField('name')}
                 onBlur={() => setFocusedField(null)}
-                className="w-full pl-10 pr-4 py-3 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none"
+                className="w-full pl-10 pr-4 py-2 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none"
                 required
               />
             </div>
@@ -281,7 +274,7 @@ const Signup = () => {
                 : 'border-gray-200'
             }`}>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaEnvelope className="w-5 h-5 text-gray-400" />
+                <FaEnvelope className="w-4 h-4 text-gray-400" />
               </div>
               <input
                 type="email"
@@ -291,7 +284,7 @@ const Signup = () => {
                 onChange={handleChange}
                 onFocus={() => setFocusedField('email')}
                 onBlur={() => setFocusedField(null)}
-                className="w-full pl-10 pr-4 py-3 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none"
+                className="w-full pl-10 pr-4 py-2 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none"
                 required
               />
             </div>
@@ -310,7 +303,7 @@ const Signup = () => {
                 : 'border-gray-200'
             }`}>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="w-5 h-5 text-gray-400" />
+                <FaLock className="w-4 h-4 text-gray-400" />
               </div>
               <input
                 type={showPassword ? "text" : "password"}
@@ -320,7 +313,7 @@ const Signup = () => {
                 onChange={handleChange}
                 onFocus={() => setFocusedField('password')}
                 onBlur={() => setFocusedField(null)}
-                className="w-full pl-10 pr-10 py-3 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none"
+                className="w-full pl-10 pr-10 py-2 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none"
                 required
               />
               <button
@@ -367,7 +360,7 @@ const Signup = () => {
                 : 'border-gray-200'
             }`}>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="w-5 h-5 text-gray-400" />
+                <FaLock className="w-4 h-4 text-gray-400" />
               </div>
               <input
                 type={showConfirmPassword ? "text" : "password"}
@@ -377,7 +370,7 @@ const Signup = () => {
                 onChange={handleChange}
                 onFocus={() => setFocusedField('confirmPassword')}
                 onBlur={() => setFocusedField(null)}
-                className="w-full pl-10 pr-10 py-3 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none"
+                className="w-full pl-10 pr-10 py-2 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none"
                 required
               />
               <button

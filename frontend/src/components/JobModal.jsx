@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiBriefcase, FiMapPin, FiDollarSign, FiClock, FiUser, FiX, FiExternalLink, FiBookmark, FiShare2, FiMail, FiPhone, FiGlobe } from 'react-icons/fi';
 import ShareJob from "../components/ShareJob"
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { BiRupee } from 'react-icons/bi';
 const JobModal = (selectedJob,setSelectedJob) => {
 
 // const [showShareOptions, setShowShareOptions] = useState(false);
@@ -83,8 +84,9 @@ const navigate=useNavigate()
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="text-sm font-semibold text-gray-500 mb-2">SALARY</h4>
                       <div className="flex items-center">
-                        <FiDollarSign className="mr-2 text-gray-500" />
-                        <span className="text-gray-900">{selectedJob.selectedJob.salaryRange}</span>
+                     
+                         <BiRupee className=" text-gray-500"/>
+                        <span className="text-gray-900">{selectedJob.selectedJob.salaryRange} LPA</span>
                       </div>
                     </div>
                   </div>
@@ -123,7 +125,7 @@ const navigate=useNavigate()
                       
                       <div>
                         <p className="text-sm text-gray-500">Posted By</p>
-                        <p className="font-medium">({selectedJob.selectedJob.postedByType})</p>
+                        <p className="font-medium">{selectedJob.selectedJob.postedByType}</p>
                       </div>
                       
                       <div>

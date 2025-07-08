@@ -144,8 +144,6 @@ if (job.postedByType === 'referrer' && job.postedBy.toString() === seekerId) {
 
 
 
-
-
 exports.getSeekerApplications = async (req, res) => {
   try {
     const seekerId = req.userId;
@@ -174,30 +172,7 @@ exports.getSeekerApplications = async (req, res) => {
 
  
 
-    // Transform applications
-    // const transformedApplications = applications.map(app => {
-    //   const isReferral = app.appliedVia === 'referral';
-      
-    //   return {
-    //     _id: app._id,
-    //     applicationStatus: isReferral ? app.referrerStatus : app.companyStatus,
-    //     statusUpdatedAt: isReferral ? app.referrerStatusUpdatedAt : app.companyStatusUpdatedAt,
-    //     updatedBy: app.updatedBy,
-    //     resumeUrl: app.resumeUrl,
-    //     appliedVia: app.appliedVia,
-    //     appliedViaReferral: isReferral,
-    //     createdAt: app.createdAt,
-    //     job: app.job ? {
-    //       ...app.job,
-    //       _id: app.job._id || app.job
-    //     } : {
-    //       _id: app.job,
-    //       title: "Deleted Job",
-    //       description: "This job is no longer available",
-    //       status: "Deleted"
-    //     }
-    //   };
-    // });
+
 
 
     const transformedApplications = applications.map(app => {
@@ -225,7 +200,6 @@ exports.getSeekerApplications = async (req, res) => {
   };
 });
 
-    // console.log(transformedApplications, 'applications found for seeker' );
 
     res.status(200).json(transformedApplications);
   } catch (err) {
@@ -236,8 +210,6 @@ exports.getSeekerApplications = async (req, res) => {
     });
   }
 };
-
-// Get applications received by the logged-in referrer
 
 
 exports.getReferrerApplications = async (req, res) => {
@@ -282,9 +254,7 @@ exports.getReferrerApplications = async (req, res) => {
       if (jobMap.has(jobId)) {
         const job = jobMap.get(jobId);
         
-        // For referral copies, show referrer status
-        // const displayStatus = job.isReferralCopy?app.companyStatus:app.referrerStatus ;
-     
+      
 
         
         const displayStatus = job.postedByType === 'referrer' ? app.referrerStatus : app.companyStatus;
@@ -311,7 +281,6 @@ exports.getReferrerApplications = async (req, res) => {
 
 
 
-// Update application status by referrer
 
 
 exports.updateApplicationStatus = async (req, res) => {
@@ -462,7 +431,7 @@ await createNotification(
 
 //get individual job with applicants for company
 exports.getApplicantsForJob = async (req, res) => {
-console.log('Fetching applicants for job:');
+
 
   try {
     const jobId = req.params.jobId;
@@ -475,7 +444,6 @@ console.log('Fetching applicants for job:');
     const applications = await Application.find({ job: jobId })
       .populate('seeker', 'name email profile resume');
 
-    console.log('Applications:', applications);
     res.status(200).json(applications);
   } catch (err) {
     console.error('getApplicantsForJob error:', err);
@@ -483,13 +451,6 @@ console.log('Fetching applicants for job:');
   }
 };
 
-
-
-// Get all jobs posted by current user, along with applicants per job
-
-
-
-// controllers/jobController.js
 
 exports.getJobsWithApplicants = async (req, res) => {
   try {
@@ -584,12 +545,7 @@ exports.getJobsWithApplicants = async (req, res) => {
     // Get total job count for pagination
     const totalJobs = await Job.countDocuments(jobQuery);
 
-    console.log(  { success: true,
-      jobs: jobsWithCounts,
-      totalJobs,
-      totalPages: Math.ceil(totalJobs / limit),
-      currentPage: parseInt(page),
-      limit: parseInt(limit)})
+   
 
     res.status(200).json({
       success: true,
@@ -606,113 +562,102 @@ exports.getJobsWithApplicants = async (req, res) => {
 };
 
 
-// get individual job applicants  for company
-
-// exports.fetchJobApplicants = async (req, res) => {
-//   try {
-//     const { jobId } = req.params;
-
-//     // Fetch the job
-//     const job = await Job.findById(jobId);
-//     if (!job) return res.status(404).json({ message: 'Job not found' });
-
-
-//     // Fetch applications for the job
-//     const applications = await Application.find({ job: jobId })
-//       .populate('seeker', 'name email profile') // populate seeker details
-//       .sort({ createdAt: -1 });
-
-//     res.json({ job, applicants: applications });
-//   } catch (error) {
-//     console.error('Error fetching job with applications:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-
-
-
-// };
-
 
 exports.fetchJobApplicants = async (req, res) => {
   try {
     const { jobId } = req.params;
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const { page = 1, limit = 10, search, status, experienceMin, experienceMax } = req.query;
     const skip = (page - 1) * limit;
+
+   
 
     const job = await Job.findById(jobId);
     if (!job) return res.status(404).json({ message: 'Job not found' });
 
-    const [applications, total] = await Promise.all([
-      Application.find({ job: jobId })
-        .populate('seeker', 'name email profile')
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit),
-        
-      Application.countDocuments({ job: jobId })
-    ]);
+    // Build aggregation pipeline
+    const pipeline = [
+      { $match: { job: mongoose.Types.ObjectId(jobId) } },
+
+      // Lookup seeker details
+      { $lookup: {
+          from: "users",
+          localField: "seeker",
+          foreignField: "_id",
+          as: "seeker"
+        }
+      },
+      { $unwind: "$seeker" },
+      {
+  $addFields: {
+    seekerExperienceInt: {
+      $toInt: {
+        $ifNull: ["$seeker.profile.experience", "0"]
+      }
+    }
+  }
+}
+    ];
+
+    // Add filters dynamically
+    const matchFilters = {};
+
+    if (status) matchFilters.companyStatus = status;
+
+   if (experienceMin || experienceMax) {
+  matchFilters.seekerExperienceInt = {};
+  if (experienceMin) matchFilters.seekerExperienceInt.$gte = parseInt(experienceMin);
+  if (experienceMax) matchFilters.seekerExperienceInt.$lte = parseInt(experienceMax);
+
+}
+
+
+
+
+
+
+    if (search) {
+      const regex = new RegExp(search, 'i');
+      matchFilters.$or = [
+        { "seeker.name": regex },
+        { "seeker.email": regex },
+        { "seeker.profile.skills": regex }
+      ];
+    }
+
+    if (Object.keys(matchFilters).length > 0) {
+      pipeline.push({ $match: matchFilters });
+    }
+
+    // Sort, paginate
+    pipeline.push(
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: parseInt(limit) }
+    );
+
+    // Execute aggregation
+    const applications = await Application.aggregate(pipeline);
+
+    // Total count for pagination (filtered)
+    const countPipeline = [...pipeline.filter(stage => !("$skip" in stage || "$limit" in stage))];
+    countPipeline.push({ $count: "total" });
+    const countResult = await Application.aggregate(countPipeline);
+    const total = countResult[0]?.total || 0;
 
     res.json({
       job,
       applicants: applications,
-      page,
+      page: parseInt(page),
       totalPages: Math.ceil(total / limit),
       totalApplicants: total
     });
+
   } catch (error) {
     console.error('Error fetching job with applications:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// exports.fetchJobApplicants = async (req, res) => {
-//   try {
-//     const { jobId } = req.params;
-//     const page = parseInt(req.query.page) || 1;
-//     const limit = parseInt(req.query.limit) || 10;
-//     const skip = (page - 1) * limit;
-
-//     // Build query based on filters
-//     const query = { job: jobId };
-    
-//     // Status filter
-//     if (req.query.status) {
-//       query.companyStatus = req.query.status;
-//     }
-    
-//     // Search filter
-//     if (req.query.search) {
-//       const searchRegex = new RegExp(req.query.search, 'i');
-//       query.$or = [
-//         { 'seeker.name': searchRegex },
-//         { 'seeker.email': searchRegex },
-//         { 'seeker.profile.skills': searchRegex }
-//       ];
-//     }
-
-//     const [applications, total] = await Promise.all([
-//       Application.find(query)
-//         .populate('seeker', 'name email profile')
-//         .sort({ createdAt: -1 })
-//         .skip(skip)
-//         .limit(limit),
-        
-//       Application.countDocuments(query)
-//     ]);
-
-//     res.json({
-//       job: await Job.findById(jobId),
-//       applicants: applications,
-//       page,
-//       totalPages: Math.ceil(total / limit),
-//       totalApplicants: total
-//     });
-//   } catch (error) {
-//     console.error('Error fetching job with applications:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// };
 
 
 exports.fetchSeekerSingleJobDetail = async (req, res) => {

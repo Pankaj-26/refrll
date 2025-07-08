@@ -7,10 +7,12 @@ import {
   FiExternalLink
 } from "react-icons/fi";
 import StatusBadge from "./StatusBadge";
+import { BiRupee } from "react-icons/bi";
 
 const AllApplicationCard = ({ application, onClick }) => {
   const { job, appliedViaReferral, applicationStatus, createdAt } = application;
-  
+
+
   return (
     <div 
       className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all duration-300 cursor-pointer"
@@ -46,16 +48,16 @@ const AllApplicationCard = ({ application, onClick }) => {
           <span className="line-clamp-1">{job?.location || "Remote"}</span>
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-          <FiDollarSign className="flex-shrink-0" />
+            <BiRupee className=" flex-shrink-0"/>
           <span>{job?.salaryRange || "Not specified"}</span>
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
           <FiBriefcase className="flex-shrink-0" />
-          <span>{job?.employmentType || "Full-time"}</span>
+          <span>{job?.employmentType || "Full-time"} </span>
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
           <FiClock className="flex-shrink-0" />
-          <span>{job?.experienceRequired || "Any experience"}</span>
+          <span>{job?.experienceRequired || "Any experience"} +years</span>
         </div>
       </div>
 

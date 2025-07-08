@@ -38,32 +38,7 @@ const setAuthCookies = (res, accessToken, refreshToken) => {
   });
 };
 
-// exports.signupCompany = async (req, res) => {
-//   const { name, email, password } = req.body;
 
-//   try {
-//     let company = await Company.findOne({ email });
-//     if (company) return res.status(400).json({ message: 'Company already exists' });
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     company = new Company({
-//       name,
-//       email,
-//       password: hashedPassword,
-      
-//     });
-
-//     await company.save();
-
-//     const token = createToken(company);
-
-//     res.status(201).json({ token, company: { id: company._id, name: company.name, email: company.email } });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// };
 
 
 

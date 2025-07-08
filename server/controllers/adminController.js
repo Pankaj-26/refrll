@@ -37,12 +37,10 @@ const latestUsers = await User.find().select('name email roles createdAt').limit
 
 
 
-
-
 exports.getCompanyJobs = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;   // default page 1
-    const limit = parseInt(req.query.limit) || 10; // default 10 jobs per page
+    const page = parseInt(req.query.page) || 1;   
+    const limit = parseInt(req.query.limit) || 10; 
     const skip = (page - 1) * limit;
 
     // ✅ Fetch total count first
