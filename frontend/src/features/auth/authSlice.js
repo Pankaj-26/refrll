@@ -104,38 +104,6 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
 });
 
 
-// export const toggleRole = createAsyncThunk('auth/toggleRole', async (currentRole, thunkAPI) => {
-//   try {
-//     const token = localStorage.getItem('token');
-//     const endpoint = currentRole === 'seeker' ? 'upgradeToReferrer' : 'downgradeToSeeker';
-    
-//     const res = await axios.put(
-//       'http://localhost:5000/users/${endpoint}',
-//       {}, 
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//         withCredentials: true,
-//         timeout: 5000
-//       }
-//     );
-    
-//     // Extract newToken and user from response
-//     const { newToken, user } = res.data;
-    
-//     // Update client-side token storage
-//     localStorage.setItem('token', newToken);
-    
-//     // Update axios default headers for future requests
-//     axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-    
-//     return user;
-//   } catch (err) {
-//     return thunkAPI.rejectWithValue(err.response?.data?.message || 'Role switch failed');
-//   }
-// });
-
 
 
 

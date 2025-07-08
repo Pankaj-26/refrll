@@ -98,7 +98,7 @@ exports.signup = async (req, res) => {
           const refreshToken = createRefreshToken(company);
           setAuthCookies(res, accessToken, refreshToken);
       
-          res.status(201).json({company: { id: company._id, name: company.name, email: company.email } });
+          res.status(201).json({user: { id: company._id, name: company.name, email: company.email } });
         } catch (err) {
           console.error(err);
           res.status(500).json({ message: 'Server error' });

@@ -53,6 +53,8 @@ const Signup = () => {
   }, [error, dispatch]);
 
   useEffect(() => {
+
+    console.log(user)
     if (user) {
       toast.success("Registered successfully! Redirecting...");
       setTimeout(() => navigate("/login"), 1500);
@@ -101,7 +103,7 @@ const Signup = () => {
     // Add your social login logic here
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     
     // Validate all fields
@@ -129,27 +131,61 @@ const Signup = () => {
       return;
     }
 
-    if (form.isCompany) {
-      dispatch(
+    // if (form.isCompany) {
+    //   dispatch(
       
 
+    //     signupUser({
+    //       name: form.name,
+    //       email: form.email,
+    //       password: form.password,
+    //       isCompany:form.isCompany
+    //     })
+    //   );
+    // } else {
+    //   dispatch(
+    //     signupUser({
+    //       name: form.name,
+    //       email: form.email,
+    //       password: form.password,
+    //       isCompany:null
+    //     })
+    //   );
+    // }
+
+try {
+    let response;
+    if (form.isCompany) {
+      response = await dispatch(
         signupUser({
           name: form.name,
           email: form.email,
           password: form.password,
-          isCompany:form.isCompany
+          isCompany: true  
         })
-      );
+      ).unwrap();
     } else {
-      dispatch(
+      response = await dispatch(
         signupUser({
           name: form.name,
           email: form.email,
           password: form.password,
-          isCompany:null
+          isCompany: false  
         })
-      );
+      ).unwrap();
     }
+
+    console.log("Signup response:", response);
+    
+    if (response.user) {
+      toast.success("Registered successfully! Redirecting...");
+      setTimeout(() => navigate("/login"), 1500);
+    }
+  } catch (error) {
+    toast.error(error.message || "Signup failed");
+  }
+
+
   };
 
   const getPasswordStrengthColor = () => {
@@ -169,6 +205,7 @@ const Signup = () => {
   };
 
     const handleGoogleLogin = () => {
+       toast(`Continuing with Google...`)
     window.location.href = 'http://localhost:5000/api/auth/google'; 
   };
 
