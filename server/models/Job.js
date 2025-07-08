@@ -6,17 +6,17 @@ const jobSchema = new mongoose.Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     location: { type: String, required: true },
-    applicationLimit: { type: Number, min: 1 }, 
+    applicationLimit: { type: Number, min: 1 ,default: null}, 
     currentApplications: { type: Number, default: 0 },
 
     company: { type: String, required: true },
     skills: { type: [String], required: true },
     salaryRange: { type: String },
-    employmentType: { type: String, enum: ['Full-Time', 'Part-Time', 'Contract'] },
+    employmentType: { type: String, enum: ['Full-Time', 'Part-Time', 'Contract', 'Internship'] },
     experienceRequired: { type: Number, required: true, min: 0 },
     status:{
       type:String,
-      enum:['Open','Close'],
+      enum:['Open','Closed'],
       default:'Open'
     },
 
@@ -41,19 +41,16 @@ isReferralCopy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-
-    
+views: { type: Number, default: 0 },
+expiryDate: { type: Date },
     postedBy: { type: mongoose.Schema.Types.ObjectId, required: true },
-    postedByType: { type: String, enum: ['referrer', 'company'], required: true }, // 🔥 important
-
+    postedByType: { type: String, enum: ['referrer', 'company'], required: true }, 
   },
   { timestamps: true }
 );
-// In jobSchema
-jobSchema.index({ postedByType: 1 }); // Add this index
-jobSchema.index({ skills: 1, location: 1 });
 
-// models/Job.js
+jobSchema.index({ postedByType: 1 });
+jobSchema.index({ skills: 1, location: 1 });
 
 jobSchema.index({
   title: 'text',

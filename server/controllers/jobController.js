@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Application = require('../models/Application');
 const Job = require('../models/Job');
 const User = require('../models/User');
-
+const ReferralClaim = require('../models/ReferralClaim');
 
 
 
@@ -223,6 +223,8 @@ exports.getJobs = async (req, res) => {
     const userId = req.userId;
     const { tab, page = 1, limit = 10, search, ...filters } = req.query;
     const { jobType, experience, salaryRange, location } = filters;
+
+   
 
     const query = {};
     const conditions = [];

@@ -60,7 +60,7 @@ const Signup = () => {
   }, [user, navigate]);
 
   useEffect(() => {
-    // Calculate password strength
+    
     let strength = 0;
     if (form.password.length >= 6) strength += 1;
     if (/[A-Z]/.test(form.password)) strength += 1;

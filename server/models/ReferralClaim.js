@@ -33,6 +33,8 @@ const referralClaimSchema = new mongoose.Schema({
 // Indexes for efficient querying
 referralClaimSchema.index({ job: 1, referrer: 1 });
 referralClaimSchema.index({ referrer: 1, status: 1 });
-referralClaimSchema.index({ job: 1, referredCandidate: 1 });
+referralClaimSchema.index({ job: 1});
+referralClaimSchema.index({ referralJob: 1 });
+
 
 module.exports = mongoose.model('ReferralClaim', referralClaimSchema);

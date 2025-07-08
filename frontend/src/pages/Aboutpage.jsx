@@ -1,11 +1,15 @@
 // src/pages/AboutPage.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaRocket, FaLightbulb, FaCogs, FaHandshake } from 'react-icons/fa';
 import FeatureCard from '../components/FeatureCard';
 // import TeamMember from '../components/TeamMember';
 
 const AboutPage = () => {
+  const navigate=useNavigate();
+  useEffect(()=>{
+     document.title = "About | Refrll – Where Connections Create Careers";
+  },[])
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-16">
@@ -49,9 +53,9 @@ const AboutPage = () => {
       
       <div className="mb-20">
         <div className="flex flex-col md:flex-row items-center gap-10">
-          <div className="md:w-1/2">
+          {/* <div className="md:w-1/2">
             <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-80" />
-          </div>
+          </div> */}
           <div className="md:w-1/2">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
             <p className="text-gray-700 mb-4">
@@ -99,12 +103,12 @@ const AboutPage = () => {
               Whether you're a job seeker looking for your next role, a referrer who wants to help others grow, or a company seeking the best talent – Refrll is here to empower your journey.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300">
-                Sign Up as Job Seeker
+              <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300" onClick={()=>navigate("/signup")}>
+                Sign Up 
               </button>
-              <button className="bg-white border border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-medium py-2 px-6 rounded-lg transition duration-300">
+              {/* <button className="bg-white border border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-medium py-2 px-6 rounded-lg transition duration-300">
                 Post a Job
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

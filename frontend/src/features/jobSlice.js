@@ -4,13 +4,18 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from 'react-hot-toast';
 import API from "../util/axios"
-
+import qs from "qs";
 
 export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs",
-  async (params, thunkAPI) => {
+  async (filters, thunkAPI) => {
+ 
     try {
-      const res = await API.get("/jobs/getjobs", { params });
+      const res = await API.get("/jobs/getjobs",  {
+  params: filters,
+  paramsSerializer: (params) =>
+    qs.stringify(params, { arrayFormat: 'repeat' }),
+});
       
       return res.data;
     } catch (err) {

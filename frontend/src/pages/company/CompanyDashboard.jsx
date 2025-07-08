@@ -558,7 +558,7 @@ export default function CompanyDashboard() {
                     : "Get started by posting your first job"}
                 </p>
                 <button
-                  onClick={() => navigate("/post-job")}
+                  onClick={() => navigate("/post-job/:jobId/edit")}
                   className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Post a Job

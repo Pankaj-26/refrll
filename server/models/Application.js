@@ -1,12 +1,13 @@
 
 const mongoose = require('mongoose');
+const Job = require('./Job');
 
 
 const applicationSchema = new mongoose.Schema(
   {
     job: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: true },
     seeker: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    resumeUrl: { type: String, required: true },
+    resumeUrl: { type: String, required: true, match: /^https?:\/\//, },
 
     appliedVia: {
       type: String,
@@ -21,12 +22,12 @@ const applicationSchema = new mongoose.Schema(
     },
 companyStatus: {
   type: String,
-  enum: ['applied', 'reviewed', 'accepted', 'rejected', null],
+  enum: ['applied', 'reviewed', 'accepted', 'rejected',null],
   default: null
 },
 referrerStatus: {
   type: String,
-  enum: ['applied', 'reviewed', 'accepted', 'rejected', null],
+  enum: ['applied', 'reviewed', 'accepted', 'rejected',null],
   default: null
 },
         companyStatusUpdatedAt: Date,

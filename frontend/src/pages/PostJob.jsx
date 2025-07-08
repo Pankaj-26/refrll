@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobDetailForEdit, postJob, updateJob } from '../features/jobSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { BiRupee } from 'react-icons/bi';
 import { 
   FiBriefcase, 
   FiMapPin, 
@@ -179,7 +180,7 @@ else{
     { label: 'Location', name: 'location', icon: <FiMapPin />, required: true },
     { label: 'Description', name: 'description', type: 'textarea', icon: <FiEdit3 />, required: true },
     { label: 'Skills (comma separated)', name: 'skills', icon: <FiHash />, required: true },
-    { label: 'Salary Range', name: 'salaryRange', icon: <FiDollarSign /> },
+    { label: 'Salary', name: 'salaryRange', icon:    <BiRupee /> },
   ];
 
 

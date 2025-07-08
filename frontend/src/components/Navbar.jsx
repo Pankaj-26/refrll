@@ -484,9 +484,10 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <div className="flex items-center space-x-8">
-          <NavButton onClick={() => navigate(dashboardPath)}>
+          {user &&    <NavButton onClick={() => navigate(dashboardPath)}>
             Dashboard
-          </NavButton>
+          </NavButton>}
+      
 
           {canSeeJobs && (
             <NavButton onClick={() => navigate("/job/postings")}>
@@ -503,7 +504,10 @@ const Navbar = () => {
 
         {/* Right Side */}
         <div className="flex items-center gap-4">
-          <NotificationBell notifications={notifications} />
+
+{user &&   <NotificationBell notifications={notifications} /> }
+
+        
 
           {/* User Menu */}
           <div className="relative" ref={menuRef}>
@@ -516,7 +520,7 @@ const Navbar = () => {
               <FiUser className="w-5 h-5 text-gray-700" />
             </button>
 
-            <AnimatePresence>
+            {user &&    <AnimatePresence>
               {menuOpen && (
                 <UserMenu
                   user={user}
@@ -525,7 +529,9 @@ const Navbar = () => {
                   navigateTo={navigateTo}
                 />
               )}
-            </AnimatePresence>
+            </AnimatePresence>}
+
+         
           </div>
         </div>
       </div>

@@ -349,7 +349,7 @@ const Footer = () => {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Links</h2>
             <ul className="space-y-3">
               <li><a href="/job/postings" className="text-gray-600 hover:text-blue-600 transition-colors">Jobs</a></li>
-              <li><a href="/post-job" className="text-gray-600 hover:text-blue-600 transition-colors">Post Job</a></li>
+          
               <li><a href="/about" className="text-gray-600 hover:text-blue-600 transition-colors">About Us</a></li>
               <li><a href="/contact" className="text-gray-600 hover:text-blue-600 transition-colors">Contact</a></li>
             </ul>
@@ -359,10 +359,10 @@ const Footer = () => {
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Resources</h2>
             <ul className="space-y-3">
-              <li><a href="/blog" className="text-gray-600 hover:text-blue-600 transition-colors">Blog</a></li>
-              <li><a href="/help-center" className="text-gray-600 hover:text-blue-600 transition-colors">Help Center</a></li>
+              {/* <li><a href="/blog" className="text-gray-600 hover:text-blue-600 transition-colors">Blog</a></li>
+             */}
               <li><a href="/faq" className="text-gray-600 hover:text-blue-600 transition-colors">FAQs</a></li>
-              <li><a href="/testimonials" className="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+              {/* <li><a href="/testimonials" className="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li> */}
             </ul>
           </div>
         </div>

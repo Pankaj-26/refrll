@@ -29,14 +29,15 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
 import JobModal from "../components/JobModal";
-import toast from "react-hot-toast"; // Add toast import
+import toast from "react-hot-toast"; 
+import { debounce } from 'lodash';
 
 const JobPostings = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
   const activeTab = searchParams.get("tab") || "company";
-
+const [debouncedSearch, setDebouncedSearch] = useState(search);
   // Redux state
   const jobs = useSelector(selectAllJobs);
   const loading = useSelector(selectJobsLoading);
@@ -64,9 +65,27 @@ const JobPostings = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [showJobDetail, setShowJobDetail] = useState(null);
 
-  useEffect(() => {
-  searchParams.set("page", currentPage);
-  setSearchParams(searchParams, { replace: true });
+//   useEffect(() => {
+//   searchParams.set("page", currentPage);
+//   setSearchParams(searchParams, { replace: true });
+// }, [currentPage, searchParams, setSearchParams]);
+
+
+useEffect(() => {
+  const handler = debounce(() => {
+    setDebouncedSearch(search);
+  }, 500);
+
+  handler();
+  return () => {
+    handler.cancel();
+  };
+}, [search]);
+
+useEffect(() => {
+  const newParams = new URLSearchParams(searchParams);
+  newParams.set("page", currentPage);
+  setSearchParams(newParams, { replace: true });
 }, [currentPage, searchParams, setSearchParams]);
 
 
@@ -75,7 +94,7 @@ const JobPostings = () => {
 
     const fetchParams = {
       tab: currentTab,
-      search,
+      search:debouncedSearch ,
       page: currentPage,
       limit: 10,
       ...filters,
@@ -83,7 +102,7 @@ const JobPostings = () => {
 
     document.title = "Jobs | Refrll – Browse Latest Jobs and Referrals";
     dispatch(fetchJobs(fetchParams));
-  }, [dispatch, searchParams, search, filters, currentPage]);
+  }, [dispatch, searchParams, debouncedSearch, filters, currentPage]);
 
   // Save filters to localStorage
   useEffect(() => {
@@ -100,15 +119,22 @@ const JobPostings = () => {
     [searchParams, setSearchParams]
   );
 
+
+
   // Handle job application
-  const handleApply = useCallback(
-    (jobId) => {
-      dispatch(applyToJob(jobId));
-    },
-    [dispatch]
-  );
+  const handleApply = useCallback((jobId) => {
+if(user?.resume?.url){
+  
+  dispatch(applyToJob(jobId));
+  toast.success("Application submitted successfully!");
+} else {    
+  toast.error("Please upload your resume before applying");
 
+    }
 
+   }, [dispatch]);
+
+  
 
   // Handle referral claim directly
   const handleReferClick = useCallback(
@@ -150,6 +176,7 @@ const JobPostings = () => {
 
   // Toggle job type filter
   const toggleJobTypeFilter = useCallback((type) => {
+   
     setFilters((prev) => ({
       ...prev,
       jobType: prev.jobType.includes(type)
@@ -376,9 +403,10 @@ const JobPostings = () => {
           </div>
         </div>
 
-        {/* Jobs Grid */}
+        <div className="min-h-[1700px]">
+  {/* Jobs Grid */}
         {jobs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 ">
             {jobs.map((job) => (
               <JobCard
                 key={job._id}
@@ -401,6 +429,10 @@ const JobPostings = () => {
             onAction={resetFilters}
           />
         )}
+
+        </div>
+
+      
 
         {/* Pagination */}
         {totalPages > 1 && (
@@ -476,11 +508,11 @@ const JobPostings = () => {
             className="px-4 py-2 bg-white text-blue-600 rounded-lg font-medium text-sm shadow hover:bg-gray-100 transition-colors"
             onClick={() =>
               navigate(
-                activeTab === "company" ? "/seeker-profile" : "/referrer-profile"
+                activeTab === "company" && "/dashboard"
               )
             }
           >
-            {activeTab === "company" ? "Complete Profile" : "Become a Referrer"}
+            {activeTab === "company" ? "Complete Profile" : "Become a Referrer "}
           </button>
         </div>
       </div>
