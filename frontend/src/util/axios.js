@@ -130,10 +130,19 @@ API.interceptors.response.use(
   isRefreshing = true;
 
   try {
-    await API.post('/auth/refresh');
+    await API.post('/auth/refresh', {}, {
+      headers: {
+        'X-Client-Type': isMobile() ? 'mobile' : 'desktop'
+      }
+    });
     processQueue(null);
     return API(originalRequest);
   } catch (refreshErr) {
+
+      if (isMobile() && refreshErr.response?.status === 401) {
+      document.cookie = 'refreshToken=; Max-Age=0; path=/;';
+      document.cookie = 'accessToken=; Max-Age=0; path=/;';
+    }
     processQueue(refreshErr, null);
     window.location.href = '/login';
     return Promise.reject(refreshErr);

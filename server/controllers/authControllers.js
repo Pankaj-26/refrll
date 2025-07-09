@@ -179,7 +179,8 @@ exports.signin = async (req, res) => {
 };
 
 exports.refresh = async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
+  const refreshToken = req.cookies.refreshToken ||  req.headers['x-refresh-token'] || 
+                      req.body.refreshToken;
   
   if (!refreshToken) {
     return res.status(401).json({ message: 'Refresh token required' });
@@ -201,6 +202,16 @@ exports.refresh = async (req, res) => {
     const newRefreshToken = createRefreshToken(user);
     setAuthCookies(res, newAccessToken, newRefreshToken);
 
+     // For mobile clients, return tokens in body too
+    if (req.headers['x-client-type'] === 'mobile') {
+      res.status(200).json({ 
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+        message: 'Tokens refreshed'
+      });
+  } else {
+      res.status(200).json({ message: 'Tokens refreshed successfully' });
+    }
     res.status(200).json({ message: 'Tokens refreshed successfully' });
   } catch (err) {
     console.error('Refresh error:', err);
