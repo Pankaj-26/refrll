@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import API from "../../util/axios"
 
-// const API = 'http://localhost:5000/api';
+
 axios.defaults.withCredentials = true; // Enable cookie transmission
 
 const initialState = {

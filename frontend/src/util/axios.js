@@ -1,26 +1,26 @@
 
 
-// import axios from 'axios';
+import axios from 'axios';
 
-// const API = axios.create({
-//   baseURL: 'https://refrll-backend.onrender.com/api',
-//   withCredentials: true,
-// });
+const API = axios.create({
+  baseURL: 'https://refrll-backend.onrender.com/api',
+  withCredentials: true,
+});
 
-// let isRefreshing = false;
-// let failedQueue = [];
+let isRefreshing = false;
+let failedQueue = [];
 
-// const processQueue = (error, token = null) => {
-//   failedQueue.forEach(prom => {
-//     if (error) {
-//       prom.reject(error);
-//     } else {
-//       prom.resolve(token);
-//     }
-//   });
+const processQueue = (error, token = null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
 
-//   failedQueue = [];
-// };
+  failedQueue = [];
+};
 
 // API.interceptors.response.use(
 //   response => response,
@@ -143,3 +143,7 @@ API.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+
+
+export default API;
