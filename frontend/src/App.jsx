@@ -65,6 +65,7 @@ function App() {
     const checkAndRefresh = async () => {
       try {
         await refreshAccessToken();
+         await dispatch(fetchUser());
       } catch (err) {
         toast.error("Refresh failed");
       } finally {
@@ -75,10 +76,6 @@ function App() {
     checkAndRefresh();
   }, []);
 
-    // Fetch user on mount
-    useEffect(() => {
-      dispatch(fetchUser());
-    }, [dispatch]);
 
   return (
     <div className="bg-white text-black dark:bg-gray-900 dark:text-white min-h-screen ">
