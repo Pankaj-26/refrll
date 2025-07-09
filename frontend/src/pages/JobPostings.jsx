@@ -232,7 +232,7 @@ if(user?.resume?.url){
         {/* Compact Header */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-900 bg-clip-text text-transparent dark:text-white">
               Discover Career Opportunities
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">

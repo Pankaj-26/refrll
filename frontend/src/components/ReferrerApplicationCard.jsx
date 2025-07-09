@@ -26,13 +26,13 @@ const ReferrerApplicationCard = ({ app, onStatusUpdate, updating }) => {
   const handleDownloadResume = (resumeUrl) => {
   const link = document.createElement("a");
   link.href = resumeUrl;
-  link.download = ""; // Optional: specify filename e.g. "resume.pdf"
+  link.download = "resume.pdf"; // Optional: specify filename e.g. "resume.pdf"
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 };
 
-console.log(app)
+
 
   const applicant = app.seeker || {};
   const profile = app.seeker.profile || {};
@@ -209,15 +209,7 @@ console.log(app)
       <div className="flex flex-wrap gap-2 mb-4">
        
         {app?.seeker?.resume ? (
-          // <a
-          //   href={app.seeker.resume.url}
-          //   target="_blank"
-          //   rel="noopener noreferrer"
-          //   className="p-1.5 text-gray-500 hover:text-blue-600"
-          //   title="Download Resume"
-          // >
-          //   <FiDownload />
-          // </a>
+    
            <button className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded flex items-center gap-1"  onClick={() => handleDownloadResume(app.seeker.resume.url)}>
           <FiDownload size={12} /> Resume
         </button>
@@ -229,9 +221,7 @@ console.log(app)
             <FiDownload />
           </span>
         )}
-        {/* <button className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded flex items-center gap-1">
-          <FiMail size={12} /> Message
-        </button> */}
+      
         <button className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded flex items-center gap-1">
           <FiPhone size={12} /> {profile.phone}
         </button>

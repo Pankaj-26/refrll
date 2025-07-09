@@ -246,14 +246,14 @@ const JobModal = ({ selectedJob, setSelectedJob }) => {
         transition={{ duration: 0.3 }}
       >
         <motion.div 
-          className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+          className="bg-white dark:bg-gray-800 shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
         >
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-t-2xl p-6 relative">
+          {/* <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-t-2xl p-6 relative">
             <div className="flex justify-between items-start">
               <div className="flex items-start gap-4">
                 <div className="bg-white p-2 rounded-xl shadow-md">
@@ -296,7 +296,58 @@ const JobModal = ({ selectedJob, setSelectedJob }) => {
                 Posted {formatDate(selectedJob.createdAt)}
               </div>
             </div>
-          </div>
+          </div> */}
+
+
+          {/* Header with gradient */}
+<div className="bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-900 px-4 py-4 relative">
+  <div className="flex justify-between items-start">
+    <div className="flex items-start gap-3">
+      <div className="bg-white p-1 rounded-lg shadow">
+        <FiBriefcase className="w-10 h-10 text-blue-600" />
+      </div>
+      <div>
+        <h2 className="text-lg font-bold text-white">{selectedJob.title}</h2>
+        <div className="flex items-center text-blue-100 text-sm mt-1 flex-wrap gap-2">
+          <span className="font-medium">{selectedJob.company}</span>
+          <span className="flex items-center gap-1">
+            <FiMapPin className="text-sm" />
+            {selectedJob.location}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <button 
+      onClick={() => setSelectedJob(null)}
+      className="text-white p-2 rounded-full hover:bg-indigo-800 transition-colors"
+    >
+      <FiX size={20} />
+    </button>
+  </div>
+
+  <div className="flex flex-wrap gap-2 mt-3">
+    <div className="bg-blue-800/40 backdrop-blur-sm px-3 py-1 rounded-full flex items-center text-white text-xs">
+      <FiBriefcase className="mr-1" />
+      {selectedJob.employmentType}
+    </div>
+    <div className="bg-blue-800/40 backdrop-blur-sm px-3 py-1 rounded-full flex items-center text-white text-xs">
+      <FiUser className="mr-1" />
+      {selectedJob.experienceRequired}+ yrs
+    </div>
+    <div className="bg-blue-800/40 backdrop-blur-sm px-3 py-1 rounded-full flex items-center text-white text-xs">
+    
+      <BiRupee className="mr-1" />
+
+      {selectedJob.salaryRange} LPA
+    </div>
+    <div className="bg-blue-800/40 backdrop-blur-sm px-3 py-1 rounded-full flex items-center text-white text-xs">
+      <FiCalendar className="mr-1" />
+      {formatDate(selectedJob.createdAt)}
+    </div>
+  </div>
+</div>
+
           
           <div className="p-6">
             <div className="flex flex-col md:flex-row gap-6">
@@ -313,16 +364,16 @@ const JobModal = ({ selectedJob, setSelectedJob }) => {
                   </div>
                 </div>
                 
-                <div className="mb-8">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <div className="mb-2">
+                  <h5 className="text-medium font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                     <FiStar className="text-amber-500" />
                     Required Skills
-                  </h3>
+                  </h5>
                   <div className="flex flex-wrap gap-3">
                     {selectedJob.skills.map((skill, index) => (
                       <span 
                         key={index} 
-                        className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full font-medium flex items-center"
+                        className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-4 py-1 rounded-full font-medium flex items-center text-sm"
                       >
                         {skill}
                       </span>
@@ -333,23 +384,23 @@ const JobModal = ({ selectedJob, setSelectedJob }) => {
               
               <div className="md:w-1/3">
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-800 rounded-2xl p-5 shadow-md border border-gray-100 dark:border-gray-700">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <h3 className="text-medium font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                     <FiCalendar className="text-indigo-600" />
                     Application Details
                   </h3>
                   
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex text-sm justify-between items-center py-1 border-b border-gray-200 dark:border-gray-700">
                       <span className="text-gray-600 dark:text-gray-300">Posted By</span>
                       <span className="font-medium text-gray-900 dark:text-white">{selectedJob.postedByType}</span>
                     </div>
                     
-                    <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex justify-between items-center py-1 border-b border-gray-200 dark:border-gray-700">
                       <span className="text-gray-600 dark:text-gray-300">Posted On</span>
                       <span className="font-medium text-gray-900 dark:text-white">{formatDate(selectedJob.createdAt)}</span>
                     </div>
                     
-                    <div className="flex justify-between items-center py-2">
+                    <div className="flex justify-between items-center py-1">
                       <span className="text-gray-600 dark:text-gray-300">Last Updated</span>
                       <span className="font-medium text-gray-900 dark:text-white">{formatDate(selectedJob.updatedAt)}</span>
                     </div>

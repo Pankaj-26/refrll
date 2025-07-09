@@ -172,7 +172,7 @@ const JobCard = ({
           </div>
 
           {job.salaryRange && (
-            <div className="flex items-center text-green-600 dark:text-green-400 font-medium">
+            <div className="flex items-center text-green-600 dark:text-green-400 font-medium text-sm">
               <BiRupee className=" flex-shrink-0"/>
               <span>{job.salaryRange} LPA</span>
             </div>
@@ -180,7 +180,7 @@ const JobCard = ({
         </div>
 
         <div className="mt-4">
-          <p className="text-gray-700 dark:text-gray-300 line-clamp-3 text-sm">
+          <p className="text-gray-700 dark:text-gray-300 line-clamp-2 text-sm">
             {job.description}
           </p>
         </div>
