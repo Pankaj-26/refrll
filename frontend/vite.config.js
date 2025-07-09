@@ -7,24 +7,24 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
    darkMode: 'class',
   plugins: [react(),  tailwindcss(),],
-  // plugins: [react(), ],
+ 
 
   css: {
-    devSourcemap: true, // Enable CSS sourcemaps
-    // postcss: {
-    //   plugins: [require('tailwindcss'), require('autoprefixer')],
-    // },
+    devSourcemap: true, 
   },
   optimizeDeps: {
-    // include: ['tailwindcss'],
+   
   },
-   server:{
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5000', 
-        changeOrigin: true,
-        secure: false,
-      },
-    }
-   }
+   build: { outDir: 'dist' },
+  server: { open: true },
+  base: '/',
+  //  server:{
+  //   proxy: {
+  //     '/api': {
+  //       target: 'https://refrll-backend.onrender.com', 
+  //       changeOrigin: true,
+  //       secure: false,
+  //     },
+  //   }
+  //  }
 })
