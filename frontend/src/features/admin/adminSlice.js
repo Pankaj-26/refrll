@@ -8,7 +8,7 @@ export const fetchAdminStats = createAsyncThunk(
   'admin/fetchStats',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/stats', { withCredentials: true });
+      const res = await axios.get('https://refrll-backend.onrender.com/api/admin/stats', { withCredentials: true });
       return res.data;
     } catch (err) {
       console.error("Fetch admin stats error:", err);
@@ -23,7 +23,7 @@ export const fetchCompanyJobs = createAsyncThunk(
   'companyJobs/fetchCompanyJobs',
   async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/admin/company-jobs?page=${page}&limit=${limit}`, { withCredentials: true });
+      const res = await axios.get(`https://refrll-backend.onrender.com/api/admin/company-jobs?page=${page}&limit=${limit}`, { withCredentials: true });
       return res.data;
     } catch (err) {
       console.error("Fetch company jobs error:", err);
