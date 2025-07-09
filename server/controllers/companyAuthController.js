@@ -22,8 +22,8 @@ const createRefreshToken = (user) => {
 const setAuthCookies = (res, accessToken, refreshToken) => {
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict'
+    secure: true, // Set to true if using HTTPS
+    sameSite: 'None'
   };
 
   res.cookie('accessToken', accessToken, {

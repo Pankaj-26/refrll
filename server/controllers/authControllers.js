@@ -28,7 +28,7 @@ const createRefreshToken = (user) => {
 const setAuthCookies = (res, accessToken, refreshToken) => {
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true, // Set to true if using HTTPS
     sameSite: 'None'
   };
 
@@ -47,13 +47,13 @@ const setAuthCookies = (res, accessToken, refreshToken) => {
 const clearAuthCookies = (res) => {
   res.clearCookie('accessToken', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure:true,
     sameSite: 'None'
   });
   
   res.clearCookie('refreshToken', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
     sameSite: 'None',
     path: '/api/auth/refresh'
   });
