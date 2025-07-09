@@ -404,10 +404,7 @@ const Navbar = () => {
   const canSeeJobs = user?.roles?.seeker || user?.roles?.referrer;
   const canPostJobs = user?.roles?.referrer || user?.roles === "company";
 
-  // Fetch user on mount
-  useEffect(() => {
-    dispatch(fetchUser());
-  }, [dispatch]);
+
 
   // Close menus when clicking outside
   useEffect(() => {
