@@ -41,7 +41,8 @@ app.use(helmet.hsts({
 // Enable CORS for frontend
 app.use(
   cors({
-    origin: 'https://refrll-frontend.onrender.com', 
+    // origin: 'https://refrll-frontend.onrender.com', 
+    origin: ['http://localhost:5173', 'https://refrll-frontend.onrender.com'],
     credentials: true,
 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],

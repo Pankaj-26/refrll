@@ -49,32 +49,56 @@ function App() {
   const [loading, setLoading] = useState(true);
 
 
+  // useEffect(() => {
+  //   // Initialize theme
+  //   dispatch(updateSystemTheme());
+
+  //   // // Listen for system theme changes
+  //   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  //   const handler = () => dispatch(updateSystemTheme());
+
+  //   mediaQuery.addEventListener("change", handler);
+  //   return () => mediaQuery.removeEventListener("change", handler);
+  // }, [mode]);
+
+
   useEffect(() => {
-    // Initialize theme
-    dispatch(updateSystemTheme());
+  const publicPaths = ['/login', '/signup', '/forgot-password', '/reset-password'];
+  const isPublicPath = publicPaths.some(path => window.location.pathname.startsWith(path));
 
-    // // Listen for system theme changes
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => dispatch(updateSystemTheme());
-
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, [mode]);
-
-  useEffect(() => {
-    const checkAndRefresh = async () => {
-      try {
+  const checkAndRefresh = async () => {
+    try {
+      // Only refresh if NOT on public path
+      if (!isPublicPath) {
         await refreshAccessToken();
-         await dispatch(fetchUser());
-      } catch (err) {
-       toast.error("Session expired. Please login again.");
-      } finally {
-        setLoading(false);
+        await dispatch(fetchUser());
       }
-    };
+    } catch (err) {
+      toast.error("Session expired. Please login again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    checkAndRefresh();
-  }, []);
+  checkAndRefresh();
+}, []);
+
+
+
+  // useEffect(() => {
+  //   const checkAndRefresh = async () => {
+  //     try {
+  //       await refreshAccessToken();
+  //        await dispatch(fetchUser());
+  //     } catch (err) {
+  //      toast.error("Session expired. Please login again.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   checkAndRefresh();
+  // }, []);
 
 
   return (

@@ -3,7 +3,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://refrll-backend.onrender.com/api',
+  // baseURL: 'https://refrll-backend.onrender.com/api',
+   baseURL: 'http://localhost:5000/api',
   withCredentials: true,
 });
 
@@ -105,6 +106,12 @@ API.interceptors.response.use(
     );
 
    if (error.response?.status === 401 && !originalRequest._retry) {
+
+      const isPublicPath = publicPaths.some(path => 
+    window.location.pathname.startsWith(path)
+  );
+
+   if (isPublicPath) return Promise.reject(error); 
   originalRequest._retry = true;
 
   if (originalRequest.url.includes('/auth/refresh')) {

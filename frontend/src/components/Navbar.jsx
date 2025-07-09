@@ -68,7 +68,7 @@
 
 //   // Fetch user on mount
 //   useEffect(() => {
-    
+
 //     dispatch(fetchUser());
 //   }, [dispatch]);
 
@@ -129,8 +129,6 @@
 //   useEffect(() => {
 //     dispatch(getNotifications());
 //   }, [dispatch]);
-
- 
 
 //   return (
 //     <nav className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border-b border-gray-200 dark:border-gray-700 fixed w-full z-50 px-6 py-1 shadow-md dark:shadow-xl">
@@ -359,8 +357,6 @@
 
 // export default React.memo(Navbar);
 
-
-
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -374,13 +370,16 @@ import {
   FiHome,
   FiPlusSquare,
   FiMenu,
-  FiX
+  FiX,
+  FiLogIn,
+  FiUserPlus,
 } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { getNotifications } from "../features/notificationsSlice";
 import NotificationBell from "./NotificationBell";
 import Refrll from "../assets/Refrll.png";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaSignInAlt } from "react-icons/fa";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -393,18 +392,16 @@ const Navbar = () => {
   const { notifications } = useSelector((state) => state.notifications);
 
   // Memoized derived values
-  const dashboardPath = user?.roles?.seeker 
-    ? "/dashboard" 
-    : user?.roles?.referrer 
-      ? "/dashboard/referrer" 
-      : user?.roles === "company" 
-        ? "/dashboard/company" 
-        : "/login";
+  const dashboardPath = user?.roles?.seeker
+    ? "/dashboard"
+    : user?.roles?.referrer
+    ? "/dashboard/referrer"
+    : user?.roles === "company"
+    ? "/dashboard/company"
+    : "/login";
 
   const canSeeJobs = user?.roles?.seeker || user?.roles?.referrer;
   const canPostJobs = user?.roles?.referrer || user?.roles === "company";
-
-
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -446,6 +443,13 @@ const Navbar = () => {
     navigate("/login");
   }, [dispatch, navigate]);
 
+  const handleLogin = useCallback(() => {
+    dispatch(logout());
+    
+    navigate("/login");
+     setMobileMenuOpen(false);
+  }, [dispatch, navigate]);
+
   // Close all menus
   const closeAllMenus = () => {
     setMenuOpen(false);
@@ -481,10 +485,11 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <div className="flex items-center space-x-8">
-          {user &&    <NavButton onClick={() => navigate(dashboardPath)}>
-            Dashboard
-          </NavButton>}
-      
+          {user && (
+            <NavButton onClick={() => navigate(dashboardPath)}>
+              Dashboard
+            </NavButton>
+          )}
 
           {canSeeJobs && (
             <NavButton onClick={() => navigate("/job/postings")}>
@@ -501,10 +506,7 @@ const Navbar = () => {
 
         {/* Right Side */}
         <div className="flex items-center gap-4">
-
-{user &&   <NotificationBell notifications={notifications} /> }
-
-        
+          {user && <NotificationBell notifications={notifications} />}
 
           {/* User Menu */}
           <div className="relative" ref={menuRef}>
@@ -517,23 +519,24 @@ const Navbar = () => {
               <FiUser className="w-5 h-5 text-gray-700" />
             </button>
 
-            {user &&    <AnimatePresence>
-              {menuOpen && (
-                <UserMenu
-                  user={user}
-                  onToggleRole={handleToggleRole}
-                  onLogout={handleLogout}
-                  navigateTo={navigateTo}
-                />
-              )}
-            </AnimatePresence>}
-
-         
+            {user && (
+              <AnimatePresence>
+                {menuOpen && (
+                  <UserMenu
+                    user={user}
+                    onToggleRole={handleToggleRole}
+                    onLogout={handleLogout}
+                    navigateTo={navigateTo}
+                  />
+                )}
+              </AnimatePresence>
+            )}
           </div>
         </div>
       </div>
 
       {/* Mobile Navbar */}
+
       <div className="md:hidden flex justify-between items-center px-4 py-3">
         <div
           className="flex items-center"
@@ -547,7 +550,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <NotificationBell notifications={notifications} />
+          {user && <NotificationBell notifications={notifications} />}
 
           <button
             onClick={() => setMobileMenuOpen(true)}
@@ -586,11 +589,13 @@ const Navbar = () => {
             </div>
 
             <div className="p-4 space-y-6">
-              <MobileNavItem
-                icon={<FiHome className="w-5 h-5" />}
-                label="Dashboard"
-                onClick={() => navigateTo(dashboardPath)}
-              />
+              {canSeeJobs && (
+                <MobileNavItem
+                  icon={<FiHome className="w-5 h-5" />}
+                  label="Dashboard"
+                  onClick={() => navigateTo(dashboardPath)}
+                />
+              )}
 
               {canSeeJobs && (
                 <MobileNavItem
@@ -608,28 +613,47 @@ const Navbar = () => {
                 />
               )}
 
-              <MobileNavItem
+              {/* <MobileNavItem
                 icon={<FiSettings className="w-5 h-5" />}
                 label="Settings"
                 onClick={() => navigateTo("/settings")}
-              />
+              /> */}
 
               {(user?.roles?.seeker || user?.roles?.referrer) && (
                 <MobileNavItem
                   icon={<FiToggleRight className="w-5 h-5" />}
-                  label={`Switch to ${user?.roles?.seeker ? "Referrer" : "Seeker"}`}
+                  label={`Switch to ${
+                    user?.roles?.seeker ? "Referrer" : "Seeker"
+                  }`}
                   onClick={handleToggleRole}
                 />
               )}
+              {canSeeJobs && (
+                <div className="pt-4 border-t border-gray-200">
+                  <MobileNavItem
+                    icon={<FiLogOut className="w-5 h-5 text-red-500" />}
+                    label="Sign Out"
+                    onClick={handleLogout}
+                    className="text-red-600 hover:bg-red-50"
+                  />
+                </div>
+              )}
 
-              <div className="pt-4 border-t border-gray-200">
-                <MobileNavItem
-                  icon={<FiLogOut className="w-5 h-5 text-red-500" />}
-                  label="Sign Out"
-                  onClick={handleLogout}
-                  className="text-red-600 hover:bg-red-50"
+              {!canSeeJobs && (
+                 <MobileNavItem
+                  icon={<FiLogIn className="w-4 h-4" />}
+                  label="Login"
+                  onClick={handleLogin}
                 />
-              </div>
+              )}
+
+               {!canSeeJobs && (
+                 <MobileNavItem
+                  icon={<FiUserPlus className="w-4 h-4" />}
+                  label="Signup"
+                  onClick={() => navigate("/signup")}
+                />
+              )}
             </div>
           </motion.div>
         )}
@@ -683,9 +707,7 @@ const UserMenu = ({ user, onToggleRole, onLogout, navigateTo }) => (
         {(user?.roles?.seeker || user?.roles?.referrer) && (
           <MenuButton
             onClick={onToggleRole}
-            icon={
-              <FiToggleRight className="w-5 h-5 mr-2 text-blue-600" />
-            }
+            icon={<FiToggleRight className="w-5 h-5 mr-2 text-blue-600" />}
           >
             Switch to {user?.roles?.seeker ? "Referrer" : "Seeker"}
           </MenuButton>

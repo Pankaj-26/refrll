@@ -206,7 +206,7 @@ try {
 
     const handleGoogleLogin = () => {
        toast(`Continuing with Google...`)
-    window.location.href = 'http://localhost:5000/api/auth/google'; 
+    window.location.href = 'https://refrll-backend.onrender.com/api/auth/google'; 
   };
 
   return (
