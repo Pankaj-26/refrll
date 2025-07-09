@@ -104,41 +104,36 @@ API.interceptors.response.use(
       window.location.pathname.startsWith(path)
     );
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+   if (error.response?.status === 401 && !originalRequest._retry) {
+  originalRequest._retry = true;
 
-      if (originalRequest.url.includes('/auth/refresh')) {
-        console.warn("Refresh endpoint itself failed. Redirecting to login.");
-        window.location.href = '/login';
-        return Promise.reject(error);
-      }
+  if (originalRequest.url.includes('/auth/refresh')) {
+    window.location.href = '/login';
+    return Promise.reject(error);
+  }
 
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        })
-          .then(() => API(originalRequest))
-          .catch(err => Promise.reject(err));
-      }
+  if (isRefreshing) {
+    return new Promise((resolve, reject) => {
+      failedQueue.push({ resolve, reject });
+    })
+      .then(() => API(originalRequest))
+      .catch(err => Promise.reject(err));
+  }
 
-      isRefreshing = true;
+  isRefreshing = true;
 
-      try {
-        console.log("Attempting token refresh...");
-        await API.post('/auth/refresh');
-        processQueue(null);
-        return API(originalRequest);
-      } catch (refreshErr) {
-        console.error("Refresh failed:", refreshErr);
-        processQueue(refreshErr, null);
-        if (!isPublicPath) {
-          window.location.href = '/login';
-        }
-        return Promise.reject(refreshErr);
-      } finally {
-        isRefreshing = false;
-      }
-    }
+  try {
+    await API.post('/auth/refresh');
+    processQueue(null);
+    return API(originalRequest);
+  } catch (refreshErr) {
+    processQueue(refreshErr, null);
+    window.location.href = '/login';
+    return Promise.reject(refreshErr);
+  } finally {
+    isRefreshing = false;
+  }
+}
 
     return Promise.reject(error);
   }

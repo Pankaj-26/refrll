@@ -67,7 +67,7 @@ function App() {
         await refreshAccessToken();
          await dispatch(fetchUser());
       } catch (err) {
-        toast.error("Refresh failed");
+       toast.error("Session expired. Please login again.");
       } finally {
         setLoading(false);
       }
