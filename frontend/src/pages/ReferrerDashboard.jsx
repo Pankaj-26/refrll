@@ -32,10 +32,11 @@ import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
 import toast from "react-hot-toast";
 import ReferrerApplicationCard from "../components/ReferrerApplicationCard";
+import  {clearJobs} from "../features/jobSlice";
 import JobModal from "../components/JobModal";
 export default function JobsWithApplicants() {
   const dispatch = useDispatch();
-  const { jobs,clearJobs, loading, error, updating } = useSelector((state) => state.jobs);
+  const { jobs, loading, error, updating } = useSelector((state) => state.jobs);
   const [expandedJobs, setExpandedJobs] = useState({});
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
