@@ -75,6 +75,11 @@ const formatUserData = (user) => ({
 exports.signup = async (req, res) => {
   const { name, email, password,isCompany } = req.body;
 
+
+  if(!password || !email || !name){
+    return res.status(400).json({ message: 'Please provide all required fields' });
+  }
+
  
 
   if (isCompany) {
@@ -147,13 +152,13 @@ exports.signin = async (req, res) => {
       entity = await Company.findOne({ email });
       entityType = 'Company';
       if (!entity) {
-        return res.status(400).json({ message: 'Invalid credentials' });
+        return res.status(401).json({ message: 'Invalid credentials' });
       }
     }
 
     // Verify password
     if (!(await bcrypt.compare(password, entity.password))) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     // Generate tokens
