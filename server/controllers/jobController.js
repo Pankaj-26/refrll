@@ -62,6 +62,7 @@ exports.createJob = async (req, res) => {
     const { userId, roles } = req.user;
   
 
+   
     // Check if user is allowed to post
     if (roles?.referrer) {
       const user = await User.findById(userId).select('roles');

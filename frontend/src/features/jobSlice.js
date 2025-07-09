@@ -205,6 +205,18 @@ const jobsSlice = createSlice({
       state.editJob = null;
     },
  
+    clearJobs: (state) => {
+      state.jobs = [];
+      state.currentJob = null;
+      state.applicants = [];
+      state.loading = false;
+      state.error = null;
+      state.updating = null;
+      state.selectedApplication = null;
+      state.totalPages = 0;
+      state.totalCount = 0;
+      state.currentPage = 1;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -353,7 +365,7 @@ const jobsSlice = createSlice({
 })
 
 
-export const { optimisticStatusUpdate,setEditJob, clearEditJob } = jobsSlice.actions;
+export const { optimisticStatusUpdate,setEditJob, clearEditJob,clearJobs } = jobsSlice.actions;
 export const selectAllJobs = (state) => state.jobs.jobs;
 export const selectJobsLoading = (state) => state.jobs.loading;
 export const selectJobsError = (state) => state.jobs.error;

@@ -35,7 +35,7 @@ import ReferrerApplicationCard from "../components/ReferrerApplicationCard";
 import JobModal from "../components/JobModal";
 export default function JobsWithApplicants() {
   const dispatch = useDispatch();
-  const { jobs, loading, error, updating } = useSelector((state) => state.jobs);
+  const { jobs,clearJobs, loading, error, updating } = useSelector((state) => state.jobs);
   const [expandedJobs, setExpandedJobs] = useState({});
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,6 +52,7 @@ export default function JobsWithApplicants() {
 
   useEffect(() => {
     document.title = "Referrer Dashboard";
+    dispatch(clearJobs());
     dispatch(fetchJobsWithApplicantsForReferrer());
   }, [dispatch]);
 
