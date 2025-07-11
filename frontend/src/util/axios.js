@@ -4,8 +4,8 @@ import axios from 'axios';
 import { isMobile } from './device';
 
 const API = axios.create({
-  baseURL: 'https://refrll-backend.onrender.com/api',
-  //  baseURL: 'http://localhost:5000/api',
+  // baseURL: 'https://refrll-backend.onrender.com/api',
+   baseURL: 'http://localhost:5000/api',
   withCredentials: true,
 });
 

@@ -17,13 +17,13 @@ describe('User Auth Routes', () => {
 
       });
 
-    expect(res.statusCode).toBe(201); // adjust if your controller returns different code
+    expect(res.statusCode).toBe(201); 
     expect(res.body.user).toBeDefined();
 expect(res.body.user.email).toBe(testEmail);
-// adjust based on your response
+
   });
 
-  // 🔥 Signup - validation fail (missing password)
+
   it('should fail signup with missing password', async () => {
     const res = await request(app)
       .post('/api/auth/signup')
@@ -33,15 +33,15 @@ expect(res.body.user.email).toBe(testEmail);
         // password missing intentionally
       });
 
-    expect(res.statusCode).toBe(400); // adjust based on your validation handling
+    expect(res.statusCode).toBe(400); 
  expect(res.body.message).toMatch(/required fields/i);
- // adjust based on your error message
+ 
   });
 
   // 🔥 Login - success
   it('should login successfully with correct credentials', async () => {
     const res = await request(app)
-      .post('/api/auth/signin') // ✅ adjust to your login route
+      .post('/api/auth/signin') 
       .send({
         email: testEmail,
         password: password,

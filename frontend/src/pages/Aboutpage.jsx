@@ -106,42 +106,12 @@ const AboutPage = () => {
               <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300" onClick={()=>navigate("/signup")}>
                 Sign Up 
               </button>
-              {/* <button className="bg-white border border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-medium py-2 px-6 rounded-lg transition duration-300">
-                Post a Job
-              </button> */}
+           
             </div>
           </div>
         </div>
       </div>
-      
-      {/* <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto mb-10">
-          Passionate professionals dedicated to transforming the job referral landscape
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          <TeamMember 
-            name="Alex Johnson"
-            role="Founder & CEO"
-            bio="10+ years in HR tech"
-          />
-          <TeamMember 
-            name="Maria Garcia"
-            role="CTO"
-            bio="Full stack expert"
-          />
-          <TeamMember 
-            name="David Kim"
-            role="Product Lead"
-            bio="UX specialist"
-          />
-          <TeamMember 
-            name="Sarah Chen"
-            role="Growth Manager"
-            bio="Talent acquisition"
-          />
-        </div>
-      </div> */}
+    
     </div>
   );
 };

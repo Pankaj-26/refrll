@@ -5,7 +5,7 @@ import axios from 'axios';
 import API from "../../util/axios"
 
 
-axios.defaults.withCredentials = true; // Enable cookie transmission
+axios.defaults.withCredentials = true; 
 
 const initialState = {
   user: null,
@@ -15,24 +15,7 @@ const initialState = {
     resetPasswordMessage: null,
 };
 
-// Auth operations
-// export const fetchUser = createAsyncThunk('auth/fetchUser', async (_, { rejectWithValue }) => {
-//   try {
-//     const res = await axios.get(`${API}/auth/me`);
-//     return res.data.user;
-//   } catch (err) {
-//     if (err.response?.status === 401) {
-//       try {
-//         await axios.post(`${API}/auth/refresh`);
-//         const retryRes = await axios.get(`${API}/auth/me`);
-//         return retryRes.data.user;
-//       } catch (refreshErr) {
-//         return rejectWithValue(refreshErr.response?.data?.message || 'Session expired');
-//       }
-//     }
-//     return rejectWithValue(err.response?.data?.message || 'Request failed');
-//   }
-// });
+
 
 
 export const fetchUser = createAsyncThunk('auth/fetchUser', async (_, { rejectWithValue }) => {
@@ -68,17 +51,6 @@ export const refreshAccessToken = async () => {
 };
 
 
-// export const loginUser = createAsyncThunk(
-//   'auth/loginUser',
-//   async ({ email, password }, { rejectWithValue }) => {
-//     try {
-//       const res = await axios.post(`${API}/auth/signin`, { email, password });
-//       return res.data;
-//     } catch (err) {
-//       return rejectWithValue(err.response?.data?.message || 'Login failed');
-//     }
-//   }
-// );
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
@@ -104,11 +76,6 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
 });
 
 
-
-
-
-
-// Signup thunk
 
 
 export const toggleRole = createAsyncThunk('auth/toggleRole', async (currentRole, thunkAPI) => {
@@ -248,7 +215,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // 🔷 Reset Password
+  
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
         state.error = null;

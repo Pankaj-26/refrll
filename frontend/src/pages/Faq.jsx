@@ -177,26 +177,7 @@ function Faq() {
           ))
         )}
 
-        {/* Contact Box */}
-        {/* <div className="mt-16 bg-white rounded-xl shadow-lg overflow-hidden border-t-4 border-blue-500">
-          <div className="p-8 text-center">
-            <div className="flex justify-center mb-4">
-              <div className="bg-blue-100 p-4 rounded-full">
-                <FaEnvelope className="text-3xl text-blue-600" />
-              </div>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Still have questions?</h2>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Our support team is ready to help you with any additional questions you might have.
-            </p>
-            <a 
-              href="mailto:support@refrll.com" 
-              className="inline-block bg-blue-100 text-blue-700 font-medium px-6 py-3 rounded-full hover:bg-blue-200 transition-colors duration-300"
-            >
-              Contact Support
-            </a>
-          </div>
-        </div> */}
+     
       </div>
 
 

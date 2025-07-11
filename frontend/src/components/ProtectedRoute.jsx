@@ -6,7 +6,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import LoadingSpinner from './LoadingSpinner';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchUser } from '../features/auth/authSlice'; // Import your fetchUser action
+import { fetchUser } from '../features/auth/authSlice';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const dispatch = useDispatch();

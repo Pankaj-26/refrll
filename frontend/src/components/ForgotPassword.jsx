@@ -1,39 +1,3 @@
-// import { useState } from 'react';
-// import API from '../util/axios';
-// import { useDispatch } from 'react-redux';
-// import { forgotPassword } from '../features/auth/authSlice';
-// const ForgotPassword = () => {
-//   const [email, setEmail] = useState('');
-//   const [message, setMessage] = useState('');
-// const dispatch = useDispatch();
-// const { forgotPasswordMessage, error, loading } = useSelector((state) => state.auth);
- 
-
-//  const handleSubmit = (e) => {
-//     e.preventDefault();
-//     dispatch(forgotPassword(email));
-//   };
-
-//   return (
-//     <div>
-//       <h2>Forgot Password</h2>
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           type="email"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//           placeholder="Enter your email"
-//           required
-//         />
-//         <button type="submit">Send Reset Link</button>
-//       </form>
-//       {message && <p>{message}</p>}
-//     </div>
-//   );
-// };
-
-// export default ForgotPassword;
-
 
 
 import { useState } from 'react';

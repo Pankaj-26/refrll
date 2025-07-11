@@ -55,7 +55,7 @@ const ContactPage = () => {
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-gray-900">Email</h3>
                   <p className="text-gray-600">support@refrll.com</p>
-                  {/* <p className="text-gray-600">partners@refrll.com</p> */}
+                
                 </div>
               </div>
               
@@ -66,7 +66,7 @@ const ContactPage = () => {
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-gray-900">Phone</h3>
                   <p className="text-gray-600">6205769341</p>
-                  {/* <p className="text-gray-600">6299096209</p> */}
+               
                 </div>
               </div>
               

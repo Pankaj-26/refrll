@@ -11,7 +11,7 @@ async function backfillOriginalJob() {
 
     // Find applications missing originalJob
     const applications = await Application.find({ originalJob: { $exists: false } });
-    console.log(`Found ${applications.length} applications to update`);
+
 
     for (const app of applications) {
       try {

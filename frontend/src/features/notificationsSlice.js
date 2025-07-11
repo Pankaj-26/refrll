@@ -2,56 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import API from "../util/axios"
 
-// export const getNotifications = createAsyncThunk(
-//   'notifications/getNotifications',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//        const res = await axios.get('http://localhost:5000/api/notifications',{
-//          withCredentials:true
-//        });
-
-
-//        return res.data;;
-     
-//     } catch (err) {
-//       return rejectWithValue(err.response.data.message || 'Failed to fetch notifications');
-//     }
-//   }
-// );
-
-// export const markNotificationAsRead  = createAsyncThunk(
-//   'notifications/markNotificationAsRead ',
-//   async (id, { rejectWithValue }) => {
-//     try {
-//        const res = await axios.patch(`http://localhost:5000/api/notifications/${id}/read`,{
-
-//         withCredentials:true
-//     });
-//     return res.data;
-  
-     
-//     } catch (err) {
-//       return rejectWithValue(err.response.data.message || 'Failed to mark as read');
-//     }
-//   }
-// );
-
-// export const markAllNotificationsAsRead = createAsyncThunk(
-//   'notifications/markAllAsRead',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await axios.patch('http://localhost:5000/api/notifications/mark-all-read',{
-//          withCredentials:true
-//       });
-//       return response.data;
-//     } catch (err) {
-//       console.error('Failed to mark notifications as read:', err);
-//       return rejectWithValue(err.response.data || 'Failed to mark notifications as read.');
-//     }
-//   }
-// );
-
-
 
 export const getNotifications = createAsyncThunk(
   'notifications/getNotifications',

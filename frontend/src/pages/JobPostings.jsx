@@ -41,7 +41,7 @@ const [debouncedSearch, setDebouncedSearch] = useState(search);
   // Redux state
   const jobs = useSelector(selectAllJobs);
   const loading = useSelector(selectJobsLoading);
-  const error = useSelector(selectJobsError);
+  
   const totalPages = useSelector(selectTotalPages);
   const totalCount = useSelector(selectTotalCount);
   const { user } = useSelector((state) => state.auth);
@@ -209,15 +209,6 @@ if(user?.resume?.url){
     return <LoadingSpinner message="Loading job opportunities..." />;
   }
 
-  // Render error state
-  if (error && jobs.length === 0) {
-    return (
-      <ErrorState
-        message={error}
-        onRetry={() => dispatch(fetchJobs({ tab: activeTab }))}
-      />
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 sm:p-6">
