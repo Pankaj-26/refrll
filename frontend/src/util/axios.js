@@ -4,8 +4,8 @@ import axios from 'axios';
 import { isMobile } from './device';
 
 const API = axios.create({
-  // baseURL: 'https://refrll-backend.onrender.com/api',
-   baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://refrll-backend.onrender.com/api',
+  //  baseURL: 'http://localhost:5000/api',
   withCredentials: true,
 });
 
@@ -130,26 +130,6 @@ API.interceptors.response.use(
 
   isRefreshing = true;
 
-  try {
-    await API.post('/auth/refresh', {}, {
-      headers: {
-        'X-Client-Type': isMobile() ? 'mobile' : 'desktop'
-      }
-    });
-    processQueue(null);
-    return API(originalRequest);
-  } catch (refreshErr) {
-
-      if (isMobile() && refreshErr.response?.status === 401) {
-      document.cookie = 'refreshToken=; Max-Age=0; path=/;';
-      document.cookie = 'accessToken=; Max-Age=0; path=/;';
-    }
-    processQueue(refreshErr, null);
-    window.location.href = '/login';
-    return Promise.reject(refreshErr);
-  } finally {
-    isRefreshing = false;
-  }
 }
 
     return Promise.reject(error);

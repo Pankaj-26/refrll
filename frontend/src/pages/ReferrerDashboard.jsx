@@ -17,10 +17,6 @@ import {
   FiFilter,
   FiShare,
   FiSearch,
-  FiMail,
-  FiPhone,
-  FiLinkedin,
-  FiDownload,
   FiChevronRight,
   FiEdit,
   FiInfo,
@@ -32,11 +28,14 @@ import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
 import toast from "react-hot-toast";
 import ReferrerApplicationCard from "../components/ReferrerApplicationCard";
-import  {clearJobs} from "../features/jobSlice";
 import JobModal from "../components/JobModal";
 export default function JobsWithApplicants() {
   const dispatch = useDispatch();
-  const { jobs, loading, error, updating } = useSelector((state) => state.jobs);
+  // const { jobs, loading, error, updating } = useSelector((state) => state.jobs);
+  const { referrerJobs, loading, error, updating } = useSelector(
+    (state) => state.jobs
+  );
+
   const [expandedJobs, setExpandedJobs] = useState({});
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,7 +52,7 @@ export default function JobsWithApplicants() {
 
   useEffect(() => {
     document.title = "Referrer Dashboard";
-    dispatch(clearJobs());
+
     dispatch(fetchJobsWithApplicantsForReferrer());
   }, [dispatch]);
 
@@ -76,7 +75,7 @@ export default function JobsWithApplicants() {
     }
   };
 
-  const filteredJobs = jobs.filter((job) => {
+  const filteredJobs = referrerJobs.filter((job) => {
     if (statusFilter !== "all" && job.status !== statusFilter) return false;
 
     if (searchTerm) {
@@ -105,12 +104,12 @@ export default function JobsWithApplicants() {
   };
 
   // Loading state
-  if (loading && jobs.length === 0) {
+  if (loading && referrerJobs.length === 0) {
     return <LoadingSpinner message="Loading job applications..." />;
   }
 
   // Error state
-  if (error && jobs.length === 0) {
+  if (error && referrerJobs.length === 0) {
     return (
       <ErrorState
         message={error}
@@ -120,7 +119,7 @@ export default function JobsWithApplicants() {
   }
 
   // Empty state
-  if (jobs.length === 0) {
+  if (referrerJobs.length === 0) {
     return (
       <EmptyState
         icon={<FiBriefcase className="w-12 h-12 text-gray-400" />}
@@ -182,18 +181,20 @@ export default function JobsWithApplicants() {
         <div className="grid grid-cols-4 gap-3 mb-6">
           <div className="bg-blue-100 rounded-lg p-3 shadow-sm border border-gray-200">
             <div className="text-xs text-gray-500">Total Jobs</div>
-            <div className="text-lg font-bold text-blue-900">{jobs.length}</div>
+            <div className="text-lg font-bold text-blue-900">
+              {referrerJobs.length}
+            </div>
           </div>
           <div className="bg-purple-100 rounded-lg p-3 shadow-sm border border-purple-200">
             <div className="text-xs text-gray-500">Open Jobs</div>
             <div className="text-lg font-bold text-purple-600">
-              {jobs.filter((job) => job.status === "Open").length}
+              {referrerJobs.filter((job) => job.status === "Open").length}
             </div>
           </div>
           <div className="bg-green-100 rounded-lg p-3 shadow-sm border border-gray-200">
             <div className="text-xs text-gray-500">Applicants</div>
             <div className="text-lg font-bold text-green-600">
-              {jobs.reduce(
+              {referrerJobs.reduce(
                 (total, job) => total + (job.applicants?.length || 0),
                 0
               )}
@@ -202,12 +203,12 @@ export default function JobsWithApplicants() {
           <div className="bg-amber-100 rounded-lg p-3 shadow-sm border border-amber-200">
             <div className="text-xs text-gray-500">Avg/Job</div>
             <div className="text-lg font-bold text-amber-600">
-              {jobs.length
+              {referrerJobs.length
                 ? Math.round(
-                    jobs.reduce(
+                    referrerJobs.reduce(
                       (total, job) => total + (job.applicants?.length || 0),
                       0
-                    ) / jobs.length
+                    ) / referrerJobs.length
                   )
                 : 0}
             </div>

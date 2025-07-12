@@ -173,18 +173,31 @@ export const getJobDetailForEdit = createAsyncThunk(
 const jobsSlice = createSlice({
   name: "jobs",
   initialState: {
-    jobs: [],
-    currentJob: null,
-    applicants: [],
-    loading: false,
-    error: null,
-    updating:null,
-   selectedApplication: null,
- totalPages: 0,
+//     jobs: [],
+//     currentJob: null,
+//     applicants: [],
+//     loading: false,
+//     error: null,
+//     updating:null,
+//    selectedApplication: null,
+//  totalPages: 0,
+//   totalCount: 0,
+//   currentPage: 1,
+//    editJob: null,
+
+
+ jobs: [],
+  referrerJobs: [],
+  currentJob: null,
+  applicants: [],
+  loading: false,
+  error: null,
+  updating: null,
+  selectedApplication: null,
+  totalPages: 0,
   totalCount: 0,
   currentPage: 1,
-   editJob: null,
-
+  editJob: null,
   },
   reducers: {
       optimisticStatusUpdate: (state, action) => {
@@ -205,17 +218,13 @@ const jobsSlice = createSlice({
       state.editJob = null;
     },
  
-    clearJobs: (state) => {
+     clearCurrentJobs: (state) => {
       state.jobs = [];
-      state.currentJob = null;
-      state.applicants = [];
-      state.loading = false;
-      state.error = null;
-      state.updating = null;
-      state.selectedApplication = null;
+   
+    state.referrerJobs = [];
       state.totalPages = 0;
       state.totalCount = 0;
-      state.currentPage = 1;
+   
     }
   },
   extraReducers: (builder) => {
@@ -290,11 +299,18 @@ const jobsSlice = createSlice({
    .addCase(fetchJobsWithApplicantsForReferrer.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchJobsWithApplicantsForReferrer.fulfilled, (state, action) => {
-        state.jobs = action.payload.jobs;
-        state.applicants = action.payload.applications;
-        state.loading = false;
-      })
+.addCase(fetchJobsWithApplicantsForReferrer.fulfilled, (state, action) => {
+  state.referrerJobs = action.payload.jobs; 
+  state.applicants = action.payload.applications;
+  state.loading = false;
+})
+
+
+      // .addCase(fetchJobsWithApplicantsForReferrer.fulfilled, (state, action) => {
+      //   state.jobs = action.payload.jobs;
+      //   state.applicants = action.payload.applications;
+      //   state.loading = false;
+      // })
       .addCase(fetchJobsWithApplicantsForReferrer.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
@@ -365,8 +381,10 @@ const jobsSlice = createSlice({
 })
 
 
-export const { optimisticStatusUpdate,setEditJob, clearEditJob,clearJobs } = jobsSlice.actions;
+export const { optimisticStatusUpdate,setEditJob, clearEditJob, clearCurrentJobs } = jobsSlice.actions;
 export const selectAllJobs = (state) => state.jobs.jobs;
+export const selectReferrerJobs = (state) => state.jobs.referrerJobs;
+
 export const selectJobsLoading = (state) => state.jobs.loading;
 export const selectJobsError = (state) => state.jobs.error;
 // / Add these selectors at the bottom

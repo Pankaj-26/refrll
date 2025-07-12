@@ -19,6 +19,7 @@ import {
   claimJobForReferral,
   selectAllJobs,
   selectJobsLoading,
+   clearCurrentJobs,
   selectJobsError,
   selectTotalPages,
   selectTotalCount,
@@ -65,10 +66,6 @@ const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [showFilters, setShowFilters] = useState(false);
   const [showJobDetail, setShowJobDetail] = useState(null);
 
-//   useEffect(() => {
-//   searchParams.set("page", currentPage);
-//   setSearchParams(searchParams, { replace: true });
-// }, [currentPage, searchParams, setSearchParams]);
 
 
 useEffect(() => {
@@ -113,10 +110,11 @@ useEffect(() => {
   const setActiveTab = useCallback(
     (tab) => {
       setCurrentPage(1);
+      dispatch(clearCurrentJobs());
       searchParams.set("tab", tab);
       setSearchParams(searchParams, { replace: true });
     },
-    [searchParams, setSearchParams]
+    [searchParams, setSearchParams,dispatch]
   );
 
 
@@ -132,7 +130,7 @@ if(user?.resume?.url){
 
     }
 
-   }, [dispatch]);
+   }, [dispatch,user]);
 
   
 
