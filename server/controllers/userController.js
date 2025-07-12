@@ -29,16 +29,16 @@ const setAuthCookies = (res, accessToken, refreshToken) => {
   // Access token cookie (short-lived)
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict',
+    secure: true,
+    sameSite: 'None',
     maxAge: 15 * 60 * 1000 // 15 minutes
   });
   
   // Refresh token cookie (long-lived)
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict',
+    secure: true,
+    sameSite: 'None',
     path: '/api/auth/refresh', // Only sent to refresh endpoint
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
   });
@@ -47,14 +47,14 @@ const setAuthCookies = (res, accessToken, refreshToken) => {
 const clearAuthCookies = (res) => {
   res.clearCookie('accessToken', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict'
+    secure: true,
+    sameSite: 'None'
   });
   
   res.clearCookie('refreshToken', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict',
+    secure: true,
+    sameSite: 'none',
     path: '/api/auth/refresh'
   });
 };
@@ -67,6 +67,7 @@ exports.updateSeekerProfile = async (req, res) => {
     const userId = req.userId;
     const userType=req.userType;
     const user = await User.findById(userId);
+    
 
     if (!user || ! userType.seeker) {
       return res.status(403).json({ message: 'Unauthorized or not a seeker' });
